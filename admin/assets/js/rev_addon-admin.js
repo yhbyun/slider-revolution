@@ -7,7 +7,7 @@
 	$(document).ready(function(){
 		//hover toggles buttons
 		
-			$(".rs-addon-activated").hover(function () {
+			/*$(".rs-addon-activated").hover(function () {
 				$this = $(this);
 			    $this.data("original",$this.html());
 			    $this.removeClass('rs-status-green').addClass('rs-status-orange').html($this.data('alternative'));
@@ -32,13 +32,13 @@
 			}, function () {
 				$this = $(this);
 			    $this.removeClass('rs-status-green').addClass('rs-status-red').html($this.data("original"));
-			});
+			});*/
 		
 		//click event to install plugin
 			$(".rs-addon-not-installed").click(function(){
 				showWaitAMinute({fadeIn:300,text:rev_slider_addon.please_wait_a_moment});
 				$this = $(this);
-				console.log("install process");
+				//console.log("install process");
 				$.ajax({
 				url : rev_slider_addon.ajax_url,
 				type : 'post',
@@ -48,29 +48,33 @@
 					plugin: $this.data("plugin")
 				},
 				success : function( response ) {
-					console.log(response);
 					switch(response){
 						case "0":
-								console.log("Something Went Wrong");
+								showWaitAMinute({fadeOut:300,text:rev_slider_addon.please_wait_a_moment});
+								UniteAdminRev.showErrorMessage("Something went wrong!");
+								//console.log("Something Went Wrong");
 								break;
 						case "1":
-								console.log("Plugin installed");
+								//console.log("Plugin installed");
 								location.reload();
 								break;
 						case "-1":
-								console.log("Nonce missing");
+								showWaitAMinute({fadeOut:300,text:rev_slider_addon.please_wait_a_moment});
+								UniteAdminRev.showErrorMessage("Nonce missing!");
+								//console.log("Nonce missing");
 								break;
 					}
 				},
 				error : function ( response ){
-					console.log('Ajax Error');
+					//console.log('Ajax Error');
+					showWaitAMinute({fadeOut:300,text:rev_slider_addon.please_wait_a_moment});
+					UniteAdminRev.showErrorMessage("Something went wrong!");
 				}
 			}); // End Ajax
 		}); // End Click
 
 		//click event to activate plugin
 			$(".rs-addon-not-activated").click(function(){
-				console.log("activate process");
 				showWaitAMinute({fadeIn:300,text:rev_slider_addon.please_wait_a_moment});
 				
 				$this = $(this);
@@ -103,10 +107,10 @@
 		}); // End Click
 
 		//click event to deactivate plugin
-			$(".rs-addon-activated").click(function(){
+			$(".rs-dash-deactivate-addon").click(function(){
 				showWaitAMinute({fadeIn:300,text:rev_slider_addon.please_wait_a_moment});
 				$this = $(this);
-				console.log("deactivate process");
+				//console.log("deactivate process");
 				$.ajax({
 				url : rev_slider_addon.ajax_url,
 				type : 'post',
@@ -130,7 +134,7 @@
 					}
 				},
 				error : function ( response ){
-					console.log('Ajax Error');
+					//console.log('Ajax Error');
 				}
 			}); // End Ajax
 		}); // End Click
@@ -138,8 +142,11 @@
 
 })( jQuery );
 
+
+if (showWaitAMinute===undefined)
 function showWaitAMinute(obj) {
 		var wm = jQuery('#waitaminute');		
+		
 		// SHOW AND HIDE WITH DELAY
 		if (obj.delay!=undefined) {
 
@@ -178,4 +185,6 @@ function showWaitAMinute(obj) {
 				break;	
 			}
 		}
-	}
+	 }
+
+

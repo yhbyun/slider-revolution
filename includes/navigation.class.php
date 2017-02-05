@@ -442,7 +442,7 @@ class RevSliderNavigation {
 					if(isset($settings['presets']) && !empty($settings['presets'])){
 						foreach($settings['presets'] as $spreset){
 							if($preset !== $spreset['handle']) continue;
-							if($spreset['type'] !== $slider_preset) continue;
+							if($spreset['type'] !== $type) continue;
 							
 							foreach($settings['placeholders'] as $ph){
 								if(empty($ph)) continue;

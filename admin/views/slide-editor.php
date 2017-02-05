@@ -167,6 +167,8 @@ $ext_width = RevSliderFunctions::getVal($slideParams, 'ext_width', '1920');
 $ext_height = RevSliderFunctions::getVal($slideParams, 'ext_height', '1080');
 $use_parallax = RevSliderFunctions::getVal($slideParams, 'use_parallax', $def_use_parallax);
 
+$mediafilter = RevSliderFunctions::getVal($slideParams, 'media-filter-type', 'none');
+
 $parallax_level[] =  RevSliderFunctions::getVal($sliderParams,"parallax_level_1","5");
 $parallax_level[] =  RevSliderFunctions::getVal($sliderParams,"parallax_level_2","10");
 $parallax_level[] =  RevSliderFunctions::getVal($sliderParams,"parallax_level_3","15");
@@ -466,7 +468,10 @@ if($slide->isStaticSlide() || $slider->isSlidesFromPosts()){ //insert sliderid f
 	<div class="clear_both"></div>
 
 	<div class="title_line" style="margin-bottom:0px !important;">
-		<div id="icon-options-general" class="icon32"></div>		
+		<?php 
+			$icon_general = '<div class="icon32" id="icon-options-general"></div>';
+			echo apply_filters( 'rev_icon_general_filter', $icon_general ); 
+		?>		
 		<a href="<?php echo RevSliderGlobals::LINK_HELP_SLIDE; ?>" class="button-primary float_right revblue mtop_10 mleft_10" target="_blank"><?php _e("Help",'revslider'); ?></a>
 	</div>
 
@@ -496,7 +501,7 @@ if($slide->isStaticSlide() || $slider->isSlidesFromPosts()){ //insert sliderid f
 			</div>
 			
 			<div class="rs-toolbar-cssbtn rs-mini-toolbar-button">
-				<a class='button-primary revpurple' href='javascript:void(0)' id='button_edit_css_global'><i class="">&lt;/&gt;</i><span class="mini-toolbar-text"><?php _e("CSS Global",'revslider'); ?></span></a>
+				<a class='button-primary revpurple' href='javascript:void(0)' id='button_edit_css_global'><i class="">&lt;/&gt;</i><span class="mini-toolbar-text"><?php _e("Slider CSS/JS",'revslider'); ?></span></a>
 			</div>
 
 
@@ -566,7 +571,7 @@ if($slide->isStaticSlide() || $slider->isSlidesFromPosts()){ //insert sliderid f
 		Without those functions the editor may not work correctly. Please remove those custom jquery ui includes in order the editor will work correctly.", 'revslider'); ?>
 	</div>
 	
-	<div class="edit_slide_wrapper<?php echo ($slide->isStaticSlide()) ? ' rev_static_layers' : ''; ?>">
+	<div id="id-esw" class="<?php echo ($slide->isStaticSlide()) ? ' rev_static_layers' : ''; ?>">
 		<?php
 		require self::getPathTemplate('slide-stage');
 		?>
@@ -658,6 +663,7 @@ if($slide->isStaticSlide() || $slider->isSlidesFromPosts()){ //insert sliderid f
 						<tr><td><a href="javascript:UniteLayersRev.insertTemplate('catlist')">{{catlist}}</a></td><td><?php _e("List of categories with links",'revslider'); ?></td></tr>
 						<tr><td><a href="javascript:UniteLayersRev.insertTemplate('catlist_raw')">{{catlist_raw}}</a></td><td><?php _e("List of categories without links",'revslider'); ?></td></tr>
 						<tr><td><a href="javascript:UniteLayersRev.insertTemplate('taglist')">{{taglist}}</a></td><td><?php _e("List of tags with links",'revslider'); ?></td></tr>
+						<tr><td><a href="javascript:UniteLayersRev.insertTemplate('id')">{{id}}</a></td><td><?php _e("Post ID",'revslider'); ?></td></tr>
 					</table>
 					<table class="table_template_help" id="slide-images-template-entry" style="display: none;">
 						<?php
@@ -882,12 +888,16 @@ if($slide->isStaticSlide() || $slider->isSlidesFromPosts()){ //insert sliderid f
 
 		<div id="dialog_advanced_css" class="dialog_advanced_css" title="<?php _e('Advanced CSS', 'revslider'); ?>" style="display:none;">
 			<div style="display: none;"><span id="rev-example-style-layer">example</span></div>
+			<div id="change_acea_wrappers">
+				<div id="change_acea_toidle" class="revblue button-primary"><?php _e('Edit Idle', 'revslider'); ?></div>
+				<div id="change_acea_tohover" class="revblue button-primary"><?php _e('Edit Hover', 'revslider'); ?></div>
+			</div>
 			<div class="first-css-area">
-				<span class="advanced-css-title" style="background:#e67e22"><?php _e('Style from Options', 'revslider'); ?><span style="margin-left:15px;font-size:11px;font-style:italic">(<?php _e('Editable via Option Fields, Saved in the Class:', 'revslider'); ?><span class="current-advance-edited-class"></span>)</span></span>
+				<span class="cbi-title"><?php _e('Style from options', 'revslider'); ?><span class="acsa_idle_or_hover"></span><span style="font-size:11px;font-style:italic;display:block;line-height:13px">(<?php _e('Editable via Option Fields, Saved in the Class:', 'revslider'); ?><span class="current-advance-edited-class"></span>)</span></span>				
 				<textarea id="textarea_template_css_editor_uneditable" rows="20" cols="81" disabled="disabled"></textarea>
 			</div>
 			<div class="second-css-area">
-				<span class="advanced-css-title"><?php _e('Additional Custom Styling', 'revslider'); ?><span style="margin-left:15px;font-size:11px;font-style:italic">(<?php _e('Appended in the Class:', 'revslider'); ?><span class="current-advance-edited-class"></span>)</span></span>
+				<span class="cbi-title"><?php _e('Additional Custom Styling', 'revslider'); ?><span class="acsa_idle_or_hover"></span><span style="font-size:11px;font-style:italic;display:block;line-height:13px">(<?php _e('Appended in the Class:', 'revslider'); ?><span class="current-advance-edited-class"></span>)</span></span>				
 				<textarea id="textarea_advanced_css_editor" rows="20" cols="81"></textarea>
 			</div>
 		</div>
@@ -905,8 +915,12 @@ if($slide->isStaticSlide() || $slider->isSlidesFromPosts()){ //insert sliderid f
 		</div>
 		 
 		<div id="dialog_advanced_layer_css" class="dialog_advanced_layer_css" title="<?php _e('Layer Inline CSS', 'revslider'); ?>" style="display:none;">
+			<div id="change_ace_wrappers">
+				<div id="change_ace_toidle" class="revblue button-primary"><?php _e('Edit Idle', 'revslider'); ?></div>
+				<div id="change_ace_tohover" class="revblue button-primary"><?php _e('Edit Hover', 'revslider'); ?></div>
+			</div>
 			<div class="first-css-area">
-				<span class="advanced-css-title" style="background:#e67e22"><?php _e('Advanced Custom Styling', 'revslider'); ?><span style="margin-left:15px;font-size:11px;font-style:italic">(<?php _e('Appended Inline to the Layer Markup', 'revslider'); ?>)</span></span>
+				<span class="cbi-title"><?php _e('Advanced Custom Styling', 'revslider'); ?><span id="acs_idle_or_hover"></span><span style="font-size:11px;font-style:italic;display:block;line-height:13px">(<?php _e('Appended Inline to the Layer Markup', 'revslider'); ?>)</span></span>
 				<textarea id="textarea_template_css_editor_layer" name="textarea_template_css_editor_layer"></textarea>
 			</div>
 		</div>
@@ -995,7 +1009,6 @@ if($slide->isStaticSlide() || $slider->isSlidesFromPosts()){ //insert sliderid f
 
 				UniteLayersRev.init("<?php echo $slideDelay; ?>");
 				
-								
 				UniteCssEditorRev.init();
 				
 				
@@ -1060,15 +1073,18 @@ if($slide->isStaticSlide() || $slider->isSlidesFromPosts()){ //insert sliderid f
 				jQuery('.my-color-field').wpColorPicker({
 					palettes:false,
 					height:250,
-
 					border:false,
-										
-				    change:function(event,ui) {
-				    	/*var col = jQuery(event.target).val();
-				    	if (col.length<5) {
-				    		col = "#"+col[1]+col[1]+col[2]+col[2]+col[3]+col[3];
-				    	}				    	
-				    	jQuery(event.target).val(col);*/
+				    change:function(event,ui) {				    					    
+				    	if (event.target.value.length<7) {
+				    		if (event.target.value.indexOf('#')===-1)
+				    			event.target.value = "#"+event.target.value;
+				    		if (event.target.value.length<5) {
+				    			var oldcolor = event.target.value,
+				    				newcolor = "#"+oldcolor[1]+oldcolor[1]+oldcolor[2]+oldcolor[2]+oldcolor[3]+oldcolor[3];
+				    			event.target.value = newcolor;
+
+				    		}
+				    	}
 				    	switch (jQuery(event.target).attr('name')) {
 							case "adbutton-color-1":
 							case "adbutton-color-2":
@@ -1102,7 +1118,6 @@ if($slide->isStaticSlide() || $slider->isSlidesFromPosts()){ //insert sliderid f
 							//jQuery('#style_form_wrapper').trigger("colorchanged");
 						}
 					}
-								
 				});
 
 				jQuery('.adb-input').on("change blur focus",setExampleButtons);
@@ -1244,6 +1259,7 @@ $mslide_list = RevSliderFunctions::jsonEncodeForClientSide($mslide_list);
 		UniteLayersRev.setInitSlideIds(<?php echo $mslide_list; ?>);
 	});
 	var curSlideID = <?php echo $slideID; ?>;
+	var curSliderID = <?php echo $sliderID; ?>;
 </script>
 
 <?php

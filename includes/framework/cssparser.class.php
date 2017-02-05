@@ -177,7 +177,7 @@ class RevSliderCssParser{
 						if(!is_array($name) && isset($check_parameters[$name])){
 							$style = RevSliderFunctions::add_missing_val($style, $check_parameters[$name]);
 						}
-						if(is_array($style)) $style = implode(' ', $style);
+						if(is_array($style) || is_object($style)) $style = implode(' ', $style);
 						
 						$ret = self::check_for_modifications($name, $style);
 						if($ret['name'] == 'cursor' && $ret['style'] == 'auto') continue;
@@ -189,7 +189,7 @@ class RevSliderCssParser{
 					foreach($styles_adv as $name => $style){
 						if(in_array($name, $deformations) && $name !== 'css_cursor') continue;
 						
-						if(is_array($style)) $style = implode(' ', $style);
+						if(is_array($style) || is_object($style)) $style = implode(' ', $style);
 						$ret = self::check_for_modifications($name, $style);
 						if($ret['name'] == 'cursor' && $ret['style'] == 'auto') continue;
 						$css.= $ret['name'].':'.$ret['style'].";".$nl;
@@ -220,7 +220,7 @@ class RevSliderCssParser{
 							if(!is_array($name) && isset($check_parameters[$name])){
 								$style = RevSliderFunctions::add_missing_val($style, $check_parameters[$name]);
 							}
-							if(is_array($style)) $style = implode(' ', $style);
+							if(is_array($style)|| is_object($style)) $style = implode(' ', $style);
 							
 							$ret = self::check_for_modifications($name, $style);
 							if($ret['name'] == 'cursor' && $ret['style'] == 'auto') continue;
@@ -232,7 +232,7 @@ class RevSliderCssParser{
 						foreach($hover_adv as $name => $style){
 							
 							if(in_array($name, $deformations) && $name !== 'css_cursor') continue;
-							if(is_array($style)) $style = implode(' ', $style);
+							if(is_array($style)|| is_object($style)) $style = implode(' ', $style);
 							$ret = self::check_for_modifications($name, $style);
 							if($ret['name'] == 'cursor' && $ret['style'] == 'auto') continue;
 							$css.= $ret['name'].':'.$ret['style'].";".$nl;
@@ -260,7 +260,10 @@ class RevSliderCssParser{
 		return array('name' => $name, 'style' => $style);
 	}
 	
+	
 	public static function parseArrayToCss($cssArray, $nl = "\n\r", $adv = false){
+		$deformations = self::get_deformation_css_tags();
+		
 		$css = '';
 		foreach($cssArray as $id => $attr){
 			$setting = (array)$attr['settings'];
@@ -284,13 +287,16 @@ class RevSliderCssParser{
 			
 			if(is_array($styles) && !empty($styles)){
 				foreach($styles as $name => $style){
+					if(in_array($name, $deformations) && $name !== 'css_cursor') continue;
+					
 					if($name == 'background-color' && strpos($style, 'rgba') !== false){ //rgb && rgba
 						$rgb = explode(',', str_replace('rgba', 'rgb', $style));
 						unset($rgb[count($rgb)-1]);
 						$rgb = implode(',', $rgb).')';
 						$css.= $name.':'.$rgb.";".$nl;
 					}
-					$style = (is_array($style)) ? implode(' ', $style) : $style;
+					
+					$style = (is_array($style) || is_object($style)) ? implode(' ', $style) : $style;
 					$css.= $name.':'.$style.";".$nl;
 				}
 			}
@@ -315,7 +321,7 @@ class RevSliderCssParser{
 							$rgb = implode(',', $rgb).')';
 							$css.= $name.':'.$rgb.";".$nl;
 						}
-						$style = (is_array($style)) ? implode(' ', $style) : $style;
+						$style = (is_array($style) || is_object($style)) ? implode(' ', $style) : $style;
 						$css.= $name.':'.$style.";".$nl;
 					}
 					$css.= "}".$nl.$nl;
@@ -332,7 +338,7 @@ class RevSliderCssParser{
 			$css.= $class." {".$nl;
 			if(is_array($styles) && !empty($styles)){
 				foreach($styles as $name => $style){
-					$style = (is_array($style)) ? implode(' ', $style) : $style;
+					$style = (is_array($style) || is_object($style)) ? implode(' ', $style) : $style;
 					$css.= $name.':'.$style.";".$nl;
 				}
 			}
@@ -542,9 +548,10 @@ class RevSliderCssParser{
 			'corner_left' => 'corner_left',
 			'corner_right' => 'corner_right',
 			'parallax' => 'parallax',
-			'type' => 'type'/*,
-			'text-align' => 'text-align'*/
-			
+			'type' => 'type',
+			'padding' => 'padding',
+			'margin' => 'margin',
+			'text-align' => 'text-align'
 		);
 		
 	}

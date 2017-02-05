@@ -1,32 +1,44 @@
 /********************************************
- * REVOLUTION 5.2 EXTENSION - ACTIONS
- * @version: 1.3.2 (12.04.2016)
+ * REVOLUTION 5.3 EXTENSION - ACTIONS
+ * @version: 2.0.4 (24.11.2016)
  * @requires jquery.themepunch.revolution.js
  * @author ThemePunch
 *********************************************/
-
 (function($) {
-
+"use strict";
 var _R = jQuery.fn.revolution,
-	_ISM = _R.is_mobile();
+	_ISM = _R.is_mobile(),
+	extension = {	alias:"Actions Min JS",
+					name:"revolution.extensions.actions.min.js",
+					min_core: "5.3",
+					version:"2.0.4"
+			  };
+
 
 ///////////////////////////////////////////
 // 	EXTENDED FUNCTIONS AVAILABLE GLOBAL  //
 ///////////////////////////////////////////
 jQuery.extend(true,_R, {
 	checkActions : function(_nc,opt,as) {
+
+		if (_R.compare_version(extension).check==="stop") return false;		
+
 		checkActions_intern(_nc,opt,as);
-	}		
+				
+	}
+	
 });
 
 //////////////////////////////////////////
 //	-	INITIALISATION OF ACTIONS 	-	//
 //////////////////////////////////////////
 var checkActions_intern = function(_nc,opt,as) {
+
 if (as)				
 	jQuery.each(as,function(i,a) {		
+
 		a.delay = parseInt(a.delay,0)/1000;
-		_nc.addClass("noSwipe");
+		_nc.addClass("tp-withaction");
 
 		// LISTEN TO ESC TO EXIT FROM FULLSCREEN
 		if (!opt.fullscreen_esclistener) {
@@ -41,10 +53,12 @@ if (as)
 
 		var tnc = a.layer == "backgroundvideo" ? jQuery(".rs-background-video-layer") : a.layer == "firstvideo" ? jQuery(".tp-revslider-slidesli").find('.tp-videolayer') : jQuery("#"+a.layer);
 
+
 		// NO NEED EXTRA TOGGLE CLASS HANDLING
 		if (jQuery.inArray(a.action,["toggleslider","toggle_mute_video","toggle_global_mute_video","togglefullscreen"])!=-1) {
 			_nc.data('togglelisteners',true);
 		}
+
 		// COLLECT ALL TOGGLE TRIGGER TO CONNECT THEM WITH TRIGGERED LAYER
 		switch (a.action) {
 			case "togglevideo":
@@ -64,7 +78,9 @@ if (as)
 					if (layertoggledby == undefined)
 						layertoggledby = new Array();
 					layertoggledby.push(_nc);					
-					_tnc.data('layertoggledby',layertoggledby)				
+					_tnc.data('layertoggledby',layertoggledby);
+					_tnc.data('triggered_startstatus',a.layerstatus);		
+					
 				});
 			break;
 			case "toggle_mute_video":
@@ -98,39 +114,48 @@ if (as)
 
 		}
 		
-		_nc.on(a.event,function() {			
+		_nc.on(a.event,function() {		
+			
+			if (a.event==="click" && _nc.hasClass("tp-temporarydisabled")) return false;
 			var tnc = a.layer == "backgroundvideo" ? jQuery(".active-revslide .slotholder .rs-background-video-layer") : a.layer == "firstvideo" ? jQuery(".active-revslide .tp-videolayer").first() : jQuery("#"+a.layer);
 
 			if (a.action=="stoplayer" || a.action=="togglelayer" || a.action=="startlayer") {
-				if (tnc.length>0) 												
-					if (a.action=="startlayer" || (a.action=="togglelayer" && tnc.data('animdirection')!="in")) {
-						tnc.data('animdirection',"in");
-						var otl = tnc.data('timeline_out'),
-							base_offsetx = opt.sliderType==="carousel" ? 0 : opt.width/2 - (opt.gridwidth[opt.curWinRange]*opt.bw)/2,
-							base_offsety=0;																		
-						if (otl!=undefined) otl.pause(0).kill();																		
-						if (_R.animateSingleCaption) _R.animateSingleCaption(tnc,opt,base_offsetx,base_offsety,0,false,true);	
-						var tl = tnc.data('timeline');
-						tnc.data('triggerstate',"on");		
-						_R.toggleState(tnc.data('layertoggledby'));																												
-						punchgs.TweenLite.delayedCall(a.delay,function() {
-							tl.play(0);
-						},[tl]);								
+				
+				if (tnc.length>0) 	{
+					var _ = tnc.data();
+					if (a.action=="startlayer" || (a.action=="togglelayer" && tnc.data('animdirection')!="in")) {						
+						_.animdirection= "in";
+						_.triggerstate = "on";
+						_R.toggleState(_.layertoggledby);	
+						
+						if (_R.playAnimationFrame) {
+							clearTimeout(_.triggerdelay);
+							_.triggerdelay = setTimeout(function() {
+								_R.playAnimationFrame({caption:tnc,opt:opt,frame:"frame_0", triggerdirection:"in", triggerframein:"frame_0", triggerframeout:"frame_999"});
+							},(a.delay*1000));							
+						}
 					} else 
 
 					if (a.action=="stoplayer" || (a.action=="togglelayer" && tnc.data('animdirection')!="out")) {
-						tnc.data('animdirection',"out");
-						tnc.data('triggered',true);
-						tnc.data('triggerstate',"off");
+						_.animdirection= "out";
+						_.triggered= true;
+						_.triggerstate = "off";
 						if (_R.stopVideo) _R.stopVideo(tnc,opt);
-						if (_R.endMoveCaption)												
-							punchgs.TweenLite.delayedCall(a.delay,_R.endMoveCaption,[tnc,null,null,opt]);
-						_R.unToggleState(tnc.data('layertoggledby'))														
-					}															
+						_R.unToggleState(_.layertoggledby);
+						if (_R.endMoveCaption) {
+							clearTimeout(_.triggerdelay);
+							_.triggerdelay = setTimeout(function() {
+								_R.playAnimationFrame({caption:tnc,opt:opt,frame:"frame_999", triggerdirection:"out", triggerframein:"frame_0", triggerframeout:"frame_999"});
+							},(a.delay*1000));
+						}																						
+					}
+				}															
 			} else 	{
-				if (_ISM && (a.action=='playvideo' || a.action=='stopvideo' || a.action=='togglevideo' || a.action=='mutevideo' || a.action=='unmutevideo' || a.action=='toggle_mute_video' || a.action=='toggle_global_mute_video')) {
+				
+				if (_ISM && (a.action=='playvideo' || a.action=='stopvideo' || a.action=='togglevideo' || a.action=='mutevideo' || a.action=='unmutevideo' || a.action=='toggle_mute_video' || a.action=='toggle_global_mute_video')) {						
 						actionSwitches(tnc,opt,a,_nc);
 				} else {
+					a.delay = a.delay === "NaN" || a.delay ===NaN ? 0 : a.delay;
 					punchgs.TweenLite.delayedCall(a.delay,function() {
 						actionSwitches(tnc,opt,a,_nc);	
 					},[tnc,opt,a,_nc]);
@@ -142,14 +167,18 @@ if (as)
 			case "startlayer":
 			case "playlayer":
 			case "stoplayer":
-				var tnc = jQuery("#"+a.layer);		
-					if (tnc.data('start')!="bytrigger")	{
-						tnc.data('triggerstate',"on");						
-						tnc.data('animdirection',"in");						
+
+				var tnc = jQuery("#"+a.layer),				
+					d = tnc.data();		
+					
+					if (tnc.length>0 && d!==undefined && ((d.frames!==undefined && d.frames[0].delay!="bytrigger") || (d.frames===undefined && d.start!=="bytrigger")))	{						
+						d.triggerstate="on";
+						//d.animdirection="in";		
+
 					}	
 			break;
 		}
-	})		
+	})				
 }
 
 
@@ -173,17 +202,17 @@ var actionSwitches = function(tnc,opt,a,_nc) {
 				case "+1":
 				case "next":
 					opt.sc_indicator="arrow";
-					_R.callingNewSlide(opt,opt.c,1);					
+					_R.callingNewSlide(opt.c,1);					
 				break;
 				case "previous":
 				case "prev":
 				case "-1":									
 					opt.sc_indicator="arrow";
-					_R.callingNewSlide(opt,opt.c,-1);																		
+					_R.callingNewSlide(opt.c,-1);																		
 				break;
 				default:
 					var ts = jQuery.isNumeric(a.slide) ?  parseInt(a.slide,0) : a.slide;
-					_R.callingNewSlide(opt,opt.c,ts);									
+					_R.callingNewSlide(opt.c,ts);									
 				break;
 			}												
 		break;
@@ -246,8 +275,8 @@ var actionSwitches = function(tnc,opt,a,_nc) {
 				}
 			_nc.toggleClass('rs-toggle-content-active');
 		break;
-		case "toggle_global_mute_video":
-		    if (_nc.hasClass("rs-toggle-content-active")) {
+		case "toggle_global_mute_video":			
+		    if (opt.globalmute === true) {
 		    	opt.globalmute = false;				    	
 		    	if (opt.playingvideos != undefined && opt.playingvideos.length>0) {			
 					jQuery.each(opt.playingvideos,function(i,_nc) {							
@@ -314,14 +343,20 @@ var actionSwitches = function(tnc,opt,a,_nc) {
 			}	
 			
 		break;
+		default:
+			var obj = {};
+			obj.event = a;
+			obj.layer = _nc;			
+			opt.c.trigger('layeraction',[obj]);
+		break;
 	}
 }
 
 var getOffContH = function(c) {
 	if (c==undefined) return 0;		
 	if (c.split(',').length>1) {
-		oc = c.split(",");
-		var a =0;
+		var oc = c.split(","),
+			a =0;
 		if (oc)
 			jQuery.each(oc,function(index,sc) {
 				if (jQuery(sc).length>0)

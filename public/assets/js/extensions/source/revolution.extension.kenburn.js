@@ -1,25 +1,35 @@
 /********************************************
  * REVOLUTION 5.0 EXTENSION - KEN BURN
- * @version: 1.0.0 (03.08.2015)
+ * @version: 1.2 (2.11.2016)
  * @requires jquery.themepunch.revolution.js
  * @author ThemePunch
 *********************************************/
 
 (function($) {
-
-var _R = jQuery.fn.revolution;
+"use strict";
+var _R = jQuery.fn.revolution,
+	extension = {	alias:"KenBurns Min JS",
+					name:"revolution.extensions.kenburn.min.js",
+					min_core: "5.0",
+					version:"1.2.0"
+			  };
 
 ///////////////////////////////////////////
 // 	EXTENDED FUNCTIONS AVAILABLE GLOBAL  //
 ///////////////////////////////////////////
 jQuery.extend(true,_R, {
 
-	stopKenBurn : function(l) {			
+	stopKenBurn : function(l) {		
+		if (_R.compare_version(extension).check==="stop") return false;
+
 		if (l.data('kbtl')!=undefined)			
 		l.data('kbtl').pause();				
 	},
 
-	startKenBurn :  function(l,opt,prgs) {			
+	startKenBurn :  function(l,opt,prgs) {		
+
+		if (_R.compare_version(extension).check==="stop") return false;
+
 		var d = l.data(),
 			i = l.find('.defaultimg'),
 			s = i.data('lazyload') || i.data('src'),
@@ -81,7 +91,7 @@ jQuery.extend(true,_R, {
 			kcalcL = function(cw,ch,d) {				
 				var f=d.scalestart/100,
 					fe=d.scaleend/100,
-					ofs = d.oofsetstart != undefined ? d.offsetstart.split(" ") || [0,0] : [0,0],
+					ofs = d.offsetstart != undefined ? d.offsetstart.split(" ") || [0,0] : [0,0],
 					ofe = d.offsetend != undefined ? d.offsetend.split(" ") || [0,0] : [0,0];
 				d.bgposition = d.bgposition == "center center" ? "50% 50%" : d.bgposition;
 				
@@ -111,6 +121,7 @@ jQuery.extend(true,_R, {
 				o.start.scale = f;	
 				o.end.scale = fe;
 
+				d.rotatestart = d.rotatestart===0 ? 0.01 : d.rotatestart;
 				o.start.rotation = d.rotatestart+"deg";
 				o.end.rotation = d.rotateend+"deg";		
 				

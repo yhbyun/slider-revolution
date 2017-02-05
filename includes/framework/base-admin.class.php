@@ -18,7 +18,7 @@ class RevSliderBaseAdmin extends RevSliderBase {
 	private static $tempVars = array();
 	private static $startupError = '';
 	private static $menuRole = 'admin';
-	private static $arrMetaBoxes = '';		//option boxes that will be added to post
+	private static $arrMetaBoxes = array();		//option boxes that will be added to post
 	
 	private static $allowed_views = array('master-view', 'system/validation', 'system/dialog-video', 'system/dialog-update', 'system/dialog-global-settings', 'sliders', 'slider', 'slider_template', 'slides', 'slide', 'navigation-editor', 'slide-editor', 'slide-overview', 'slide-editor', 'slider-overview', 'themepunch-google-fonts');
 	
@@ -424,7 +424,13 @@ class RevSliderBaseAdmin extends RevSliderBase {
 		
 		$options = apply_filters('revslider_mod_activation_option', $options);
 		
+		
 		$operations = new RevSliderOperations();
+		$options_exist = $operations->getGeneralSettingsValues();
+		if(!is_array($options_exist)) $options_exist = array();
+		
+		$options = array_merge($options_exist, $options);
+		
 		$operations->updateGeneralSettings($options);
 		
 	}

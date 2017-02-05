@@ -1,3 +1,6 @@
+var rs_install_slider = {};
+var rs_install_ids = [];
+var rs_install_url = false;
 var RevSliderAdmin = new function(){
 
 	var t = this;
@@ -53,7 +56,58 @@ var RevSliderAdmin = new function(){
 			shortcode = rev_lang.wrong_alias;
 		jQuery("#shortcode").val(shortcode);
 	}
-
+	
+	
+	var template_library_loaded = false;
+	t.load_slider_template_html = function(){
+		//jQuery('#button_import_template_slider').click();
+		
+		//get HTML of Sliders and add them to the wrapper 
+		if(!template_library_loaded){
+			UniteAdminRev.ajaxRequest('load_template_store_sliders', {}, function(response){
+				if(response.success){
+					jQuery('.revolution-template-groups').html(response['html']);
+					jQuery('#template_area').addClass("show");
+					jQuery('#template_area').trigger("showitnow");
+					
+					initTemplateSliders();
+					
+					template_library_loaded = true;
+				}
+			});
+		}else{
+			jQuery('#template_area').addClass("show");
+			jQuery('#template_area').trigger("showitnow");
+		}
+		
+		return true;
+	}
+	
+	var template_slide_library_loaded = false;
+	t.load_slide_template_html = function(){
+		//jQuery('#button_import_template_slider').click();
+		
+		//get HTML of Sliders and add them to the wrapper 
+		if(!template_slide_library_loaded){
+			UniteAdminRev.ajaxRequest('load_template_store_slides', {}, function(response){
+				if(response.success){
+					jQuery('.revolution-basic-templates').html(response['html']);
+					template_slide_library_loaded = true;
+					
+					templateSelectorHandling();
+					
+					jQuery('#template_area').addClass("show");
+					jQuery('.revolution-template-groups').perfectScrollbar();
+					scrollTA();
+				}
+			});
+		}else{
+			jQuery('#template_area').addClass("show");
+			jQuery('.revolution-template-groups').perfectScrollbar();
+			scrollTA();
+		}
+		return true;
+	}
 	
 	/**
 	 * change fields of the slider view
@@ -88,6 +142,13 @@ var RevSliderAdmin = new function(){
 			jQuery('.rs-hide-on-fixed').show();
 		}
 		
+		if(textMode == 'full'){
+			jQuery('.rs-show-on-auto').toggle(100);
+			jQuery('.rs-show-on-auto').show(100);
+		}else{
+			jQuery('.rs-show-on-auto').toggle(100);
+			jQuery('.rs-show-on-auto').hide(100);
+		}
 		if(enableFullScreen){
 			jQuery('.rs-show-on-fullscreen').show();
 			jQuery('.rs-hide-on-fullscreen').hide();
@@ -997,15 +1058,21 @@ var RevSliderAdmin = new function(){
 		 * add Template Slider through Import. Check for zip name
 		 **/
 		jQuery('body').on('click', '.template_slider_item_reimport, .install_template_slider', function(){
-			
-			if(jQuery(this).hasClass('deny_download')){
-				alert(rev_lang.this_template_requires_version+' '+jQuery(this).data('versionneed')+' '+rev_lang.of_slider_revolution);
+			var _t = jQuery(this);
+
+			jQuery('#import_dialog_box').data('requested_slide',_t.data('title'));
+
+			if(_t.hasClass('deny_download')){
+				alert(rev_lang.this_template_requires_version+' '+_t.data('versionneed')+' '+rev_lang.of_slider_revolution);
 				return false;
 			}
 			
+			var mdata = {};
+			mdata.zip = _t.data('zipname');
+			mdata.uid = _t.data('uid');
+			mdata.package = 'false';
+			
 			//modify the dialog with some informations 
-			jQuery('.rs-zip-name').text(jQuery(this).data('zipname'));
-			jQuery('.rs-uid').val(jQuery(this).data('uid'));
 			
 			//from server or from local file
 			
@@ -1024,11 +1091,15 @@ var RevSliderAdmin = new function(){
 						jQuery(".input_import_slider").val('');
 						jQuery('.rs-import-slider-button').hide();
 						
+						jQuery('.rs-zip-name').text(mdata.zip);
+						jQuery('.rs-uid').val(mdata.uid);
+						jQuery('.rs-package').val(mdata['package']); //set that the package needs to be installed
+						
 						jQuery("#dialog_import_template_slider").dialog({
 							modal:true,
 							resizable:false,
 							width:600,
-							height:350,
+							height:450,
 							closeOnEscape:true,
 							dialogClass:"tpdialogs",
 							create:function(ui) {				
@@ -1046,15 +1117,41 @@ var RevSliderAdmin = new function(){
 					},
 					"Online":function(){
 						if(rs_plugin_validated){
-							//show please wait
-							showWaitAMinute({fadeIn:300,text:rev_lang.please_wait_a_moment});
-							
-							//get from server
-							jQuery('#rs-import-template-from-server').submit();
-							
-							jQuery(this).dialog("close");
+							if(rs_single_page_creation){
+								jQuery('#dialog_import_template_slider_page_template').dialog({
+									modal:true,
+									resizable:false,
+									title:'Create Blank Demo Page',
+									width:450,
+									height:200,
+									closeOnEscape:true,
+									dialogClass:"tpdialogs",
+									create:function(ui) {				
+										jQuery(ui.target).parent().find('.ui-dialog-titlebar').addClass("tp-slider-new-dialog-title");
+									},
+									buttons:{
+										'Yes':function(){
+											import_template_online_slider(mdata, 'true');
+											
+											jQuery(this).dialog("close");
+											jQuery("#dialog_import_template_slider_from").dialog("close");
+										},
+										'No':function(){
+											import_template_online_slider(mdata, 'false');
+											
+											jQuery(this).dialog("close");
+											jQuery("#dialog_import_template_slider_from").dialog("close");
+										}
+									}
+									
+								});
+							}else{
+								import_template_online_slider(mdata, 'false');
+								
+								jQuery("#dialog_import_template_slider_from").dialog("close");
+							}
 						}else{
-							alert(rev_lang.this_feature_only_if_activated);
+							jQuery('#regsiter-to-access-store-none').click();
 						}
 					}
 				}
@@ -1066,6 +1163,11 @@ var RevSliderAdmin = new function(){
 		
 		
 		
+		/*jQuery('#form-import-online-slider-local').submit(function(evt){
+			
+		});*/
+		
+		
 		jQuery('body').on('click', '.template_slider_item_reimport_package, .install_template_slider_package', function(){
 			
 			if(jQuery(this).hasClass('deny_download')){
@@ -1073,26 +1175,269 @@ var RevSliderAdmin = new function(){
 				return false;
 			}
 			
-			//modify the dialog with some informations 
-			jQuery('.rs-zip-name').text(jQuery(this).data('zipname'));
-			jQuery('.rs-uid').val(jQuery(this).data('uid'));
-			jQuery('.rs-package').val('true'); //set that the package needs to be installed
+			var mdata = {};
+			mdata.zip = jQuery(this).data('zipname');
+			mdata.uid = jQuery(this).data('uid');
+			mdata['package'] = 'true';
 			
 			if(rs_plugin_validated){
-				//show please wait
-				showWaitAMinute({fadeIn:300,text:rev_lang.please_wait_a_moment});
-				
-				//get from server
-				jQuery('#rs-import-template-from-server').submit();
+				if(rs_pack_page_creation){
+					jQuery('#dialog_import_template_slider_page_template').dialog({
+						modal:true,
+						resizable:false,
+						title:'Create Blank Demo Page',
+						width:450,
+						height:200,
+						closeOnEscape:true,
+						dialogClass:"tpdialogs",
+						create:function(ui) {				
+							jQuery(ui.target).parent().find('.ui-dialog-titlebar').addClass("tp-slider-new-dialog-title");
+						},
+						buttons:{
+							'Yes':function(){
+								import_template_online_slider(mdata, 'true');
+								
+								jQuery(this).dialog("close");
+							},
+							'No':function(){
+								import_template_online_slider(mdata, 'false');
+								
+								jQuery(this).dialog("close");
+							}
+						}
+						
+					});
+				}else{
+					import_template_online_slider(mdata, 'false');
+				}
 			}else{
+				//jQuery('.rs-package').val('false');
+			
 				alert(rev_lang.this_feature_only_if_activated);
 			}
-			
-			jQuery('.rs-package').val('false');
 			
 			jQuery('#close-template').click();
 			return false;
 		});
+		
+		var installclosebutton;
+
+		
+		var import_template_online_slider = function(mdata, create_page){
+			
+			jQuery('#import_dialog_box').html('');
+
+			
+			//open dialog which will then have all the information of the Sliders
+			jQuery('#dialog_import_template_slider_info').dialog({
+				modal:true,
+				resizable:false,
+				width:450,
+				minHeight:350,
+				open: function(event, ui) {
+					var dialog = jQuery(event.target).parent(),						
+						dialogtitle = dialog.find('.ui-dialog-titlebar');					
+					dialog.attr("id","tp_import_sliders");
+					dialogtitle.attr("id","tp_import_sliders_title");
+					installclosebutton = jQuery(".ui-dialog-titlebar-close", ui.dialog);
+					jQuery(".ui-dialog-titlebar-close", ui.dialog).hide();
+				}
+			});
+			
+			if(mdata['package'] !== undefined && slider_package_uids[mdata.uid] !== undefined){
+				mdata['page-creation'] = false;
+				
+				delete(mdata['package']);
+				
+				rs_install_slider = {};
+				rs_install_ids = [];
+				
+				for(var i in slider_package_uids[mdata.uid]){
+					for(var ki in slider_package_uids[mdata.uid][i]){
+						rs_install_slider[i] = {
+                            uid: slider_package_uids[mdata.uid][i][ki],
+                            sid: ki,
+                            status: 0
+                        }
+					}
+				}
+				
+				var my_install_calls = 0;
+				var max_calls = 60;
+				var warning_calls = 30;
+				
+				var install_interval = setInterval(function(){
+					my_install_calls++;
+					
+					//jQuery('#import_dialog_box_action').append('.');
+					
+
+					if(my_install_calls == warning_calls){
+						jQuery('#import_dialog_box_action').append('<div class="import_failure">'+rev_lang.download_install_takes_longer+"</div>");
+					} 
+					if(my_install_calls == max_calls){
+						jQuery('#import_dialog_box').append(rev_lang.download_failed_check_server);
+						jQuery('#import_dialog_box').append('<div>'+rev_lang.aborting_import+'</div>');
+						jQuery('#import_dialog_box_action').html('');
+						installclosebutton.show();
+						clearInterval(install_interval);
+					}
+					
+					var cur_installing = 0;
+					var cur_installed = 1;
+					var finished = true;
+					for(var i in rs_install_slider){
+						if(rs_install_slider[i]['status'] === 1){
+							cur_installing = 1;
+						}
+						if(rs_install_slider[i]['status'] !== 2){
+							finished = false;
+						}
+						if(rs_install_slider[i]['status'] === 2){
+							cur_installed++;
+						}
+					}
+					
+					if(cur_installed <= Object.keys(rs_install_slider).length){
+						jQuery('#install-slider-counter').css({width:((cur_installed/Object.keys(rs_install_slider).length)*100)+"%"});
+					}else{
+						jQuery('#install-slider-counter').width('100%');
+					}
+					
+					if(cur_installing === 0){ //install new slider
+						my_install_calls = 0;//reset to 0 as new Slider will be installed
+						
+						
+						for(var i in rs_install_slider){
+							if(rs_install_slider[i]['status'] === 0){
+								
+								mdata.uid = rs_install_slider[i]['uid'];
+
+								jQuery('#import_dialog_box_action').html(slider_package_names[rs_install_slider[i]['uid']].name); //Write the Name of the Current Installing Slider
+								rs_install_slider[i]['status'] = 1;
+								
+								UniteAdminRev.ajaxRequest("import_slider_online_template_slidersview_new", mdata, function(response){
+									//modify the dialog with some informations 
+									rs_install_slider[i]['status'] = 2;
+									
+									if(response.slider_id !== undefined && response.slider_id > 0){
+										rs_install_ids.push(response.slider_id);
+									}
+									if(response.view !== false){
+										rs_install_url = response.view;
+									}
+									
+									if(response.error.length > 0){
+										for(var key in response.error){
+											jQuery('#import_dialog_box').append('<div>'+response.error[key]+'</div>');
+										}
+									}else{
+										for(var key in response.success){
+										//	jQuery('#import_dialog_box').append('<div>'+response.success[key]+'</div>');
+										}
+										
+									}
+								}, true);
+								break;
+							}
+						}
+					}
+					if(finished){
+						clearInterval(install_interval);
+						//all slider installed
+						
+						if(create_page === 'true'){
+							//create page
+							jQuery('#import_dialog_box').append('<div>'+rev_lang.create_draft+'</div>');
+							
+							UniteAdminRev.ajaxRequest("create_draft_page", {slider_ids: rs_install_ids}, function(response){
+								if(response.open !== false){ //open created page
+									jQuery('#import_dialog_box').append('<div>'+rev_lang.draft_created+'</div>');
+									window.open(response.open, '_blank');
+								}else{
+									jQuery('#import_dialog_box').append('<div>'+rev_lang.draft_not_created+'</div>');
+								}
+								jQuery('#import_dialog_box').append('<div>'+rev_lang.slider_import_success_reload+'</div>');
+								if(rs_install_url !== false){
+									location.href = rs_install_url;
+								}
+							}, true);
+							
+						}else{
+							jQuery('#import_dialog_box').append('<div>'+rev_lang.slider_import_success_reload+'</div>');
+							if(rs_install_url !== false){
+								location.href = rs_install_url;
+							}
+						}
+						
+					}
+				}, 1000);
+			}else{
+				mdata['page-creation'] = create_page;
+				
+				var title = jQuery('#import_dialog_box').data('requested_slide'); 
+				//t.get_title_by_uid(mdata["uid"]);
+				
+				jQuery('#import_dialog_box').append('<div>'+title+'</div>');
+				
+				UniteAdminRev.ajaxRequest("import_slider_online_template_slidersview_new", mdata, function(response){
+					//modify the dialog with some informations 
+					jQuery('#import_dialog_box_action').html('');
+					
+					if(response.error.length > 0){
+						for(var key in response.error){
+							jQuery('#import_dialog_box').append('<div>'+response.error[key]+'</div>');
+						}
+					}else{
+						for(var key in response.success){
+							jQuery('#install-slider-counter').css({width:"100%"});
+							//jQuery('#import_dialog_box').append('<div>'+response.success[key]+'</div>');
+						}
+						if(response.open !== false){ //open created page
+							jQuery('#import_dialog_box').append('<div>'+rev_lang.draft_created+'</div>');
+							window.open(response.open, '_blank');
+							
+						}
+						if(response.view !== false){ //redirect
+							jQuery('#import_dialog_box').append('<div>'+rev_lang.slider_import_success_reload+'</div>');
+							location.href = response.view;
+						}
+					}
+				}, true);
+			}
+			/*UniteAdminRev.ajaxRequest("import_slider_online_template_slidersview", mdata, function(response){
+				console.log(response);
+			});*/
+			
+			
+			/*jQuery('.rs-zip-name').text(mdata.zip);
+			jQuery('.rs-uid').val(mdata.uid);
+			jQuery('.rs-package').val(mdata['package']); //set that the package needs to be installed
+			
+			jQuery('#rs-import-template-from-server').find('.rs-page-creation').val(create_page);
+			
+			//show please wait
+			showWaitAMinute({fadeIn:300,text:rev_lang.please_wait_a_moment});
+			
+			//get from server
+			jQuery('#rs-import-template-from-server').submit();
+			jQuery('.rs-package').val('false');*/
+			
+		}
+		
+		
+		t.get_title_by_uid = function(uid){
+			//get name by uid
+			var dat = jQuery('.template_slide_item_img[data-uid="'+uid+'"]').data('title');
+			if(dat == undefined)
+				dat = jQuery('.install_template_slider[data-uid="'+uid+'"]').data('title');
+			if(dat == undefined)
+				dat = jQuery('.template_slider_item_import[data-uid="'+uid+'"]').data('title');
+			if(dat == undefined)
+				dat = jQuery('.install_template_slider_package[data-uid="'+uid+'"]').data('title');
+			
+			return dat;
+		}
 		
 		
 		/**
@@ -1169,10 +1514,57 @@ var RevSliderAdmin = new function(){
 			}
 		});
 		
+		
+		jQuery('#form-import-slider-local, #form-import-online-slider-local').submit(function(evt){
+			
+			var title = jQuery(this).find('input[name="import_file"]').val().split('\\').pop();
+			
+			
+			if(jQuery('#dialog_import_slider').dialog("instance") !== undefined){
+				jQuery('#dialog_import_slider').dialog('close');
+			}
+			if(jQuery('#dialog_import_template_slider').dialog("instance") !== undefined){
+				jQuery('#dialog_import_template_slider').dialog('close');
+			}
+			
+			jQuery('#dialog_import_template_slider_info').dialog({
+				modal:true,
+				resizable:false,
+				width:450,
+				minHeight:350,
+				open: function(event, ui) {
+					
+					var dialog = jQuery(event.target).parent(),						
+						dialogtitle = dialog.find('.ui-dialog-titlebar');					
+					dialog.attr("id","tp_import_sliders");
+					dialogtitle.attr("id","tp_import_sliders_title");
+					//installclosebutton = jQuery(".ui-dialog-titlebar-close", ui.dialog);
+					jQuery(".ui-dialog-titlebar-close", ui.dialog).hide();
+				}
+			});
+			jQuery('#import_dialog_box').html('');
+			jQuery('#import_dialog_box').append('<div>'+title+'</div>');
+			
+			var my_install_calls = 0;
+			var max_calls = 60;
+			var warning_calls = 30;			
+			var install_interval = setInterval(function(){
+				my_install_calls++;								
+				if(my_install_calls == warning_calls){
+					jQuery('#import_dialog_box_action').append(rev_lang.download_install_takes_longer);
+				}
+				if(my_install_calls == max_calls){
+					jQuery('#import_dialog_box').append(rev_lang.download_failed_check_server);
+					jQuery('#import_dialog_box').append('<div>'+rev_lang.aborting_import+'</div>');
+					jQuery('#import_dialog_box_action').html('');
+					installclosebutton.show();
+					clearInterval(install_interval);
+				}
+			}, 1000);
+		});
+		
 		jQuery("#button_import_template_slider, #button_import_template_slider_b").click(function(){
-			jQuery('#template_area').addClass("show");
-			jQuery('#template_area').trigger("showitnow");
-			return true;
+			t.load_slider_template_html();
 		});
 		
 		//import slide dialog
@@ -1571,28 +1963,34 @@ var RevSliderAdmin = new function(){
 		if(!isDemo)
 			isDemo = false;
 		
+		tpLayerTimelinesRev.updateZIndexByOrder();
+		UniteLayersRev.setRowZoneOrders();
+		tpLayerTimelinesRev.organiseGroupsAndLayer();
+		
 		var layers = UniteLayersRev.getLayers();
 		
 		var arrLayersNew = {};
 		for(key in layers){
 			if(layers[key].layer_unavailable !== true && layers[key].deleted !== true){
-				arrLayersNew[key] = layers[key];
+				arrLayersNew[key] = jQuery.extend(true, {}, layers[key]);
 				
 				if(typeof(arrLayersNew[key].layer_unavailable) !== 'undefined') delete(arrLayersNew[key].layer_unavailable);
 				if(typeof(arrLayersNew[key].deleted) !== 'undefined') delete(arrLayersNew[key].deleted);
+				if(typeof(arrLayersNew[key].references) !== 'undefined') delete(arrLayersNew[key].references);
 				if(typeof(arrLayersNew[key].createdOnInit) !== 'undefined') delete(arrLayersNew[key].createdOnInit);
 			}
 		}
 		
-		
 		if(JSON && JSON.stringify)
 			arrLayersNew = JSON.stringify(arrLayersNew);
-
+		
+		
+		
 		var data = {
 			slideid:slideID,
 			layers:arrLayersNew
 		};
-
+		
 		data.params = RevSliderSettings.getSettingsObject("form_slide_params");
 		
 		if(!isDemo){ //demo means static captions. This has
@@ -1704,6 +2102,8 @@ var RevSliderAdmin = new function(){
 				data = callback(data);
 		});
 		
+		data.obj_favorites = favoriteObjectsList;
+		
 		if(!isDemo){
 			UniteAdminRev.setAjaxHideButtonID("button_save_slide,button_save_slide-tb");
 			UniteAdminRev.setAjaxLoaderID("loader_update");
@@ -1725,6 +2125,7 @@ var RevSliderAdmin = new function(){
 		
 		jQuery('body').on('click', '.rs-reload-shop', function(){
 			if(confirm(rev_lang.unsaved_data_will_be_lost_proceed)){
+				
 				showWaitAMinute({fadeIn:300,text:rev_lang.please_wait_a_moment});
 				
 				location.href = window.location.href+'&update_shop';
@@ -1735,8 +2136,10 @@ var RevSliderAdmin = new function(){
 		 * add Template Slider through Import, then add specific slide to current Slider and open it. Check for zip name
 		 **/
 		jQuery('body').on('click', '.install_template_slide', function(){
-			var data = jQuery(this);
-			
+			var data = jQuery(this);			
+
+			jQuery('#import_dialog_box').data('requested_slide',data.data('title'));
+
 			if(data.hasClass('deny_download')){
 				alert(rev_lang.this_template_requires_version+' '+data.data('versionneed')+' '+rev_lang.of_slider_revolution);
 				return false;
@@ -1788,6 +2191,10 @@ var RevSliderAdmin = new function(){
 								//show please wait
 								showWaitAMinute({fadeIn:300,text:rev_lang.please_wait_a_moment});
 								
+								//open dialog and put the dots
+								
+								import_single_slide_wait();
+								
 								//get from server
 								jQuery('#rs-import-slide-template-from-server').submit();
 								
@@ -1803,6 +2210,50 @@ var RevSliderAdmin = new function(){
 			}
 		});
 		
+		jQuery('#dialog_import_template_slide').submit(function(evt){
+			import_single_slide_wait();
+		});
+		
+		var import_single_slide_wait = function(){
+			jQuery('#import_dialog_box').html('');
+
+			//open dialog which will then have all the information of the Sliders
+			jQuery('#dialog_import_template_slide_info').dialog({
+				modal:true,
+				resizable:false,
+				width:450,
+				minHeight:350,
+				open: function(event, ui) {
+					var dialog = jQuery(event.target).parent(),						
+						dialogtitle = dialog.find('.ui-dialog-titlebar');					
+					dialog.attr("id","tp_import_sliders");
+					dialogtitle.attr("id","tp_import_sliders_title");
+					//installclosebutton = jQuery(".ui-dialog-titlebar-close", ui.dialog);
+					jQuery(".ui-dialog-titlebar-close", ui.dialog).hide();
+					
+				}
+			});
+			var my_install_calls = 0;
+			var warning_calls = 60;
+			var max_calls = 90;
+			
+			jQuery('#import_dialog_box').append(jQuery('#import_dialog_box').data('requested_slide'));
+
+			var install_interval = setInterval(function(){
+				my_install_calls++;
+												
+				if(my_install_calls == warning_calls){
+					jQuery('#import_dialog_box_action').append(rev_lang.download_install_takes_longer);
+				}
+				if(my_install_calls == max_calls){
+					jQuery('#import_dialog_box').append(rev_lang.download_failed_check_server);
+					jQuery('#import_dialog_box').append('<div>'+rev_lang.aborting_import+'</div>');
+					jQuery('#import_dialog_box_action').html('');					
+					clearInterval(install_interval);					
+				}
+			}, 1000);
+			
+		};
 		
 		
 		// TOGGLE SOME ACCORDION
@@ -1926,6 +2377,7 @@ var RevSliderAdmin = new function(){
 				}
 			}); //dialog
 		});	//change image click.
+
 		
 		
 		//change image actions
@@ -2439,48 +2891,49 @@ var RevSliderAdmin = new function(){
 		
 		//set action and data
 		
-		var objData = { slideid:slideID };
+		var objDataPreview = { slideid:slideID };
 		
 		if(useParams == true){
-			objData.params = RevSliderSettings.getSettingsObject("form_slide_params"),
-			objData.params.slide_bg_color = jQuery("#slide_bg_color").val();
-			objData.params.slide_bg_external = jQuery("#slide_bg_external").val();
-			objData.params.bg_fit = jQuery("#slide_bg_fit").val();
-			objData.params.bg_fit_x = jQuery("input[name='bg_fit_x']").val();
-			objData.params.bg_fit_y = jQuery("input[name='bg_fit_y']").val();
-			objData.params.bg_repeat = jQuery("#slide_bg_repeat").val();
-			objData.params.bg_position = jQuery("#slide_bg_position").val();
-			objData.params.bg_position_x = jQuery("input[name='bg_position_x']").val();
-			objData.params.bg_position_y = jQuery("input[name='bg_position_y']").val();
-			objData.params.bg_end_position_x = jQuery("input[name='bg_end_position_x']").val();
-			objData.params.bg_end_position_y = jQuery("input[name='bg_end_position_y']").val();
+			objDataPreview.params = RevSliderSettings.getSettingsObject("form_slide_params"),
+			objDataPreview.params.slide_bg_color = jQuery("#slide_bg_color").val();
+			objDataPreview.params.slide_bg_external = jQuery("#slide_bg_external").val();
+			objDataPreview.params.bg_fit = jQuery("#slide_bg_fit").val();
+			objDataPreview.params.bg_fit_x = jQuery("input[name='bg_fit_x']").val();
+			objDataPreview.params.bg_fit_y = jQuery("input[name='bg_fit_y']").val();
+			objDataPreview.params.bg_repeat = jQuery("#slide_bg_repeat").val();
+			objDataPreview.params.bg_position = jQuery("#slide_bg_position").val();
+			objDataPreview.params.bg_position_x = jQuery("input[name='bg_position_x']").val();
+			objDataPreview.params.bg_position_y = jQuery("input[name='bg_position_y']").val();
+			objDataPreview.params.bg_end_position_x = jQuery("input[name='bg_end_position_x']").val();
+			objDataPreview.params.bg_end_position_y = jQuery("input[name='bg_end_position_y']").val();
 
 			//kenburns & pan zoom
-			objData.params.kenburn_effect = (jQuery("input[name='kenburn_effect']").is(':checked')) ? 'on' : 'off';
-			objData.params.kb_start_fit = jQuery("input[name='kb_start_fit']").val();
-			objData.params.kb_end_fit = jQuery("input[name='kb_end_fit']").val();
+			objDataPreview.params.kenburn_effect = (jQuery("input[name='kenburn_effect']").is(':checked')) ? 'on' : 'off';
+			objDataPreview.params.kb_start_fit = jQuery("input[name='kb_start_fit']").val();
+			objDataPreview.params.kb_end_fit = jQuery("input[name='kb_end_fit']").val();
 
-			objData.params.bg_end_position = jQuery("select[name='bg_end_position']").val();
-			objData.params.kb_duration = jQuery("input[name='kb_duration']").val();
-			objData.params.kb_easing = jQuery("select[name='kb_easing']").val();
+			objDataPreview.params.bg_end_position = jQuery("select[name='bg_end_position']").val();
+			objDataPreview.params.kb_duration = jQuery("input[name='kb_duration']").val();
+			objDataPreview.params.kb_easing = jQuery("select[name='kb_easing']").val();
 			
 			var ml = UniteLayersRev.getLayers();
 			
 			var arrLayersNew = {};
 			for(key in ml){
 				if(ml[key].layer_unavailable !== true && ml[key].deleted !== true){
-					arrLayersNew[key] = ml[key];
+					arrLayersNew[key] = jQuery.extend(true, {}, ml[key]);
 					
 					if(typeof(arrLayersNew[key].layer_unavailable) !== 'undefined') delete(arrLayersNew[key].layer_unavailable);
 					if(typeof(arrLayersNew[key].deleted) !== 'undefined') delete(arrLayersNew[key].deleted);
+					if(typeof(arrLayersNew[key].references) !== 'undefined') delete(arrLayersNew[key].references);
 					if(typeof(arrLayersNew[key].createdOnInit) !== 'undefined') delete(arrLayersNew[key].createdOnInit);
 				}
 			}
 			
-			objData.layers = arrLayersNew;
+			objDataPreview.layers = arrLayersNew;
 		}
 		
-		var jsonData = JSON.stringify(objData);
+		var jsonData = JSON.stringify(objDataPreview);
 
 		
 		jQuery("#preview-slide-data").val(jsonData);
@@ -2579,6 +3032,8 @@ var RevSliderAdmin = new function(){
 
 	var g_codemirrorCssDynamic = null;
 	var g_codemirrorCssStatic = null;
+	var g_codemirrorCssSlider = null;
+	var g_codemirrorJsSlider = null;
 	var staticStyles = null;
 	var urlStaticCssCaptions = null;
 
@@ -2605,6 +3060,14 @@ var RevSliderAdmin = new function(){
 		g_codemirrorCssStatic = CodeMirror.fromTextArea(document.getElementById("textarea_edit_static"), { lineNumbers: true });
 	}
 
+	t.setCodeMirrorSliderEditor = function(){
+		g_codemirrorCssSlider = CodeMirror.fromTextArea(document.getElementById("textarea_show_slider_styles"), { lineNumbers: true });
+	}
+
+	t.setCodeMirrorSliderEditorJS = function(){
+		g_codemirrorJsSlider = CodeMirror.fromTextArea(document.getElementById("textarea_show_slider_javascript"), { lineNumbers: true });
+	}
+
 	t.setCodeMirrorDynamicEditor = function(){
 		g_codemirrorCssDynamic = CodeMirror.fromTextArea(document.getElementById("textarea_show_dynamic_styles"), {
 			lineNumbers: true,
@@ -2616,6 +3079,8 @@ var RevSliderAdmin = new function(){
 		jQuery("#css-static-accordion").accordion({
 			heightStyle: "content",
 			activate: function(event, ui){
+				if(g_codemirrorCssSlider != null) g_codemirrorCssSlider.refresh();
+				if(g_codemirrorJsSlider != null) g_codemirrorJsSlider.refresh();
 				if(g_codemirrorCssStatic != null) g_codemirrorCssStatic.refresh();
 				if(g_codemirrorCssDynamic != null) g_codemirrorCssDynamic.refresh();
 			}
@@ -2628,10 +3093,34 @@ var RevSliderAdmin = new function(){
 			//if(!UniteLayersRev.getLayerGeneralParamsStatus()) return false; //false if fields are disabled
 
 			jQuery("#css-static-accordion").accordion({ active: 1 });
-
+			
+			
+			UniteAdminRev.ajaxRequest("get_slider_custom_css_js",{slider_id:curSliderID},function(response){
+				var cssData = response['css'];
+				var jsData = response['js'];
+				if(g_codemirrorCssSlider != null)
+					g_codemirrorCssSlider.setValue(cssData);
+				else{
+					jQuery("#textarea_show_slider_styles").val(cssData);
+					setTimeout('RevSliderAdmin.setCodeMirrorSliderEditor()',500);
+				}
+				
+				if(g_codemirrorJsSlider != null)
+					g_codemirrorJsSlider.setValue(jsData);
+				else{
+					jQuery("#textarea_show_slider_javascript").val(jsData);
+					setTimeout('RevSliderAdmin.setCodeMirrorSliderEditorJS()',500);
+				}
+				
+			}, false);
+			
+			
 			UniteAdminRev.ajaxRequest("get_static_css","",function(response){
 				var cssData = response.data;
-
+				
+				if(cssData !== ''){
+					//show button
+				}
 				if(g_codemirrorCssStatic != null)
 					g_codemirrorCssStatic.setValue(cssData);
 				else{
@@ -2642,7 +3131,7 @@ var RevSliderAdmin = new function(){
 
 			UniteAdminRev.ajaxRequest("get_dynamic_css","",function(response){
 				var cssData = response.data;
-
+				
 				if(g_codemirrorCssDynamic != null)
 					g_codemirrorCssDynamic.setValue(cssData);
 				else{
@@ -2650,29 +3139,81 @@ var RevSliderAdmin = new function(){
 					setTimeout('RevSliderAdmin.setCodeMirrorDynamicEditor()',500);
 				}
 			});
-
+			
+			jQuery("#css_slider_editor_wrap").dialog({
+				modal:true,
+				resizable:false,
+				minWidth:1024,
+				minHeight:500,
+				closeOnEscape:true,							
+				//title:rev_lang.global_styles_editor,				
+				create:function(ui) {							
+					//jQuery(ui.target).parent().find('.ui-dialog-titlebar').addClass("tp-slider-new-dialog-title");
+				},
+				open:function () {
+					jQuery(this).closest(".ui-dialog").addClass("tp-css-editor-dialog");					
+				},
+				buttons:{
+					'Save': function(){
+						var data = {};
+						if(g_codemirrorCssSlider != null)
+							data['css'] = g_codemirrorCssSlider.getValue();
+						else
+							data['css'] = jQuery("#textarea_show_slider_styles").val();
+						
+						if(g_codemirrorJsSlider != null)
+							data['js'] = g_codemirrorJsSlider.getValue();
+						else
+							data['js'] = jQuery("#textarea_show_slider_javascript").val();
+						
+						data['slider_id'] = curSliderID;
+						
+						UniteAdminRev.ajaxRequest("update_slider_custom_css_js",data,function(response){
+							/*if(g_codemirrorCssSlider != null)
+								g_codemirrorCssSlider.setValue('');
+							else
+								jQuery("#textarea_show_slider_styles").val('');*/
+						});
+						
+						jQuery(this).dialog('close');
+					}
+				}
+			});
+			
+			
+		});
+		
+		jQuery('.show_global_styles').click(function(){
+			initGlobalCssAccordion();
 			jQuery("#css_static_editor_wrap").dialog({
 				modal:true,
 				resizable:false,
-				title:rev_lang.global_styles_editor,
-				minWidth:700,
-				minHeight:500,
+				//title:rev_lang.global_styles_editor,
+				minWidth:1224,
+				minHeight:600,
 				closeOnEscape:true,
 				create:function(ui) {				
-					jQuery(ui.target).parent().find('.ui-dialog-titlebar').addClass("tp-slider-new-dialog-title");
+					//jQuery(ui.target).parent().find('.ui-dialog-titlebar').addClass("tp-slider-new-dialog-title");
 				},
 				open:function () {
-					jQuery(this).closest(".ui-dialog")
-					.find(".ui-button").each(function(i) {
-					   var cl;
-					   if (i==0) cl="revgray";
-					   if (i==1) cl="revgreen";
-					   if (i==2) cl="revred";
-					   jQuery(this).addClass(cl).addClass("button-primary").addClass("rev-uibuttons");
-				   })
+					jQuery(this).closest(".ui-dialog").addClass("tp-css-editor-dialog").addClass("tp-depricated-dialog");
 				},
 				buttons:{
-					Save:function(){
+					'Empty Global Styles': function(){
+						if(!confirm(rev_lang.really_clear_global_styles)){
+							return false;
+						}
+						
+						data = '';
+						
+						UniteAdminRev.ajaxRequest("update_static_css",data,function(response){
+							if(g_codemirrorCssStatic != null)
+								g_codemirrorCssStatic.setValue('');
+							else
+								jQuery("#textarea_edit_static").val('');
+						});
+					},
+					/*Save:function(){
 						if(!confirm(rev_lang.really_update_global_styles)){
 							return false;
 						}
@@ -2696,7 +3237,7 @@ var RevSliderAdmin = new function(){
 						//	setTimeout('UniteAdminRev.loadCssFile(RevSliderAdmin.getUrlStaticCssCaptions(),"rs-plugin-static-css");',1000);
 
 						jQuery(this).dialog("close");
-					},
+					},*/
 					"Cancel":function(){
 						jQuery(this).dialog("close");
 					}

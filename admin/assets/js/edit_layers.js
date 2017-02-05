@@ -21,7 +21,9 @@
 jQuery(document).ready(function(){
 	UniteLayersRev.setGlobalAction(wp.template( "rs-action-layer-wrap" ));
 	UniteLayersRev.setGlobalSlideImport(wp.template( "rs-import-layer-wrap" ));
+	!function(e){"use strict";"function"==typeof define&&define.amd?define(["jquery","jquery-ui/sortable"],e):e(window.jQuery)}(function(e){"use strict";function t(e,t,s){return e>t&&t+s>e}e.widget("mjs.nestedSortable",e.extend({},e.ui.sortable.prototype,{options:{disableParentChange:!1,doNotClear:!1,expandOnHover:700,isAllowed:function(){return!0},isTree:!1,listType:"ul",maxLevels:0,protectRoot:!1,rootID:null,rtl:!1,startCollapsed:!1,tabSize:20,branchClass:"mjs-nestedSortable-branch",collapsedClass:"mjs-nestedSortable-collapsed",disableNestingClass:"mjs-nestedSortable-no-nesting",errorClass:"mjs-nestedSortable-error",expandedClass:"mjs-nestedSortable-expanded",hoveringClass:"mjs-nestedSortable-hovering",leafClass:"mjs-nestedSortable-leaf",disabledClass:"mjs-nestedSortable-disabled"},_create:function(){var t,s=this;if(this.element.data("ui-sortable",this.element.data("mjs-nestedSortable")),!this.element.is(this.options.listType))throw t="nestedSortable: Please check that the listType option is set to your actual list type",new Error(t);this.options.isTree&&this.options.expandOnHover&&(this.options.tolerance="intersect"),e.ui.sortable.prototype._create.apply(this,arguments),this.options.isTree&&e(this.items).each(function(){var e=this.item,t=e.hasClass(s.options.collapsedClass),i=e.hasClass(s.options.expandedClass);e.children(s.options.listType).length?(e.addClass(s.options.branchClass),t||i||(s.options.startCollapsed?e.addClass(s.options.collapsedClass):e.addClass(s.options.expandedClass))):e.addClass(s.options.leafClass)})},_destroy:function(){return this.element.removeData("mjs-nestedSortable").removeData("ui-sortable"),e.ui.sortable.prototype._destroy.apply(this,arguments)},_mouseDrag:function(t){var s,i,o,l,r,n,a,h,p,d,c,u,f,m,g,v,C=this,b=this.options,y=!1,_=e(document);for(this.position=this._generatePosition(t),this.positionAbs=this._convertPositionTo("absolute"),this.lastPositionAbs||(this.lastPositionAbs=this.positionAbs),this.options.scroll&&(this.scrollParent[0]!==document&&"HTML"!==this.scrollParent[0].tagName?(this.overflowOffset.top+this.scrollParent[0].offsetHeight-t.pageY<b.scrollSensitivity?(y=this.scrollParent.scrollTop()+b.scrollSpeed,this.scrollParent.scrollTop(y)):t.pageY-this.overflowOffset.top<b.scrollSensitivity&&(y=this.scrollParent.scrollTop()-b.scrollSpeed,this.scrollParent.scrollTop(y)),this.overflowOffset.left+this.scrollParent[0].offsetWidth-t.pageX<b.scrollSensitivity?(y=this.scrollParent.scrollLeft()+b.scrollSpeed,this.scrollParent.scrollLeft(y)):t.pageX-this.overflowOffset.left<b.scrollSensitivity&&(y=this.scrollParent.scrollLeft()-b.scrollSpeed,this.scrollParent.scrollLeft(y))):(t.pageY-_.scrollTop()<b.scrollSensitivity?(y=_.scrollTop()-b.scrollSpeed,_.scrollTop(y)):e(window).height()-(t.pageY-_.scrollTop())<b.scrollSensitivity&&(y=_.scrollTop()+b.scrollSpeed,_.scrollTop(y)),t.pageX-_.scrollLeft()<b.scrollSensitivity?(y=_.scrollLeft()-b.scrollSpeed,_.scrollLeft(y)):e(window).width()-(t.pageX-_.scrollLeft())<b.scrollSensitivity&&(y=_.scrollLeft()+b.scrollSpeed,_.scrollLeft(y))),y!==!1&&e.ui.ddmanager&&!b.dropBehaviour&&e.ui.ddmanager.prepareOffsets(this,t)),this.positionAbs=this._convertPositionTo("absolute"),r=this.placeholder.offset().top,this.options.axis&&"y"===this.options.axis||(this.helper[0].style.left=this.position.left+"px"),this.options.axis&&"x"===this.options.axis||(this.helper[0].style.top=this.position.top+"px"),this.hovering=this.hovering?this.hovering:null,this.mouseentered=this.mouseentered?this.mouseentered:!1,function(){var e=this.placeholder.parent().parent();e&&e.closest(".ui-sortable").length&&(n=e)}.call(this),a=this._getLevel(this.placeholder),h=this._getChildLevels(this.helper),c=document.createElement(b.listType),s=this.items.length-1;s>=0;s--)if(i=this.items[s],o=i.item[0],l=this._intersectsWithPointer(i),l&&i.instance===this.currentContainer){if(-1!==o.className.indexOf(b.disabledClass))if(2===l){if(p=this.items[s+1],p&&p.item.hasClass(b.disabledClass))continue}else if(1===l&&(d=this.items[s-1],d&&d.item.hasClass(b.disabledClass)))continue;if(u=1===l?"next":"prev",o!==this.currentItem[0]&&this.placeholder[u]()[0]!==o&&!e.contains(this.placeholder[0],o)&&("semi-dynamic"===this.options.type?!e.contains(this.element[0],o):!0)){if(this.mouseentered||(e(o).mouseenter(),this.mouseentered=!0),b.isTree&&e(o).hasClass(b.collapsedClass)&&b.expandOnHover&&(this.hovering||(e(o).addClass(b.hoveringClass),this.hovering=window.setTimeout(function(){e(o).removeClass(b.collapsedClass).addClass(b.expandedClass),C.refreshPositions(),C._trigger("expand",t,C._uiHash())},b.expandOnHover))),this.direction=1===l?"down":"up","pointer"!==this.options.tolerance&&!this._intersectsWithSides(i))break;e(o).mouseleave(),this.mouseentered=!1,e(o).removeClass(b.hoveringClass),this.hovering&&window.clearTimeout(this.hovering),this.hovering=null,!b.protectRoot||this.currentItem[0].parentNode===this.element[0]&&o.parentNode!==this.element[0]?b.protectRoot||this._rearrange(t,i):this.currentItem[0].parentNode!==this.element[0]&&o.parentNode===this.element[0]?(e(o).children(b.listType).length||(o.appendChild(c),b.isTree&&e(o).removeClass(b.leafClass).addClass(b.branchClass+" "+b.expandedClass)),f="down"===this.direction?e(o).prev().children(b.listType):e(o).children(b.listType),void 0!==f[0]&&this._rearrange(t,null,f)):this._rearrange(t,i),this._clearEmpty(o),this._trigger("change",t,this._uiHash());break}}if(function(){var e=this.placeholder.prev();m=e.length?e:null}.call(this),null!=m)for(;"li"!==m[0].nodeName.toLowerCase()||-1!==m[0].className.indexOf(b.disabledClass)||m[0]===this.currentItem[0]||m[0]===this.helper[0];){if(!m[0].previousSibling){m=null;break}m=e(m[0].previousSibling)}if(function(){var e=this.placeholder.next();g=e.length?e:null}.call(this),null!=g)for(;"li"!==g[0].nodeName.toLowerCase()||-1!==g[0].className.indexOf(b.disabledClass)||g[0]===this.currentItem[0]||g[0]===this.helper[0];){if(!g[0].nextSibling){g=null;break}g=e(g[0].nextSibling)}return this.beyondMaxLevels=0,null==n||null!=g||b.protectRoot&&n[0].parentNode==this.element[0]||!(b.rtl&&this.positionAbs.left+this.helper.outerWidth()>n.offset().left+n.outerWidth()||!b.rtl&&this.positionAbs.left<n.offset().left)?null==m||m.hasClass(b.disableNestingClass)||!(m.children(b.listType).length&&m.children(b.listType).is(":visible")||!m.children(b.listType).length)||b.protectRoot&&this.currentItem[0].parentNode===this.element[0]||!(b.rtl&&this.positionAbs.left+this.helper.outerWidth()<m.offset().left+m.outerWidth()-b.tabSize||!b.rtl&&this.positionAbs.left>m.offset().left+b.tabSize)?this._isAllowed(n,a,a+h):(this._isAllowed(m,a,a+h+1),m.children(b.listType).length||(m[0].appendChild(c),b.isTree&&m.removeClass(b.leafClass).addClass(b.branchClass+" "+b.expandedClass)),r&&r<=m.offset().top?m.children(b.listType).prepend(this.placeholder):m.children(b.listType)[0].appendChild(this.placeholder[0]),"undefined"!=typeof n&&this._clearEmpty(n[0]),this._trigger("change",t,this._uiHash())):(n.after(this.placeholder[0]),v=!n.children(b.listItem).children("li:visible:not(.ui-sortable-helper)").length,b.isTree&&v&&n.removeClass(this.options.branchClass+" "+this.options.expandedClass).addClass(this.options.leafClass),"undefined"!=typeof n&&this._clearEmpty(n[0]),this._trigger("change",t,this._uiHash())),this._contactContainers(t),e.ui.ddmanager&&e.ui.ddmanager.drag(this,t),this._trigger("sort",t,this._uiHash()),this.lastPositionAbs=this.positionAbs,!1},_mouseStop:function(t){this.beyondMaxLevels&&(this.placeholder.removeClass(this.options.errorClass),this.domPosition.prev?e(this.domPosition.prev).after(this.placeholder):e(this.domPosition.parent).prepend(this.placeholder),this._trigger("revert",t,this._uiHash())),e("."+this.options.hoveringClass).mouseleave().removeClass(this.options.hoveringClass),this.mouseentered=!1,this.hovering&&window.clearTimeout(this.hovering),this.hovering=null,this._relocate_event=t,this._pid_current=e(this.domPosition.parent).parent().attr("id"),this._sort_current=this.domPosition.prev?e(this.domPosition.prev).next().index():0,e.ui.sortable.prototype._mouseStop.apply(this,arguments)},_intersectsWithSides:function(e){var s=this.options.isTree?.8:.5,i=t(this.positionAbs.top+this.offset.click.top,e.top+e.height*s,e.height),o=t(this.positionAbs.top+this.offset.click.top,e.top-e.height*s,e.height),l=t(this.positionAbs.left+this.offset.click.left,e.left+e.width/2,e.width),r=this._getDragVerticalDirection(),n=this._getDragHorizontalDirection();return this.floating&&n?"right"===n&&l||"left"===n&&!l:r&&("down"===r&&i||"up"===r&&o)},_contactContainers:function(){this.options.protectRoot&&this.currentItem[0].parentNode===this.element[0]||e.ui.sortable.prototype._contactContainers.apply(this,arguments)},_clear:function(){var t,s;for(e.ui.sortable.prototype._clear.apply(this,arguments),(this._pid_current!==this._uiHash().item.parent().parent().attr("id")||this._sort_current!==this._uiHash().item.index())&&this._trigger("relocate",this._relocate_event,this._uiHash()),t=this.items.length-1;t>=0;t--)s=this.items[t].item[0],this._clearEmpty(s)},serialize:function(t){var s=e.extend({},this.options,t),i=this._getItemsAsjQuery(s&&s.connected),o=[];return e(i).each(function(){var t=(e(s.item||this).attr(s.attribute||"id")||"").match(s.expression||/(.+)[-=_](.+)/),i=(e(s.item||this).parent(s.listType).parent(s.items).attr(s.attribute||"id")||"").match(s.expression||/(.+)[-=_](.+)/);t&&o.push((s.key||t[1])+"["+(s.key&&s.expression?t[1]:t[2])+"]="+(i?s.key&&s.expression?i[1]:i[2]:s.rootID))}),!o.length&&s.key&&o.push(s.key+"="),o.join("&")},toHierarchy:function(t){function s(t){var o,l=(e(t).attr(i.attribute||"id")||"").match(i.expression||/(.+)[-=_](.+)/),r=e(t).data();return r.nestedSortableItem&&delete r.nestedSortableItem,l?(o={id:l[2]},o=e.extend({},o,r),e(t).children(i.listType).children(i.items).length>0&&(o.children=[],e(t).children(i.listType).children(i.items).each(function(){var e=s(this);o.children.push(e)})),o):void 0}var i=e.extend({},this.options,t),o=[];return e(this.element).children(i.items).each(function(){var e=s(this);o.push(e)}),o},toArray:function(t){function s(t,r,n){var a,h,p,d=n+1;if(e(t).children(i.listType).children(i.items).length>0&&(r++,e(t).children(i.listType).children(i.items).each(function(){d=s(e(this),r,d)}),r--),a=e(t).attr(i.attribute||"id").match(i.expression||/(.+)[-=_](.+)/),r===o?h=i.rootID:(p=e(t).parent(i.listType).parent(i.items).attr(i.attribute||"id").match(i.expression||/(.+)[-=_](.+)/),h=p[2]),a){var c=e(t).children("div").data(),u=e.extend(c,{id:a[2],parent_id:h,depth:r,left:n,right:d});l.push(u)}return n=d+1}var i=e.extend({},this.options,t),o=i.startDepthCount||0,l=[],r=1;return i.excludeRoot||(l.push({item_id:i.rootID,parent_id:null,depth:o,left:r,right:2*(e(i.items,this.element).length+1)}),r++),e(this.element).children(i.items).each(function(){r=s(this,o,r)}),l=l.sort(function(e,t){return e.left-t.left})},_clearEmpty:function(t){function s(t,s,i,o){o&&(s=[i,i=s][0]),e(t).removeClass(s).addClass(i)}var i=this.options,o=e(t).children(i.listType),l=o.has("li").length,r=i.doNotClear||l||i.protectRoot&&e(t)[0]===this.element[0];i.isTree&&s(t,i.branchClass,i.leafClass,r),r||(o.parent().removeClass(i.expandedClass),o.remove())},_getLevel:function(e){var t,s=1;if(this.options.listType)for(t=e.closest(this.options.listType);t&&t.length>0&&!t.is(".ui-sortable");)s++,t=t.parent().closest(this.options.listType);return s},_getChildLevels:function(t,s){var i=this,o=this.options,l=0;return s=s||0,e(t).children(o.listType).children(o.items).each(function(e,t){l=Math.max(i._getChildLevels(t,s+1),l)}),s?l+1:l},_isAllowed:function(e,t,s){var i=this.options,o=this.placeholder.closest(".ui-sortable").nestedSortable("option","maxLevels"),l=this.currentItem.parent().parent(),r=i.disableParentChange&&("undefined"!=typeof e&&!l.is(e)||"undefined"==typeof e&&l.is("li"));r||!i.isAllowed(this.placeholder,e,this.currentItem)?(this.placeholder.addClass(i.errorClass),s>o&&0!==o?this.beyondMaxLevels=s-o:this.beyondMaxLevels=1):s>o&&0!==o?(this.placeholder.addClass(i.errorClass),this.beyondMaxLevels=s-o):(this.placeholder.removeClass(i.errorClass),this.beyondMaxLevels=0)}})),e.mjs.nestedSortable.prototype.options=e.extend({},e.ui.sortable.prototype.options,e.mjs.nestedSortable.prototype.options)});
 });
+
 
 jQuery(document).ready(function(){
 	jQuery.widget( "custom.catcomplete", jQuery.ui.autocomplete, {
@@ -45,10 +47,7 @@ jQuery(document).ready(function(){
 					li = that._renderItemData( ul, item );
 					if ( item.version ) {
 						li.attr( "aria-label", item.version + " : " + item.label );
-					}
-					/*if( typeof(item.variants) !== 'undefined' ) {
-						li.attr( 'variants', item.variants );
-					}*/
+					}					
 				});
 
 			}
@@ -57,11 +56,15 @@ jQuery(document).ready(function(){
 	
 });
 
+// GLOBAL VARIABLES 
+var timeline_timer = "",
+	add_meta_into = '';
+
 // EDIT Slider Functions
 // VERSION: 5.0 
 // DATE: 28-04-2015
 var UniteLayersRev = new function(){
-
+	
 	var initTop = 100,
 		initLeft = 100,
 		initSpeed = 300,
@@ -74,16 +77,21 @@ var UniteLayersRev = new function(){
 
 
 		initText = "Caption Text",
+		initGroupName = "Group",
+		initRowName = "Row",
+		initColumnName = "Column",
 		layout = 'desktop', //can be also tablet and mobil
 		transSettings = [],
 
 		t = this,
 		u = tpLayerTimelinesRev,
+		cm = tpLayerContextMenu,
+
 		initArrFontTypes = [],
 		containerID = "#divLayers",
 		container,
 		
-		update_layer_changes = true;
+		update_layer_changes = true,
 		id_counter = 0,
 		initLayers = null,
 		initDemoLayers = null,
@@ -95,70 +103,89 @@ var UniteLayersRev = new function(){
 		initLayerAnimsDefault = [],
 		currentAnimationType = 'customin',
 		curDemoSlideID = 0,
-		slideIDs = {};
+		slideIDs = {},
 		
-		selectedLayerSerial = -1,
+		alluniqueids = [],
+		
 		selectedLayerWidth = 0,
 		selectedlayerHeight = 0,
 		
 		totalWidth = 0,
 		totalHeight = 0,
 		unique_layer_id = 0,
-		add_meta_into = '',
+		//add_meta_into = '',
 		global_action_template = null,
 		global_layer_import_template = null,
 		updateRevTimer = 0,
 		updateRevChange = 0,
 		save_needed = false,
 		import_slides = {},
-		lastchangedinput = "",
-		timeline_timer = "";
+		lastchangedinput = "";
 
-		t.arrLayers = {};
-		t.arrLayersClone = {};
+	// LAYER VERSION NUMBER FOR CLEAN OUTPUT IN FRONTEND
+	t.core = 5;
+	t.sub = 3;
+	t.subsub = 0;
 
-		t.arrLayersDemo = {};
-		t.arrLayersChanges = {undo:[], redo:[]};
+	t.newlayercoord = {x:-1,y:-1};
 
-		t.attributegroups = [ 
-			{ id:"0",icon:"move", groupname:"Layer Position", keys:["left.desktop", "top.desktop", "align_hor.desktop", "align_vert.desktop", "left.notebook", "top.notebook", "align_hor.notebook", "align_vert.notebook", "left.tablet", "top.tablet", "align_hor.tablet", "align_vert.tablet", "left.mobile", "top.mobile", "align_hor.mobile", "align_vert.mobile"]},
-			{ id:"1",icon:"play", groupname:"Start Animation", keys:["splitdelay","animation","split","split_in_extratime","easing","speed","time","x_rotate_start","x_rotate_start_reverse","x_start","x_start_reverse","y_rotate_start","y_rotate_start_reverse","y_start","y_start_reverse","z_rotate_start","z_rotate_start_reverse","z_start"]},
-			{ id:"2",icon:"play", groupname:"End Animation", keys:["endsplitdelay","endanimation","endWithSlide","endeasing","endsplit","endsplitdelay","endtime","endspeed","x_end","x_end_reverse","x_origin_end","x_rotate_end","x_rotate_end_reverse","y_end","y_end_reverse","y_rotate_end","y_rotate_end_reverse","z_end","z_rotate_end","z_rotate_end_reverse"]},
-			{ id:"3",icon:"play", groupname:"Loop Animation", keys:["loop_angle","loop_animation","loop_easing","loop_enddeg","loop_radius","loop_speed","loop_startdeg","loop_xend","loop_xorigin","loop_xstart","loop_yend","loop_yorigin","loop_ystart","loop_zoomend","loop_zoomstart"]},
-			{ id:"4",icon:"play", groupname:"Mask Animation", keys:["mask_ease_end","mask_ease_start","mask_end","mask_speed_end","mask_speed_start","mask_start","mask_x_end","mask_x_end_reverse","mask_x_start","mask_x_start_reverse","mask_y_end","mask_y_end_reverse","mask_y_start","mask_y_start_reverse"]},
-			{ id:"5",icon:"font", groupname:"Formatting", keys:["autolinebreak","whitespace.desktop","whitespace.notebook","whitespace.tablet","whitespace.mobile","html_tag","layer-selectable"]},
-			{ id:"6",icon:"cog", groupname:"Behavior", keys:["basealign","lazy-load","resizeme","resize-full","responsive_offset"]},
-			{ id:"7",icon:"eye", groupname:"Visibilty", keys:["hiddenunder","visible-desktop","visible-notebook","visible-tablet","visible-mobile","show-on-hover"]},
-			{ id:"8",icon:"resize-full", groupname:"Sizing", keys:["scaleProportional","video_data.fullwidth", "video_data.cover", "originalWidth","originalHeight","cover_mode","height","width","image-size","video_height.desktop","video_height.notebook","video_height.tablet","video_height.mobile","video_width.desktop","video_width.notebook","video_width.tablet","video_width.mobile","max_height.desktop","max_height.notebook","max_height.tablet","max_height.mobile","max_width.desktop","max_width.notebook","max_width.tablet","max_width.mobile","scaleX.desktop","scaleX.notebook","scaleX.tablet","scaleX.mobile","scaleY.desktop","scaleY.notebook","scaleY.tablet","scaleY.mobile"]},			
-			{ id:"9",icon:"font", groupname:"Naming and Alias", keys:["text","alias"]},
-			{ id:"30",icon:"resize-vertical", groupname:"Order", keys:["order"]},
+	u.layout = layout;
+		
+	t.groupMove = {x:0, y:0};
+	t.selectedLayerSerial = -1;
+	t.selectedLayers = new Array();
+	t.justDropped = false;
+	t.arrLayers = {};
+	t.arrLayersClone = {};
 
-			{ id:"10",icon:"cancel", groupname:"Deleted", keys:["deleted"]},
-			{ id:"11",icon:"plus", groupname:"Created", keys:["layer_unavailable"]},
-			{ id:"12",icon:"link", groupname:"Source", keys:["svg.src","image_url"]},						
-			{ id:"13",icon:"star", groupname:"SVG Style", keys:["svg.svgstroke-color","svg.svgstroke-dasharray","svg.svgstroke-dashoffset","svg.svgstroke-width","svg.svgstroke-hover-color","svg.svgstroke-hover-dasharray","svg.svgstroke-hover-dashoffset","svg.svgstroke-hover-transparency","svg.svgstroke-hover-width"]},
-			{ id:"14",icon:"palette", groupname:"Main Styling", keys:["static_styles.color.desktop","static_styles.color.notebook","static_styles.color.tablet","static_styles.color.mobile","static_styles.font-size.desktop","static_styles.font-size.notebook","static_styles.font-size.tablet","static_styles.font-size.mobile","static_styles.font-weight.desktop","static_styles.font-weight.notebook","static_styles.font-weight.tablet","static_styles.font-weight.mobile","static_styles.line-height.desktop","static_styles.line-height.notebook","static_styles.line-height.tablet","static_styles.line-height.mobile"]},
+	t.arrLayersDemo = {};
+	t.arrLayersChanges = {undo:[], redo:[]};
 
-			{ id:"15",icon:"thumbs-up", groupname:"Layer Action", keys:["layer_action","layer_action.action","layer_action.action_delay","layer_action.actioncallback","layer_action.image_link","layer_action.jump_to_slide","layer_action.jump_to_slide","layer_action.link_open_in","layer_action.link_type","layer_action.scrollunder_offset","layer_action.toggle_class","layer_action.toggle_layer_type","layer_action.tooltip_event"]},
+	t.ignorAllUndoRedoLogs = false;
 
-			
-			{ id:"16",icon:"droplet", groupname:"Styling Text", keys:["deformation.color-transparency","deformation.font-family","deformation.font-style","deformation.opacity","deformation.text-align","deformation.text-decoration"]},
-			{ id:"17",icon:"droplet", groupname:"Styling Padding", keys:["deformation.padding","deformation.padding.0","deformation.padding.1","deformation.padding.2","deformation.padding.3"]},
-			{ id:"18",icon:"droplet", groupname:"Styling Corners", keys:["deformation.corner_left","deformation.corner_right"]},
-			{ id:"19",icon:"droplet", groupname:"Styling Background", keys:["deformation.background-color","deformation.background-transparency"]},
-			{ id:"20",icon:"droplet", groupname:"Styling Border", keys:["deformation.border-color","deformation.border-radius.0","deformation.border-radius.1","deformation.border-radius.2","deformation.border-radius.3","deformation.border-style","deformation.border-transparency","deformation.border-width"]},
-			{ id:"21",icon:"droplet", groupname:"Styling Transforms", keys:["deformation.2d_origin_x","deformation.2d_origin_y","deformation.parallax","deformation.pers","deformation.scalex","deformation.scaley","deformation.skewx","deformation.skewy","deformation.text-transform","deformation.x","deformation.xrotate","deformation.y","deformation.yrotate","deformation.z"]},
-			
-			{ id:"22",icon:"droplet", groupname:"Styling Hover", keys:["hover","deformation-hover.css_cursor","deformation-hover.easing"]},
-			{ id:"23",icon:"droplet", groupname:"Styling Hover Text", keys:["deformation-hover.color","deformation-hover.color-transparency","deformation-hover.font-family","deformation-hover.font-style","deformation-hover.opacity","deformation-hover.text-align","deformation-hover.text-decoration"]},
-			{ id:"24",icon:"droplet", groupname:"Styling Hover Padding", keys:["deformation-hover.padding","deformation-hover.padding.0","deformation-hover.padding.1","deformation-hover.padding.2","deformation-hover.padding.3"]},
-			{ id:"25",icon:"droplet", groupname:"Styling Hover Corners", keys:["deformation-hover.corner_left","deformation-hover.corner_right"]},
-			{ id:"26",icon:"droplet", groupname:"Styling Hover Background", keys:["deformation-hover.background-color","deformation-hover.background-transparency"]},
-			{ id:"27",icon:"droplet", groupname:"Styling Hover Border", keys:["deformation-hover.border-color","deformation-hover.border-radius.0","deformation-hover.border-radius.1","deformation-hover.border-radius.2","deformation-hover.border-radius.3","deformation-hover.border-style","deformation-hover.border-transparency","deformation-hover.border-width"]},
-			{ id:"28",icon:"droplet", groupname:"Styling Hover Transforms", keys:["deformation-hover.2d_origin_x","deformation-hover.2d_origin_y","deformation-hover.parallax","deformation-hover.pers","deformation-hover.scalex","deformation-hover.scaley","deformation-hover.skewx","deformation-hover.skewy","deformation-hover.text-transform","deformation-hover.x","deformation-hover.xrotate","deformation-hover.y","deformation-hover.yrotate","deformation-hover.z"]},
-			{ id:"29",icon:"video", groupname:"Video/Audo Settings", keys:["video_data.urlAudio","video_data.previewimage","video_data.link","video_data.thumb_medium.url", "video_type","video_data.id","video_data.video_type","video_data.title","video_data.author","video_data.description", "video_data.args","video_data.autoplay","video_data.nextslide","video_data.forcerewind","video_data.controls","video_data.mute","video_data.stopallvideo","video_data.allowfullscreen","video_data.videoloop","video_data.show_cover_pause","video_data.start_at","video_data.end_at","video_data.volume","video_data.desc_small","video_data.thumb_small.url","video_data.thumb_small.width","video_data.thumb_small.height","video_data.thumb_medium.width","video_data.thumb_medium.height","video_data.video_height"]}
-			
-			];
+	t.attributegroups = [ 
+		{ id:"0",icon:"move", groupname:"Layer Position", keys:["left.desktop",  "top.desktop", "align_hor.desktop", "align_vert.desktop", "left.notebook", "top.notebook", "align_hor.notebook", "align_vert.notebook", "left.tablet", "top.tablet", "align_hor.tablet", "align_vert.tablet", "left.mobile", "top.mobile", "align_hor.mobile", "align_vert.mobile"]},
+		{ id:"1",icon:"play", groupname:"Start Animation", keys:["x_rotate_start","x_rotate_start_reverse","x_start","x_start_reverse","y_rotate_start","y_rotate_start_reverse","y_start","y_start_reverse","z_rotate_start","z_rotate_start_reverse","z_start"]},
+		{ id:"2",icon:"play", groupname:"End Animation", keys:["x_end","x_end_reverse","x_origin_end","x_rotate_end","x_rotate_end_reverse","y_end","y_end_reverse","y_rotate_end","y_rotate_end_reverse","z_end","z_rotate_end","z_rotate_end_reverse"]},
+		{ id:"31",icon:"play", groupname:"Frames", keys:["splitdelay","animation","split","split_extratime","relative_time","easing","speed","time"]},
+		{ id:"3",icon:"play", groupname:"Loop Animation", keys:["loop_angle","loop_animation","loop_easing","loop_enddeg","loop_radius","loop_speed","loop_startdeg","loop_xend","loop_xorigin","loop_xstart","loop_yend","loop_yorigin","loop_ystart","loop_zoomend","loop_zoomstart"]},
+		{ id:"4",icon:"play", groupname:"Mask Animation", keys:["mask_ease_end","mask_ease_start","mask_end","mask_speed_end","mask_speed_start","mask_start","mask_x_end","mask_x_end_reverse","mask_x_start","mask_x_start_reverse","mask_y_end","mask_y_end_reverse","mask_y_start","mask_y_start_reverse"]},
+		{ id:"5",icon:"font", groupname:"Formatting", keys:["displaymode.desktop","displaymode.notebook","displaymode.tablet","displaymode.mobile","autolinebreak","whitespace.desktop","whitespace.notebook","whitespace.tablet","whitespace.mobile","html_tag","layer-selectable"]},
+		{ id:"6",icon:"cog", groupname:"Behavior", keys:["basealign","lazy-load","resizeme","resize-full","responsive_offset"]},
+		{ id:"7",icon:"eye", groupname:"Visibilty", keys:["hiddenunder","visible-desktop","visible-notebook","visible-tablet","visible-mobile","show-on-hover"]},
+		{ id:"8",icon:"resize-full", groupname:"Sizing", keys:["scaleProportional","video_data.fullwidth", "video_data.cover", "originalWidth","originalHeight","cover_mode","height","width","image-size","video_height.desktop","video_height.notebook","video_height.tablet","video_height.mobile","video_width.desktop","video_width.notebook","video_width.tablet","video_width.mobile","max_height.desktop","max_height.notebook","max_height.tablet","max_height.mobile","min_height.desktop","min_height.notebook","min_height.tablet","min_height.mobile","max_width.desktop","max_width.notebook","max_width.tablet","max_width.mobile","scaleX.desktop","scaleX.notebook","scaleX.tablet","scaleX.mobile","scaleY.desktop","scaleY.notebook","scaleY.tablet","scaleY.mobile"]},			
+		{ id:"9",icon:"font", groupname:"Naming and Alias", keys:["text","alias"]},
+
+		{ id:"30",icon:"resize-vertical", groupname:"Order", keys:["order", "p_uid"]},
+
+		{ id:"10",icon:"cancel", groupname:"Deleted", keys:["deleted"]},
+		{ id:"11",icon:"plus", groupname:"Created", keys:["layer_unavailable"]},
+		{ id:"12",icon:"link", groupname:"Source", keys:["svg.src","image_url"]},						
+		{ id:"13",icon:"star", groupname:"SVG Style", keys:["svg.svgstroke-color","svg.svgstroke-dasharray","svg.svgstroke-dashoffset","svg.svgstroke-width","svg.svgstroke-hover-color","svg.svgstroke-hover-dasharray","svg.svgstroke-hover-dashoffset","svg.svgstroke-hover-transparency","svg.svgstroke-hover-width"]},
+		{ id:"14",icon:"palette", groupname:"Main Styling", keys:["static_styles.color.desktop","static_styles.color.notebook","static_styles.color.tablet","static_styles.color.mobile","static_styles.font-size.desktop","static_styles.font-size.notebook","static_styles.font-size.tablet","static_styles.font-size.mobile","static_styles.font-weight.desktop","static_styles.font-weight.notebook","static_styles.font-weight.tablet","static_styles.font-weight.mobile","static_styles.line-height.desktop","static_styles.line-height.notebook","static_styles.line-height.tablet","static_styles.line-height.mobile"]},
+
+		{ id:"15",icon:"thumbs-up", groupname:"Layer Action", keys:["layer_action","layer_action.action","layer_action.action_delay","layer_action.actioncallback","layer_action.image_link","layer_action.jump_to_slide","layer_action.jump_to_slide","layer_action.link_open_in","layer_action.link_type","layer_action.scrollunder_offset","layer_action.toggle_class","layer_action.toggle_layer_type","layer_action.tooltip_event"]},
+
+		
+		{ id:"16",icon:"droplet", groupname:"Styling Text", keys:["deformation.color-transparency","deformation.font-family","deformation.font-style","deformation.opacity","deformation.text-align","deformation.vertical-align","deformation.display","deformation.text-decoration"]},
+		{ id:"17",icon:"droplet", groupname:"Styling Padding", keys:["deformation.padding","deformation.padding.0","deformation.padding.1","deformation.padding.2","deformation.padding.3"]},
+		{ id:"17",icon:"droplet", groupname:"Styling Margin", keys:["margin.desktop","margin.notebook","margin.tablet","margin.mobile"]},
+		{ id:"18",icon:"droplet", groupname:"Styling Corners", keys:["deformation.corner_left","deformation.corner_right"]},
+		{ id:"19",icon:"droplet", groupname:"Styling Background", keys:["deformation.background-color","deformation.background-transparency"]},
+		{ id:"20",icon:"droplet", groupname:"Styling Border", keys:["deformation.border-color","deformation.border-radius.0","deformation.border-radius.1","deformation.border-radius.2","deformation.border-radius.3","deformation.border-style","deformation.border-transparency","deformation.border-width"]},
+		{ id:"21",icon:"droplet", groupname:"Styling Transforms", keys:["deformation.2d_origin_x","deformation.2d_origin_y","deformation.parallax","deformation.pers","deformation.scalex","deformation.scaley","deformation.skewx","deformation.skewy","deformation.text-transform","deformation.x","deformation.xrotate","deformation.y","deformation.yrotate","deformation.z"]},
+		
+		{ id:"22",icon:"droplet", groupname:"Styling Hover", keys:["hover","deformation-hover.css_cursor","deformation-hover.easing"]},
+		{ id:"23",icon:"droplet", groupname:"Styling Hover Text", keys:["deformation-hover.color","deformation-hover.color-transparency","deformation-hover.font-family","deformation-hover.font-style","deformation-hover.opacity","deformation-hover.text-align","deformation-hover.vertical-align","deformation-hover.text-decoration"]},
+		{ id:"24",icon:"droplet", groupname:"Styling Hover Padding", keys:["deformation-hover.padding","deformation-hover.padding.0","deformation-hover.padding.1","deformation-hover.padding.2","deformation-hover.padding.3"]},
+		{ id:"24",icon:"droplet", groupname:"Styling Hover Margin", keys:["deformation-hover.margin","deformation-hover.margin.0","deformation-hover.margin.1","deformation-hover.margin.2","deformation-hover.margin.3"]},
+		{ id:"25",icon:"droplet", groupname:"Styling Hover Corners", keys:["deformation-hover.corner_left","deformation-hover.corner_right"]},
+		{ id:"26",icon:"droplet", groupname:"Styling Hover Background", keys:["deformation-hover.background-color","deformation-hover.background-transparency"]},
+		{ id:"27",icon:"droplet", groupname:"Styling Hover Border", keys:["deformation-hover.border-color","deformation-hover.border-radius.0","deformation-hover.border-radius.1","deformation-hover.border-radius.2","deformation-hover.border-radius.3","deformation-hover.border-style","deformation-hover.border-transparency","deformation-hover.border-width"]},
+		{ id:"28",icon:"droplet", groupname:"Styling Hover Transforms", keys:["deformation-hover.2d_origin_x","deformation-hover.2d_origin_y","deformation-hover.parallax","deformation-hover.pers","deformation-hover.scalex","deformation-hover.scaley","deformation-hover.skewx","deformation-hover.skewy","deformation-hover.text-transform","deformation-hover.x","deformation-hover.xrotate","deformation-hover.y","deformation-hover.yrotate","deformation-hover.z"]},
+		{ id:"29",icon:"video", groupname:"Video/Audo Settings", keys:["video_data.urlAudio","video_data.previewimage","video_data.link","video_data.thumb_medium.url", "video_type","video_data.id","video_data.video_type","video_data.title","video_data.author","video_data.description", "video_data.args","video_data.autoplay","video_data.nextslide","video_data.forcerewind","video_data.controls","video_data.mute","video_data.stopallvideo","video_data.allowfullscreen","video_data.videoloop","video_data.show_cover_pause","video_data.start_at","video_data.end_at","video_data.volume","video_data.desc_small","video_data.thumb_small.url","video_data.thumb_small.width","video_data.thumb_small.height","video_data.thumb_medium.width","video_data.thumb_medium.height","video_data.video_height"]}
+		
+		];
 	
 
 
@@ -182,7 +209,9 @@ var UniteLayersRev = new function(){
 	}
 	
 	
-
+	t.getLayout = function() {
+		return layout;
+	}
 
 	t.setInitSlideIds = function(jsonIds){ slideIDs = jQuery.parseJSON(jsonIds); }
 	
@@ -225,12 +254,20 @@ var UniteLayersRev = new function(){
 	t.getMaintime = function() { return g_slideTime; }
 	t.setMaintime = function(a) { g_slideTime = a; }
 	
+	// GET OBJECT LENGTH
+	t.getObjectLength = function(obj) {
+		var i = 0;
+		for (var a in obj) {
+			i++;
+		}
+		return i;
+	}
 	
 
 	t.sortFontTypesByUsage = function(){
 		for(var skey in sgfamilies){
 			for(var key in initArrFontTypes){
-				
+				if (initArrFontTypes[key]!==undefined && initArrFontTypes[key]['label']!==undefined && sgfamilies[skey]!==undefined)
 				if(initArrFontTypes[key]['label'].replace(/\ /g,'+') == sgfamilies[skey].replace(/\ /g,'+')){
 					//add to front
 					if(typeof(initArrFontTypes[key]['top']) == 'undefined'){ //push to top and define top
@@ -282,8 +319,7 @@ var UniteLayersRev = new function(){
 						obj[handle][setspecific[i]] = val;
 					}
 				}
-			}else{
-
+			}else{				
 				if(typeof(obj[handle]) !== 'undefined' && typeof(obj[handle][layout]) !== 'undefined'){
 					obj[handle][layout] = val;
 				}else{
@@ -302,12 +338,14 @@ var UniteLayersRev = new function(){
 	/**
 	 * GET option to object depending on which size is choosen
 	 */
-	t.getVal = function(obj, handle){
+	t.getVal = function(obj, handle,forcelayout){
+		forcelayout = forcelayout===undefined ? layout : forcelayout;
 		if(typeof(obj) === 'undefined') return;
 		
 		if(jQuery.inArray(handle, transSettings) !== -1){ //handle is in the list, so save only on the current choosen size
-			if(typeof(obj[handle]) !== 'undefined' && typeof(obj[handle][layout]) !== 'undefined'){				
-				return obj[handle][layout];
+			if(typeof(obj[handle]) !== 'undefined' && typeof(obj[handle][forcelayout]) !== 'undefined'){				
+
+				return obj[handle][forcelayout];
 			}else{
 				if(typeof(obj[handle]) !== 'undefined' && typeof(obj[handle]) !== 'object'){
 					return obj[handle];
@@ -318,7 +356,7 @@ var UniteLayersRev = new function(){
 							returnval = 'novalue',
 							calcblayout = "desktop";
 
-						switch(layout){
+						switch(forcelayout){
 							case 'desktop':
 								if(typeof(obj[handle]['notebook']) !== 'undefined')   {
 									returnval = obj[handle]['notebook'];
@@ -410,13 +448,18 @@ var UniteLayersRev = new function(){
 	 * insert template to editor
 	 */
 	t.insertTemplate = function(text){
-		
 		if(add_meta_into === ''){
-			if(selectedLayerSerial == -1) return(false);
+			if(t.selectedLayerSerial == -1) return(false);
 			jQuery('#layer_text').val(jQuery('#layer_text').val()+'{{'+text+'}}');
+			
 			t.updateLayerFromFields();
 		}else{
-			jQuery('input[name="'+add_meta_into+'"]').val(jQuery('input[name="'+add_meta_into+'"]').val()+'{{'+text+'}}');
+			if(jQuery.type(add_meta_into) == "object"){
+				add_meta_into.val(add_meta_into.val()+'{{'+text+'}}').trigger('change');
+			}
+			else {
+				jQuery('input[name="'+add_meta_into+'"]').val(jQuery('input[name="'+add_meta_into+'"]').val()+'{{'+text+'}}');
+			}
 		}
 		jQuery('#dialog_template_insert').dialog('close');
 	}
@@ -481,7 +524,7 @@ var UniteLayersRev = new function(){
 		var addfor = {};
 		
 		//first round, check which one are missing unique IDs and set the unique_layer_id to be used by new layers
-		for(var key in layers){
+		for(var key in layers){			
 			if(layers[key].unique_id === undefined){
 				addfor[key] = true;
 			}else{
@@ -502,17 +545,7 @@ var UniteLayersRev = new function(){
 		
 	}
 
-	t.timeLineTableDimensionUpdate = function() {		
-		clearTimeout(timeline_timer);
-		timeline_timer = setTimeout(function() {		
-			u.resetTimeLineHeight();	
-			var maxh = ((jQuery('#layers-right ul li').length+1)*32) - ((jQuery('#layers-right ul li.layer-deleted').length+1)*32),	
-				curh = jQuery('#mastertimer-wrapper').height();
-			punchgs.TweenLite.set(jQuery('.layers-wrapper'),{height:maxh-5});
-			punchgs.TweenLite.set(jQuery('#mastertimer-wrapper'),{height:maxh-5})
-			jQuery('.master-rightcell .layers-wrapper, .master-leftcell .layers-wrapper, #divLayers-wrapper, .quick-layers-list').perfectScrollbar("update");
-		},50);
-	}
+	
 
 	//======================================================
 	//	Init Functions
@@ -527,7 +560,9 @@ var UniteLayersRev = new function(){
 		
 		g_slideTime = Number(slideTime);
 		u.init(g_slideTime);
+		
 		container = jQuery(containerID);
+		var demoRows = new Array();
 					
 		//add all layers from init
 		if(initDemoLayers){
@@ -536,8 +571,12 @@ var UniteLayersRev = new function(){
 				for(var i=0;i<len;i++){
 					for(var key in initDemoLayers[i]){
 						curDemoSlideID = i;
-						
-						addLayer(initDemoLayers[i][key],true,true,true);
+						if (initDemoLayers[i][key].type==="row" || initDemoLayers[i][key].type==="column") {
+							demoRows.push(initDemoLayers[i][key].unique_id)
+						} else {
+							if (jQuery.inArray(initDemoLayers[i][key].p_uid,demoRows)==-1)
+								addLayer(initDemoLayers[i][key],true,true,true);
+						}
 						
 					}
 				}
@@ -545,33 +584,145 @@ var UniteLayersRev = new function(){
 				for(var i in initDemoLayers){
 					for(var key in initDemoLayers[i]){
 						curDemoSlideID = i;
-						
-						addLayer(initDemoLayers[i][key],true,true,true);
+						if (initDemoLayers[i][key].type==="row" || initDemoLayers[i][key].type==="column") {
+							demoRows.push(initDemoLayers[i][key].unique_id)
+						} else {
+							if (jQuery.inArray(initDemoLayers[i][key].p_uid,demoRows)==-1)
+								addLayer(initDemoLayers[i][key],true,true,true);
+						}
 					
 					}
 				}
 			}
 		}
 
-		
-		//add all layers from init
-		if(initLayers){
-			var len = initLayers.length;
-			if(len){
-				for(var i=0;i<len;i++) {							
-					addLayer(initLayers[i],true,false,true);										
+		u.organiseGroupsAndLayer(false,true);
+
+		var len = initLayers.length;		
+		if(initLayers){			
+			if(len){				
+				for(var i=0;i<len;i++) {
+					initLayers[i].addedToStage=false;
 				}
-			}else{				
-				for(var key in initLayers) {										
-					addLayer(initLayers[key],true,false,true);										
+
+				// ADD GROUPS AND LAYERS WITHOUT GROUPS BEFORE THE ROWS							
+				for(var i=0;i<len;i++) {		
+					if (initLayers[i].type==="row") break;
+					if (initLayers[i].type!=="row" && initLayers[i].type!=="column") {
+						if (initLayers[i].type!=="group" || initLayers[i].p_uid===-1) {	
+							initLayers[i].addedToStage=true;
+							addLayer(initLayers[i],true,false,true);
+						}
+					}
+				}
+				t.add_missing_unique_ids();
+				
+
+				
+				//ADD ROOT LAYERS BEFORE ROWS
+				for(var i=0;i<len;i++) {	
+					if (initLayers[i].type=="row") break;		
+					if (initLayers[i].addedToStage!==true && initLayers[i].type!=="row" && initLayers[i].type!=="column" && initLayers[i].type!=="group" ) {						
+						initLayers[i].addedToStage=true;						
+						addLayer(initLayers[i],true,false,true);										
+					}
+				}
+				
+				
+				// ADD GROUPS AND ROWS	
+				t.add_missing_unique_ids();				
+				for(var i=0;i<len;i++) {										
+					if (initLayers[i].addedToStage!==true && (initLayers[i].type==="group" || initLayers[i].type==="row"))  {						
+						initLayers[i].addedToStage=true;
+						addLayer(initLayers[i],true,false,true);										
+					}
+				}
+				
+
+				// ADD COLUMNS INTO ROWS	
+				t.add_missing_unique_ids();					
+				for(var i=0;i<len;i++) {							
+					if (initLayers[i].type==="column") {							
+						initLayers[i].addedToStage=true;
+						addLayer(initLayers[i],true,false,true);										
+					}
+				}
+					
+
+				//ADD ROOT LAYERS AFTER ROWS
+				t.add_missing_unique_ids();				
+				for(var i=0;i<len;i++) {	
+					if (initLayers[i].addedToStage!==true) {						
+						addLayer(initLayers[i],true,false,true);										
+					}
+				}
+
+			}else{		
+				for(var i in initLayers) {
+					initLayers[i].addedToStage=false;
+				}
+
+				// ADD GROUPS AND LAYERS WITHOUT GROUPS BEFORE THE ROWS							
+				for(var i in initLayers) {		
+					if (initLayers[i].type==="row") break;
+					if (initLayers[i].type!=="row" && initLayers[i].type!=="column") {
+						if (initLayers[i].type!=="group" || initLayers[i].p_uid===-1) {	
+							initLayers[i].addedToStage=true;
+							addLayer(initLayers[i],true,false,true);
+						}
+					}
+				}
+				t.add_missing_unique_ids();
+								
+				//ADD ROOT LAYERS BEFORE ROWS
+				for(var i in initLayers) {	
+					if (initLayers[i].type=="row") break;		
+					if (initLayers[i].addedToStage!==true && initLayers[i].type!=="row" && initLayers[i].type!=="column" && initLayers[i].type!=="group" ) {						
+						initLayers[i].addedToStage=true;						
+						addLayer(initLayers[i],true,false,true);										
+					}
+				}
+				
+				
+				// ADD GROUPS AND ROWS	
+				t.add_missing_unique_ids();				
+				for(var i in initLayers) {										
+					if (initLayers[i].addedToStage!==true && (initLayers[i].type==="group" || initLayers[i].type==="row"))  {						
+						initLayers[i].addedToStage=true;
+						addLayer(initLayers[i],true,false,true);										
+					}
+				}
+				
+
+				// ADD COLUMNS INTO ROWS	
+				t.add_missing_unique_ids();					
+				for(var i in initLayers) {							
+					if (initLayers[i].type==="column") {							
+						initLayers[i].addedToStage=true;
+						addLayer(initLayers[i],true,false,true);										
+					}
+				}
+					
+
+				//ADD ROOT LAYERS AFTER ROWS
+				t.add_missing_unique_ids();				
+				for(var i in initLayers) {	
+					if (initLayers[i].addedToStage!==true) {						
+						addLayer(initLayers[i],true,false,true);										
+					}
 				}
 			}			
-			t.add_missing_unique_ids();								
+			t.add_missing_unique_ids();																
 		}
+
+
 		
 		// IF LAYERS ADDED, WE CAN CALCULATE THE SCROLLER
-		t.timeLineTableDimensionUpdate();
+		u.timeLineTableDimensionUpdate();
 		
+		// One Time Refresh of TimeTable (to reset Action, Wait texts on Time Line Layers)
+		
+		u.updateAllLayerTimeline();
 		
 
 		
@@ -592,11 +743,12 @@ var UniteLayersRev = new function(){
 		
 		initLoopFunctions();
 		
-		scaleImage();
+		scaleAndResetLayerInit();
 		
-		positionChanged();
+		positionChanged_Core();
 		
 		initBackgroundFunctions();
+
 		
 		
 		// STICKY CATEGORIES FOR SCROLL SELECTORS
@@ -680,7 +832,9 @@ var UniteLayersRev = new function(){
 		jQuery('select[name="rev_show_the_slides"]').change(function(){
 			var nextsh = jQuery('#divbgholder').find('.slotholder');
 			
-			jQuery('.demo_layer').hide();
+			//jQuery('.demo_layer').hide();
+			jQuery('.demo_layer').addClass("invisible_demolayer");
+
 			nextsh.addClass("trans_bg");
 			nextsh.css("background-image","none");
 			nextsh.css("background-color","transparent");
@@ -695,6 +849,7 @@ var UniteLayersRev = new function(){
 			if(jQuery(this).val() !== 'none'){
 				var sv = jQuery(this).val();
 				jQuery('.demo_layer_'+sv).show();
+				jQuery('.demo_layer_'+sv).removeClass("invisible_demolayer");
 
 				if(typeof initDemoSettings[sv] !== 'undefined'){
 					var bgfit = (initDemoSettings[sv]['bg_fit'] == 'percentage') ? initDemoSettings[sv]['bg_fit_x'] + '% ' + initDemoSettings[sv]['bg_fit_y'] + '% ' : initDemoSettings[sv]['bg_fit'];
@@ -764,15 +919,25 @@ var UniteLayersRev = new function(){
 					
 			var changeto = jQuery(this).data('val');
 			layout = changeto;
+			u.layout = changeto
 			
+			var minheight = 0;
+			jQuery('.row-zone-container').each(function() {
+				
+				minheight=minheight + jQuery(this).height();
+			});
+
+			
+			minheight = minheight <rev_sizes[changeto][1] ? rev_sizes[changeto][1] : minheight;
+
 			jQuery('.tp-bgimg.defaultimg, #divLayers').css({
-					width:rev_sizes[changeto][0], 
-					height:rev_sizes[changeto][1]
-				});
+				width:rev_sizes[changeto][0], 
+				height:minheight
+			});
 					
 			if (__slidertype!="auto") {
 				jQuery('#divbgholder').css({minWidth:rev_sizes[changeto][0], maxWidth:"100%", marginLeft:"auto",marginRight:"auto"});
-				jQuery('#divbgholder').css({minHeight:rev_sizes[changeto][1],height:rev_sizes[changeto][1]});
+				jQuery('#divbgholder').css({minHeight:minheight,height:minheight});
 				jQuery('.slotholder .tp-bgimg.defaultimg').css({minWidth:rev_sizes[changeto][0], maxWidth:"100%" });
 				jQuery('.tp-bgimg.defaultimg').css({
 					width:"100%"					
@@ -780,39 +945,48 @@ var UniteLayersRev = new function(){
 			} else {
 				
 				jQuery('#divbgholder').css({minWidth:rev_sizes[changeto][0], maxWidth:rev_sizes[changeto][0], marginLeft:"auto",marginRight:"auto"});
-				jQuery('#divbgholder').css({minHeight:rev_sizes[changeto][1],height:rev_sizes[changeto][1]});
+				jQuery('#divbgholder').css({minHeight:minheight,height:minheight});
 				jQuery('.slotholder .tp-bgimg.defaultimg').css({minWidth:rev_sizes[changeto][0], maxWidth:rev_sizes[changeto][0] })
 
 			}			
+
+
 			
-			jQuery('#divLayers-wrapper').css('height', rev_sizes[changeto][1] + 1);
+			jQuery('#divLayers-wrapper').css('height', minheight + 1);
 
 			jQuery('.rs-slide-device_selector').removeClass('selected');
 			
 			jQuery(this).addClass('selected');
-
-			/*for(var serial in t.arrLayers){
-				updateHtmlLayersFromObject(serial,true);
-			}
-
-			for(var serial in t.arrLayersDemo){
-				updateHtmlLayersFromObject(serial,true, true);
-			}
-
-			if(selectedLayerSerial !== -1)
-				updateLayerFormFields(selectedLayerSerial);*/
-
+			
 			//update positions of all other slides elements if static slide is selected
 			u.resetSlideAnimations();
 			jQuery(window).trigger("resize");			
 			redrawAllLayerHtml();
-			//jQuery('#layer-short-toolbar').appendTo('.slide_layer.layer_selected');
+			t.setMiddleRowZone(100);
 			// update Background Size !!
 			
 		});
 
-	   
+		
+		//DESELECT ALL LAYERS WHEN CLICKED SOME NEUTRAL PLACE
+		jQuery('#divbgholder .oldslotholder, #divbgholder .slotholder, #divbgholder .defaultimg, #top-toolbar-wrapper, #layer-settings-toolbar-bottom').on('click',function(e) {
+			var button = e.which || e.button;
+		    if ( button === 1 )  cm.toggleMenuOff();		    
+			if(e.target != this) return;	
+			u.checkMultipleSelectedItems(true);		
+			unselectLayers();
+		});
 
+
+	   
+		var cfith = function(layer,a) {
+			layer['deformation-hover'][a] = layer['deformation'][a];
+			return layer;
+		}
+		var cfhti = function(layer,a) {
+			layer['deformation'][a] = layer['deformation-hover'][a];
+			return layer;
+		}
 		
 		//copy idle to hover
 		jQuery('.copy-from-idle').click(function(){
@@ -820,66 +994,68 @@ var UniteLayersRev = new function(){
 			if(confirm(rev_lang.copy_styles_to_idle_from_hover)){
 				var layer = t.getCurrentLayer();
 				
-				layer['deformation-hover']['2d_origin_x'] = layer['deformation']['2d_origin_x'];
-				layer['deformation-hover']['2d_origin_y'] = layer['deformation']['2d_origin_y'];
-				layer['deformation-hover']['2d_rotation'] = layer['2d_rotation'];
 				layer['deformation-hover']['color'] = t.getVal(layer['static_styles'], 'color');
-				layer['deformation-hover']['background-color'] = layer['deformation']['background-color'];
-				layer['deformation-hover']['background-transparency'] = layer['deformation']['background-transparency'];
-				layer['deformation-hover']['border-color'] = layer['deformation']['border-color'];
-				layer['deformation-hover']['border-radius'] = layer['deformation']['border-radius'];
-				layer['deformation-hover']['border-style'] = layer['deformation']['border-style'];
-				layer['deformation-hover']['border-transparency'] = layer['deformation']['border-transparency'];
-				layer['deformation-hover']['border-width'] = layer['deformation']['border-width'];
-				layer['deformation-hover']['color-transparency'] = layer['deformation']['color-transparency'];
-				layer['deformation-hover']['opacity'] = layer['deformation']['opacity'];
-				layer['deformation-hover']['scalex'] = layer['deformation']['scalex'];
-				layer['deformation-hover']['scaley'] = layer['deformation']['scaley'];
-				layer['deformation-hover']['skewx'] = layer['deformation']['skewx'];
-				layer['deformation-hover']['skewy'] = layer['deformation']['skewy'];
-				layer['deformation-hover']['text-decoration'] = layer['deformation']['text-decoration'];
-				layer['deformation-hover']['x'] = layer['deformation']['x'];
-				layer['deformation-hover']['xrotate'] = layer['deformation']['xrotate'];
-				layer['deformation-hover']['y'] = layer['deformation']['y'];
-				layer['deformation-hover']['yrotate'] = layer['deformation']['yrotate'];
-				layer['deformation-hover']['z'] = layer['deformation']['z'];
+				layer['deformation-hover']['2d_rotation'] = layer['2d_rotation'];
+
+				layer = cfith(layer,'2d_origin_x');
+				layer = cfith(layer,'2d_origin_y');				
+				layer = cfith(layer,'background-color');
+				layer = cfith(layer,'background-transparency');
+				layer = cfith(layer,'border-color');
+				layer = cfith(layer,'border-radius');
+				layer = cfith(layer,'border-style');
+				layer = cfith(layer,'border-transparency');
+				layer = cfith(layer,'border-width');				
+				layer = cfith(layer,'color-transparency');
+				layer = cfith(layer,'opacity');
+				layer = cfith(layer,'scalex');
+				layer = cfith(layer,'scaley');
+				layer = cfith(layer,'skewx');
+				layer = cfith(layer,'skewy');
+				layer = cfith(layer,'text-decoration');
+				layer = cfith(layer,'x');
+				layer = cfith(layer,'xrotate');
+				layer = cfith(layer,'y');
+				layer = cfith(layer,'yrotate');
+				layer = cfith(layer,'z');				
 				
-				updateLayerFormFields(selectedLayerSerial);
+				t.updateLayerFormFields(t.selectedLayerSerial);
+				
 				t.updateLayerFromFields();
 			}
 		});
-		
 		
 		//copy hover to idle
 		jQuery('.copy-from-hover').click(function(){
 			if(confirm(rev_lang.copy_styles_to_hover_from_idle)){
 				var layer = t.getCurrentLayer();
-				
-				layer['deformation']['2d_origin_x'] = layer['deformation-hover']['2d_origin_x'];
-				layer['deformation']['2d_origin_y'] = layer['deformation-hover']['2d_origin_y'];
 				layer['2d_rotation'] = layer['deformation-hover']['2d_rotation'];
 				layer['static_styles'] = t.setVal(layer['static_styles'], 'color', layer['deformation-hover']['color'], false);
-				layer['deformation']['background-color'] = layer['deformation-hover']['background-color'];
-				layer['deformation']['background-transparency'] = layer['deformation-hover']['background-transparency'];
-				layer['deformation']['border-color'] = layer['deformation-hover']['border-color'];
-				layer['deformation']['border-radius'] = layer['deformation-hover']['border-radius'];
-				layer['deformation']['border-style'] = layer['deformation-hover']['border-style'];
-				layer['deformation']['border-transparency'] = layer['deformation-hover']['border-transparency'];
-				layer['deformation']['border-width'] = layer['deformation-hover']['border-width'];
-				layer['deformation']['color-transparency'] = layer['deformation-hover']['color-transparency'];
-				layer['deformation']['opacity'] = layer['deformation-hover']['opacity'];
-				layer['deformation']['scalex'] = layer['deformation-hover']['scalex'];
-				layer['deformation']['scaley'] = layer['deformation-hover']['scaley'];
-				layer['deformation']['skewx'] = layer['deformation-hover']['skewx'];
-				layer['deformation']['skewy'] = layer['deformation-hover']['skewy'];
-				layer['deformation']['text-decoration'] = layer['deformation-hover']['text-decoration'];
-				layer['deformation']['x'] = layer['deformation-hover']['x'];
-				layer['deformation']['xrotate'] = layer['deformation-hover']['xrotate'];
-				layer['deformation']['y'] = layer['deformation-hover']['y'];
-				layer['deformation']['yrotate'] = layer['deformation-hover']['yrotate'];
-				layer['deformation']['z'] = layer['deformation-hover']['z'];
+
+				layer = cfhti(layer,'2d_origin_x');
+				layer = cfhti(layer,'2d_origin_y');				
+				layer = cfhti(layer,'background-color');
+				layer = cfhti(layer,'background-transparency');
+				layer = cfhti(layer,'border-color');
+				layer = cfhti(layer,'border-radius');
+				layer = cfhti(layer,'border-style');
+				layer = cfhti(layer,'border-transparency');
+				layer = cfhti(layer,'border-width');				
+				layer = cfhti(layer,'color-transparency');
+				layer = cfhti(layer,'opacity');
+				layer = cfhti(layer,'scalex');
+				layer = cfhti(layer,'scaley');
+				layer = cfhti(layer,'skewx');
+				layer = cfhti(layer,'skewy');
+				layer = cfhti(layer,'text-decoration');
+				layer = cfhti(layer,'x');
+				layer = cfhti(layer,'xrotate');
+				layer = cfhti(layer,'y');
+				layer = cfhti(layer,'yrotate');
+				layer = cfhti(layer,'z');		
 				
-				updateLayerFormFields(selectedLayerSerial);
+				t.updateLayerFormFields(t.selectedLayerSerial);
+				
 				t.updateLayerFromFields();
 			}
 		});
@@ -892,6 +1068,7 @@ var UniteLayersRev = new function(){
 
 				// Reset Fields from Style Template
 				updateSubStyleParameters(layer, true);
+				
 				t.updateLayerFromFields();
 			}
 		});
@@ -930,44 +1107,39 @@ var UniteLayersRev = new function(){
 							var objLayer = getVideoObjLayer(videoData);
 							
 							t.updateCurrentLayer(objLayer);
-							updateHtmlLayersFromObject(selectedLayerSerial);
-							updateLayerFormFields(selectedLayerSerial);
-							redrawLayerHtml(selectedLayerSerial);
+							updateHtmlLayersFromObject(t.selectedLayerSerial);
+							t.updateLayerFormFields(t.selectedLayerSerial);
+							redrawLayerHtml(t.selectedLayerSerial);
 							
 							scaleNormalVideo();
 						}, objVideoData);
 					break;
 					case 'image':
-						UniteAdminRev.openAddImageDialog(rev_lang.select_layer_image,function(urlImage){
-							var objData = {};
-							objData.image_url = urlImage;
-							t.updateCurrentLayer(objData);
-							
-							redrawLayerHtml(selectedLayerSerial);
-							t.add_layer_change();
-							scaleNormal();
-						});	
+						if (layer.image_library==="objectlibrary") {
+							jQuery('#dialog_addobj').data('changeimg',true);						
+							jQuery('#dialog_addobj').data('changeimgserial',layer.serial);
+							t.callObjectLibraryDialog("object");
+						} else {
+							UniteAdminRev.openAddImageDialog(rev_lang.select_layer_image,function(urlImage){
+								var objData = {};
+								objData.image_url = urlImage;
+								t.updateCurrentLayer(objData);
+								
+								redrawLayerHtml(t.selectedLayerSerial);
+								t.add_layer_change();
+								scaleNormal();
+							});	
+						}
 					break;
 					case 'shape':
 					break;
 					case 'svg':
 						//jQuery('#svg-items-filter').change();
-						jQuery('#dialog_addsvg').data('changesvg',true);						
-						jQuery('#dialog_addsvg').data('changesvgserial',layer.serial);
-						jQuery('#dialog_addsvg').dialog({				
-							minWidth: 651,
-							minHeight: 540,
-							modal: true,
-							dialogClass: 'tpdialogs',
-							create:function(ui) {											
-								jQuery(ui.target).parent().find('.ui-dialog-titlebar').addClass("tp-slider-new-dialog-title");
-							},
-							open:function() {
-								 jQuery('#object_library_results').perfectScrollbar("update");
-								 if (jQuery('.obj_library_cats.selected').length==0)
-									jQuery('.obj_library_cats').first().click();
-							}
-						});
+
+						jQuery('#dialog_addobj').data('changesvg',true);						
+						jQuery('#dialog_addobj').data('changesvgserial',layer.serial);
+						t.callObjectLibraryDialog("object");
+
 					break;
 					case 'audio':
 						//do audio stuff here
@@ -975,16 +1147,14 @@ var UniteLayersRev = new function(){
 						
 						//open video dialog
 						UniteAdminRev.openVideoDialog(function(videoData){
-							//update video layer
+							//update video layer							
 							var objLayer = getVideoObjLayer(videoData);
 							
 							t.updateCurrentLayer(objLayer);
-							updateHtmlLayersFromObject(selectedLayerSerial);
-							updateLayerFormFields(selectedLayerSerial);
-							redrawLayerHtml(selectedLayerSerial);							
-							var mcurrent_layer = t.getCurrentLayer();
-							if(mcurrent_layer !== false)
-								u.drawAudioMap(mcurrent_layer);
+							updateHtmlLayersFromObject(t.selectedLayerSerial);
+							t.updateLayerFormFields(t.selectedLayerSerial);
+							redrawLayerHtml(t.selectedLayerSerial);														
+							u.drawAudioMap(layer);
 							
 						}, objVideoData, 'audio');
 					break;
@@ -994,25 +1164,22 @@ var UniteLayersRev = new function(){
 				}
 			}
 		}
-		
-		function edit_image_current_layer() {
-			
-		}
-
+				
 		jQuery('body').on('dblclick','.layer_selected',edit_content_current_layer);
 
+
 		setTimeout(function() {
-			jQuery('#form_slide_params').find('input, select').on('change',function() {
-				
+			jQuery('#form_slide_params').find('input, select').on('change',function() {				
 				t.set_save_needed(true);
 			});
 		},500);
 		
 		// EDIT LAYER CONTENT FROM QUICK LIST		
 		jQuery('body').on('click','.button_change_image_source, .button_edit_layer, .button_change_video_settings, .button_reset_size, .button_edit_shape, .button_change_audio_settings, .button_change_svg_settings',function() {
+			
 			jQuery(':focus').blur(); // Blur Focused Elements first
 			var b = jQuery(this),
-				serial = b.closest('.layer-toolbar-li').data('serial');
+				serial = b.closest('.layer-toolbar-li').data('serial');			
 			t.setLayerSelected(serial);		
 			if (b.hasClass("button_reset_size")) 
 				resetCurrentElementSize();
@@ -1021,10 +1188,15 @@ var UniteLayersRev = new function(){
 		});
 
 		jQuery('body').on('click','.layer-title-with-icon',function() {
-			jQuery(':focus').blur(); // Blur Focused Elements first
+			var a = jQuery(this),
+				infocus = a.find('input').is(":focus");
+			if (!infocus)
+				jQuery(':focus').blur(); // Blur Focused Elements first
 			var b = jQuery(this),
 				serial = b.closest('.layer-toolbar-li').data('serial');
-			t.setLayerSelected(serial);		
+			
+			t.setLayerSelected(serial,false,infocus);		
+			
 		})
 
 		
@@ -1033,27 +1205,88 @@ var UniteLayersRev = new function(){
 
 		//delete layer actions:
 		jQuery('body').on('click',".button_delete_layer, #button_delete_layer", function(){
+
 			jQuery(':focus').blur(); // Blur Focused Elements first
 			var b = jQuery(this);
 
 			if(b.hasClass("button-now-disabled")) return(false);
 			
-			if(confirm(rev_lang.delete_layer)){
-			
-				if (b.hasClass("button_delete_layer")) {
-					var serial = b.closest('.layer-toolbar-li').data('serial');
-					t.setLayerSelected(serial);	
-				}
-				
-				//delete selected layer
-				deleteCurrentLayer();
-				unselectLayers();
+			if (b.hasClass("button_delete_layer")) {
+				var serial = b.closest('.layer-toolbar-li').data('serial');				
+				t.setLayerSelected(serial);	
+			}
 
+
+			var objLayer = t.getCurrentLayer();
+			
+			
+			if (objLayer.type==="column") return false;
+					
+			if ((objLayer.type==="group" || objLayer.type==="row") && t.getLayersInGroup(objLayer.unique_id).layers.length>0) {
+				jQuery('#delete-full-group-dialog').dialog({
+					width:600,
+					open: function() {
+				        // On open, hide the original submit button			        
+				    },
+				    buttons: [
+				        {
+				            text: "Remove All Layers",
+				            click: function() {
+				            	var list = t.getLayersInGroup(objLayer.unique_id);
+				            	jQuery.each(list.layers,function(i,layer) {
+				            		t.deleteLayer(layer.serial);
+				            	});
+				            	jQuery.each(list.columns,function(i,column) {
+				            		t.deleteLayer(column.serial);
+				            	});
+				            	t.deleteLayer(objLayer.serial);
+				            	u.organiseGroupsAndLayer(true);
+				            	 jQuery( this ).dialog( "close" );
+				            }			            
+				        },
+				        {
+				            text: "Move Layers to Root",
+				            click: function() {
+				            	var list = t.getLayersInGroup(objLayer.unique_id);
+				            	jQuery.each(list.layers,function(i,layer) {
+				            		layer.p_uid = -1;
+				            	});
+				            	jQuery.each(list.columns,function(i,column) {
+				            		t.deleteLayer(column.serial);
+				            	});
+				            	t.deleteLayer(objLayer.serial);
+				            	u.organiseGroupsAndLayer(true);
+				            	 jQuery( this ).dialog( "close" );
+				            }			            
+				        },
+				        {
+				            text: "Cancel Action",
+				            click: function() {
+				                jQuery( this ).dialog( "close" );
+				            }
+				        }
+				    ]
+				})
+			} else {
+				if(confirm(rev_lang.delete_layer)){
 				
+					if (b.hasClass("button_delete_layer")) {
+						var serial = b.closest('.layer-toolbar-li').data('serial');				
+						t.setLayerSelected(serial);	
+					}
+					
+					//delete selected layer
+					deleteCurrentLayer();
+					unselectLayers();					
+				}
 			}
 		});
 
-		//delete layer actions:
+		
+		t.makeRowSortableDroppable();
+
+
+		//DUPLICATE layer actions:
 		jQuery('body').on('click',".button_duplicate_layer, #button_duplicate_layer",function(){
 			jQuery(':focus').blur(); // Blur Focused Elements first
 			var b = jQuery(this);
@@ -1061,12 +1294,16 @@ var UniteLayersRev = new function(){
 			if(b.hasClass("button-now-disabled")) return(false);
 			if (b.hasClass("button_duplicate_layer")) {
 				var serial = b.closest('.layer-toolbar-li').data('serial');
+				
 				t.setLayerSelected(serial);	
 			}
 			//duplicate selected layer			
-			duplicateCurrentLayer();			
+			duplicateCurrentLayer();		
+			
 			return false;
 		});
+
+
 		
 		t.showHideContentEditor(false);
 	
@@ -1254,11 +1491,10 @@ var UniteLayersRev = new function(){
 				},
 				buttons:{
 					'Save':function(){
-						var new_name = jQuery('#rs-save-as-animation').val();
-						var new_handle = UniteAdminRev.sanitize_input(new_name);
-						
-						var is_new_handle_existing = false;
-						var anim = {};
+						var new_name = jQuery('#rs-save-as-animation').val(),
+							new_handle = UniteAdminRev.sanitize_input(new_name),						
+							is_new_handle_existing = false,
+							anim = {};
 						
 						for(var key in initLayerAnimsDefault){
 							if(key == new_handle){
@@ -1325,11 +1561,10 @@ var UniteLayersRev = new function(){
 				},
 				buttons:{
 					'Rename':function(){
-						var new_name = jQuery('#rs-rename-animation').val();
-						var new_handle = UniteAdminRev.sanitize_input(new_name);
-						
-						var is_found = false;
-						var is_new_handle_existing = false;
+						var new_name = jQuery('#rs-rename-animation').val(),
+							new_handle = UniteAdminRev.sanitize_input(new_name),						
+							is_found = false,
+							is_new_handle_existing = false;
 						
 						for(var key in initLayerAnimsDefault){
 							if(key == new_handle){
@@ -1572,8 +1807,8 @@ var UniteLayersRev = new function(){
 				jQuery('#dialog-change-style-from-css').dialog({
 					buttons:{'OK':function(){
 						//check what should be updated on which device types
-						var is_allowed = false;
-						var set_to = {'device':[],'include':[]};
+						var is_allowed = false,
+							set_to = {'device':[],'include':[]};
 						
 						jQuery('input[name="rs-css-set-on[]"]').each(function(){
 							if(jQuery(this)[0].checked){
@@ -1603,6 +1838,7 @@ var UniteLayersRev = new function(){
 						updateSubStyleParameters(layer, true);
 						
 						jQuery('#layer_caption').change();
+						
 						t.updateLayerFromFields();
 
 						jQuery('#dialog-change-style-from-css').dialog('close');
@@ -1707,6 +1943,8 @@ var UniteLayersRev = new function(){
 			jQuery(this).parent().remove();
 		});
 
+		
+
 		jQuery('.extra_sub_settings_wrapper').addClass("normal_rename");
 
 		jQuery('#extra_start_animation_settings input, #extra_end_animation_settings input').change(function(){
@@ -1744,20 +1982,22 @@ var UniteLayersRev = new function(){
 
 				
 		jQuery('body').on('blur','.timer-layer-text',function() {
+			
 			t.updateLayerFromFields(); 			
 		});
 
 		jQuery('#the_current-editing-layer-title').on('blur',function() {
-			//var objLayer = selectedLayerSerial === -1 ? "" : t.getLayer(selectedLayerSerial);
+			//var objLayer = t.selectedLayerSerial === -1 ? "" : t.getLayer(t.selectedLayerSerial);
 			//objLayer.alias = jQuery(this).val();
-			jQuery('#layer_sort_'+selectedLayerSerial+" .timer-layer-text").val(jQuery(this).val());
+			jQuery('#layer_sort_'+t.selectedLayerSerial+">.layer_sort_inner_wrapper .timer-layer-text").val(jQuery(this).val());
+			
 			t.updateLayerFromFields();
 		});
 
-		jQuery('body').on('blur','.layer-title-in-list',function() {
+		jQuery('body').on('blur','.layer-title-in-list',function() {			
 			var serial = jQuery(this).closest('li').data('serial');		
 			if (serial===undefined || serial==="") return false;	
-			jQuery('#layer_sort_'+serial+" "+' .timer-layer-text').val(jQuery(this).val());
+			jQuery('#layer_sort_'+serial+" "+'>.layer_sort_inner_wrapper .timer-layer-text').val(jQuery(this).val());
 			var objUpdate= {};
 			objUpdate.alias = jQuery(this).val();			
 			t.updateLayerFromFields();
@@ -1769,11 +2009,12 @@ var UniteLayersRev = new function(){
 			var b = jQuery(this),
 				i = b.find('i'),
 				p = b.closest('.layer-toolbar-li'),				
-				serial = p.data('serial');
+				serial = p.data('serial'),
+				htmllayer = t.getHtmlLayerFromSerial(serial);
 
 			if (serial===undefined || serial==="") return false;
 									
-			if(u.isLayerLocked(serial)) {
+			if(u.isLayerLocked(htmllayer)) {
 				u.unlockLayer(serial);	
 				jQuery('.layer-toolbar-li').each(function() {
 					var li = jQuery(this);
@@ -1808,9 +2049,9 @@ var UniteLayersRev = new function(){
 			var	objLayer = t.getLayer(serial);
 			
 			
-			if(u.isLayerVisible(serial)){				
+			if(u.isLayerVisible(objLayer.references.htmlLayer)){				
 				objLayer.visible = false;
-				u.hideLayer(serial);
+				u.hideLayer(objLayer);
 				jQuery('.layer-toolbar-li').each(function() {
 					var li = jQuery(this);
 					if (li.data('serial')==serial) {
@@ -1822,7 +2063,7 @@ var UniteLayersRev = new function(){
 				});				
 			}else{
 				objLayer.visible = true;
-				u.showLayer(serial);
+				u.showLayer(objLayer);
 				jQuery('.layer-toolbar-li').each(function() {
 					var li = jQuery(this);
 					if (li.data('serial')==serial) {
@@ -1834,15 +2075,560 @@ var UniteLayersRev = new function(){
 				});
 			}
 		});
+
+		jQuery('.rs-row-break-selector').click(function() {
+			var _t = jQuery(this);
+			jQuery('.rs-row-break-selector.selected').removeClass('selected');
+			_t.addClass("selected");
+			jQuery('#column_break_at option:selected').prop('selected',false);
+			jQuery('#column_break_at option[value="'+_t.data("val")+'"]').attr('selected','selected');
+			var objUpdate = {};
+			objUpdate["column_break_at"] = _t.data("val");
+			t.updateLayer(t.selectedLayerSerial,objUpdate,false,true)
+
+		});
+
+		// GROUP / COLUMNG HANDLING
+		jQuery('#rs-check-row-layout').click(function(){
+						
+			//get current selected layer 
+			var row_layer = t.getCurrentLayer();
+			
+			//check if layer is a row and can have columns
+			if(row_layer.type !== 'row') return false;
+			
+			var rl = jQuery('input[name="rs-row-layout"]').val(),						
+				rl_san = rl.replace(/[^\d\+\/ ]/gi, ''); //remove all but numbers, / and +
+
+			jQuery('input[name="rs-row-layout"]').val(rl_san);
+			
+			if(rl !== rl_san){
+				alert('Wrong format, please enter for example 1/2 + 1/4 + 1/4');
+				return false;
+			}
+			
+			//now check if the calculation is 1, if not then error_get_last
+			var result = eval(rl_san);
+			result = Math.ceil(result*100000000000000) / 100000000000000;
+
+					
+			if(result !== 1){
+				alert('The columns have to be added up to 1, so for example 1/2 + 1/8 is lower than 1');
+				return false;
+			}
+
+			
+			t.ignorAllUndoRedoLogs = true;
+
+			//check how many columns we have and how big they are
+			var columns_f = rl_san.split('+'),						
+				columns = new Array(),
+				undeleted_columns = new Array(),
+				deleted_columns = new Array();
+						
+			//Collect Columns in the Current ROW			
+			jQuery.each(t.arrLayers, function(index,objLayer) {
+				if(objLayer.type === "column" && objLayer.p_uid == row_layer.unique_id) {
+					columns.push(objLayer);			
+					if (objLayer.deleted!==true) undeleted_columns.push(objLayer);			
+					if (objLayer.deleted===true) deleted_columns.push(objLayer);
+				}
+			});
+						
+			if(columns_f.length > undeleted_columns.length){ //new has more
+				//add columns until even
+				var availablecolumns = 0;				
+				for(var i = columns.length; i < columns_f.length; i++){
+					var c_objLayer = {
+						type: "column",
+						text: initColumnName + (id_counter +1),
+						p_uid: row_layer.unique_id,
+						column_size: columns_f[i],
+						createdOnInit: false
+					}
+					addLayer(c_objLayer);
+					availablecolumns++;
+				}
+												
+				for (var i=0;i<deleted_columns.length;i++) {							
+					if (availablecolumns<columns_f.length-1) {						
+						var objData = { deleted:false};
+						t.updateLayer(deleted_columns[i].serial,objData,false,true)
+						deleted_columns[i].deleted = false;
+						deleted_columns[i].references.htmlLayer.removeClass("layer-deleted");
+						deleted_columns[i].references.quicklayer.removeClass("layer-deleted");
+						deleted_columns[i].references.sorttable.layer.removeClass("layer-deleted");
+						deleted_columns[i].references.sorttable.timeline.removeClass("layer-deleted");
+					}
+					availablecolumns++;
+				}
+				
+			}else if(columns_f.length < undeleted_columns.length){ //new has less
+				// Remove highest Columsn 1by1 and move Layers to last available Column						
+				for(var i = undeleted_columns.length; i > columns_f.length; i--){
+					//check the columns, remove the highest unique_id and save all the layers by moving them to the column before
+					var highest = 0,
+						second = 0;
+
+					jQuery.each(undeleted_columns, function(index,column) {						
+						if (column!=undefined && column.unique_id > highest && column.deleted===false) {
+							second = highest;
+							highest = column.unique_id;
+						}
+					});					
+					jQuery.each(t.arrLayers, function(index,objLayer) {						
+						if (objLayer.p_uid === highest) objLayer.p_uid = second;						
+						if (objLayer.unique_id === highest) t.deleteLayer(objLayer.serial);						
+					});									
+				}
+				
+			}else{ //same amount
+				
+			}						
+			var i = 0;
+			//set the column sizes
+			jQuery.each(t.arrLayers, function(index,objLayer){			
+				if(objLayer.p_uid == row_layer.unique_id && objLayer.deleted===false && i<columns_f.length){			
+					objLayer.column_size = columns_f[i];
+					i++;
+				}
+			})
+			t.ignorAllUndoRedoLogs = false;
+			u.organiseGroupsAndLayer(u);
+			u.allLayerToIdle();
+			t.makeRowSortableDroppable();
+			t.setLayerSelected(row_layer.serial);
+			row_layer.references.htmlLayer.find('.row_editor').addClass("open_re");			
+			
+			jQuery('#rs-layout-row-composer').show(); //.appendTo(row_layer.references.htmlLayer.find('.row_toolbar'));
+			u.timeLineTableDimensionUpdate();
+			t.hideRowLayoutComposer();
+
+		});
 		
+		//change image actions
+		jQuery("#button_change_background_image, #button_change_background_image_objlib").click(function(){
+			var layer = t.getCurrentLayer();
+			if(layer !== null){
+				if (jQuery(this).attr('id') == 'button_change_background_image_objlib') {
+					layer.image_library = "objectlibrary";
+					jQuery('#dialog_addobj').data('changeimg',true);						
+					jQuery('#dialog_addobj').data('changeimgserial',layer.serial);
+					t.callObjectLibraryDialog("layer");
+				} else {
+					delete(layer.image_library);
+					UniteAdminRev.openAddImageDialog(rev_lang.select_layer_image,function(urlImage){
+						switchLayerBackground({bgimage_url:urlImage});
+					});	
+				}
+			}
+		});	//change image click.
+		
+		jQuery("#button_clear_background_image").click(function(){			
+				switchLayerBackground({bgimage_url:""});
+			
+		});
 		
 		t.sortFontTypesByUsage();
-
 		t.cloneArrLayers();
+		// INIT CONTEXT MENU
+		cm.init();
+		
+	}
+
+	/***
+	 * 	SET Dimension of Slide based on Rows New 
+	 */
+	t.extendSlideHeightBasedOnRows = function() {
+			var minheight = 0;
+			if (typeof rev_sizes =="undefined" || rev_sizes===undefined) return;
+			jQuery('.row-zone-container').each(function() {
+				var _t=jQuery(this);
+				if (!_t.hasClass("emptyzone"))
+					minheight=minheight + _t.height();
+			});
+			minheight = minheight <rev_sizes[layout][1] ? rev_sizes[layout][1] : minheight;		
+
+			jQuery('.tp-bgimg.defaultimg, #divLayers').each(function() {
+				var _ = jQuery(this);
+				if (!jQuery(this).hasClass("slide-transition-example"))
+					_.css({height:minheight});
+			});
+			
+			if (__slidertype!="auto")
+				jQuery('#divbgholder').css({minHeight:minheight,height:minheight});				
+			else								
+				jQuery('#divbgholder').css({minHeight:minheight,height:minheight});							
+			jQuery('#divLayers-wrapper').css('height', minheight + 1);
+			
+			/*u.resetSlideAnimations();
+			jQuery(window).trigger("resize");			
+			redrawAllLayerHtml();
+			t.setMiddleRowZone(100);*/
+		}
+
 	
+	/***
+	 * Returns all Layers and Columns within a Group 
+	 */
+	t.getLayersInGroup = function(unique_id) {
+		var list = {
+			layers : [],
+			columns : []
+		};
+		// Find All Columns
+		jQuery.each(t.arrLayers,function(index,objLayer) {
+			if (objLayer.p_uid === unique_id && objLayer.type==="column")
+				list.columns.push(objLayer);
+		});
+		// Find All Layers in Group and Columns
+		jQuery.each(t.arrLayers,function(index,objLayer) {
+			if (objLayer.p_uid === unique_id && objLayer.type!=="column")
+				list.layers.push(objLayer);
+			for (var i=0;i<list.columns.length;i++) {				
+				if (list.columns[i].unique_id === objLayer.p_uid) {					
+					list.layers.push(objLayer);
+				}
+			}
+		});		
+		return list;
 	}
 	
-	
+	t.getHighestGroupOrder = function(zone) {
+		var hgroup = 0;
+		for (key in t.arrLayers) {
+			var layer = t.arrLayers[key];			
+			if (layer.type==="row" && t.getVal(layer, 'align_vert')===zone) 				
+				if (hgroup<=layer.groupOrder) hgroup = layer.groupOrder+1;
+			
+		}
+		return hgroup;
+	}
+
+	t.makeRowSortableDroppable = function() {
+		
+		//Dropable and Sortable Elements in Rows and Columns
+		jQuery('#divLayers, .tp_layer_group_inner_wrapper .slide_layer_type_column, .slide_layer_type_group .tp_layer_group_inner_wrapper').droppable({
+			refreshPositions:true,
+			tolerance:"pointer",
+			accept:".slide_layer_type_text, .slide_layer_type_image, .slide_layer_type_video, .slide_layer_type_shape, .slide_layer_type_audio, .slide_layer_type_svg, .slide_layer_type_button",
+			over:function(event,ui) {
+				var col = jQuery(event.target);
+				jQuery('.slide_layer_type_column, .slide_layer_type_row, .slide_layer_type_group').removeClass("layer_selected").removeClass('layerchild_selected');
+				if (col[0].id!=="divLayers") {
+					punchgs.TweenLite.set(col,{zIndex:0});
+					col.addClass("layer_selected").addClass('layerchild_selected');
+				}
+				if (event.target.id!=="divLayers");
+					col.closest('.slide_layer_type_row, .slide_layer_type_group').addClass("layer_selected");				
+				col.closest('.row-zone-container').addClass('layerrow_selected');
+
+				
+				
+			},
+			out:function(event,ui) {
+				var col = jQuery(event.target);		
+				punchgs.TweenLite.set(col,{zIndex:1});
+				if (col[0].id!=="divLayers")		
+					col.removeClass("layer_selected").removeClass('layerchild_selected');
+				col.closest('.layer_selected').removeClass("layer_selected").removeClass('layerchild_selected');
+				col.find('.layer_selected').removeClass("layer_selected").removeClass('layerchild_selected');	
+				col.closest('.row-zone-container').removeClass('layerrow_selected');	
+				jQuery(ui.draggable).addClass("layer_selected");
+				
+				//if (ui.draggable[0].parentNode.id!=="divLayers") jQuery('#divLayers').addClass("readytodrop");
+
+			},
+			drop:function(event,ui) {		
+				
+				jQuery(ui.draggable).data('dropin',jQuery(event.target));											
+				t.setMiddleRowZone(100);
+				t.checkRowZoneContents();
+				jQuery('.row-zone-container').removeClass("nowyouseeme");
+				jQuery('.row-zone-container').removeClass('layerrow_selected');
+				
+			}
+		});
+
+		jQuery('#row-zone-top, #row-zone-middle, #row-zone-bottom').sortable({
+			refreshPositions:true,
+			handle:".row_moveme",			
+			start:function(event,ui) {
+				
+				ui.placeholder.html(ui.item.html());
+				jQuery('.row-zone-container').addClass("nowyouseeme");
+				jQuery('.row-zone-container').addClass('layerrow_selected');
+				
+			},
+			stop:function(event,ui) {
+				
+				jQuery('.row-zone-container').removeClass("nowyouseeme");
+				jQuery('.row-zone-container').removeClass('layerrow_selected');
+				t.setRowZoneOrders();
+				u.organiseGroupsAndLayer();
+			},
+			update:function(event,ui) {				
+				var objLayer = t.getLayer(t.selectedLayerSerial);
+				switch (ui.item[0].parentNode.id) {
+					case "row-zone-top":
+						objLayer = t.setVal(objLayer, 'align_vert', "top", true);						
+					break;
+					case "row-zone-middle":
+						objLayer = t.setVal(objLayer, 'align_vert', "middle", true);						
+					break;
+					case "row-zone-bottom":
+						objLayer = t.setVal(objLayer, 'align_vert', "bottom", true);						
+					break;
+				}								
+				//t.setInnerGroupOrders(jQuery('#'+ui.item[0].parentNode.id));
+				t.setRowZoneOrders();
+				u.organiseGroupsAndLayer();
+				t.updateLayerFormFields(objLayer.serial);
+				t.setMiddleRowZone(100);
+				t.checkRowZoneContents();
+				
+
+
+			},
+			sort:function(event,ui) {
+				
+			}
+		})
+
+		jQuery('.slide_layer_type_column .tp_layer_group_inner_wrapper').sortable({
+			refreshPositions:true,	
+			placeholder:'layer_placeholder_in_column',
+			start:function(event,ui) {				
+
+				jQuery('.slide_layer_type_column, .slide_layer_type_row').removeClass("layer_selected").removeClass('layerchild_selected');
+				jQuery('.row-zone-container').removeClass('layerrow_selected');
+				ui.placeholder.html(ui.item.html());
+				var img = ui.placeholder.find('.innerslide_layer>img');
+				if (img.length>0) {
+					img.css({width:ui.item.width(), height:ui.item.height()});
+				}
+			},		
+			items:"> .slide_layer_type_text, > .slide_layer_type_image, > .slide_layer_type_video, > .slide_layer_type_shape, > .slide_layer_type_audio, > .slide_layer_type_svg, > .slide_layer_type_button",		
+			cancel:	".slide_layer_type_row, .slide_layer_type_column, .slide_layer_type_group",
+			update:function(event,ui) {				
+				t.setInnerGroupOrders(jQuery(ui.item[0].parentNode));
+				t.setMiddleRowZone(100);
+				
+			},
+			sort:function(event,ui) {
+				var a = jQuery(event.target);
+				a.closest('.slide_layer_type_column').addClass("layer_selected").addClass('layerchild_selected');
+				a.closest('.slide_layer_type_row').addClass("layer_selected");
+				
+			}
+		});
+	}
+
+	t.setRowZoneOrders = function() {
+		t.setInnerGroupOrders(jQuery('#row-zone-top'));
+		t.setInnerGroupOrders(jQuery('#row-zone-middle'));
+		t.setInnerGroupOrders(jQuery('#row-zone-bottom'));
+	}
+
+	t.setInnerGroupOrders = function (container) {				
+		
+		var order = container.sortable('toArray',{attribute:"data-uniqueid"});						
+		for (var i=0;i<order.length;i++) {
+			 var objUpdate = {groupOrder:i};												 
+			 t.updateLayer(t.getLayerByUniqueId(order[i]).serial,objUpdate,false,true);							 
+		}				
+		
+	}
+
+
+
+	t.droppedContainerCheck = function (objLayer){
+		
+		
+		var htmllayer = objLayer.references.htmlLayer,
+			dropcontainer = htmllayer.data('dropin'),
+			p_uid;
+				
+		if (objLayer.type==="row" || objLayer.type==="column" || objLayer.type==="group") {
+			// Ignoe Drop. Return to old containerwe 					
+		} else {			
+			
+			// ELEMENT IS DROPPED INTO A GROUP
+
+			if (dropcontainer !=undefined && dropcontainer[0].classList.contains("tp_layer_group_inner_wrapper")) {				
+				// ELEMENT IS ALREADY IN THE GROUP
+				if (dropcontainer[0].contains(htmllayer[0])) {										
+					p_uid = objLayer.p_uid;					
+				} else {
+				
+				objLayer = t.setVal(objLayer,'align_hor',"left");
+				objLayer = t.setVal(objLayer,'align_vert',"top");
+
+				// ELEMENT IS DROPPED FIRST TIME IN THE GROUP
+					var pos = htmllayer.position(),
+						ocp = {left:0,top:0},
+						zp = {left:0,top:0},
+						origpos = htmllayer.data('originalPosition');
+					if (objLayer.p_uid != -1) {
+						
+						var oldcontainer = t.getLayerByUniqueId(objLayer.p_uid)
+						if (oldcontainer.type==="column" || oldcontainer.type==="group") {
+							ocp =  oldcontainer.references.htmlLayer.position();
+							var zc = oldcontainer.references.htmlLayer.closest(".row-zone-container");	
+							zp = zc === undefined || zc.length==0 ? {left:0, top:0} : zc.position();							
+							zp.top += zc === undefined || zc.length==0 ? 0 : parseInt(zc.css("marginTop"),0);
+						}
+
+					} 
+					dropcontainer[0].appendChild(htmllayer[0]);
+					
+					p_uid = htmllayer.closest('.slide_layer_type_group').data('uniqueid');						
+					var pobj =  t.getLayerByUniqueId(p_uid),				
+						dim = {w:htmllayer.width(), h:htmllayer.height()};
+						
+
+					
+					objLayer.p_uid = p_uid;
+					
+					jQuery.each(pobj.left,function(i,key) {									
+						if (objLayer.top!==undefined && pobj.top!==undefined && pobj.top[i]!==undefined) {
+							if (pobj.align_hor[i]==="right") 
+								if (rev_sizes!==undefined)
+									newl = Math.round(pos.left+ocp.left- (rev_sizes[i][0]- (parseInt(pobj.left[i],0)+parseInt(pobj.max_width[i],0))));
+								else
+									newl = Math.round(pos.left+ocp.left- (jQuery('#divLayers').width() - parseInt(pobj.left[i],0)));
+							else 
+								newl = Math.round(pos.left+ocp.left- parseInt(pobj.left[i],0));
+							
+							if (pobj.align_vert[i]==="bottom")
+							 	if (rev_sizes!==undefined)
+							 		newt = Math.round(pos.top+ocp.top+zp.top- (rev_sizes[i][1]- (parseInt(pobj.top[i],0)+parseInt(pobj.max_height[i],0))));
+							 	else
+							 		newt = Math.round(pos.top+ocp.top+zp.top- (jQuery('#divLayers').height() - parseInt(pobj.top[i],0)));
+							else
+								newt = Math.round(pos.top+ocp.top+zp.top - parseInt(pobj.top[i],0));						
+														
+							objLayer.left[i] = oldcontainer ? newl : newl-1;
+							objLayer.top[i] = oldcontainer ? newt : newt-1;
+						}
+					});					
+					t.updateHtmlLayerPosition(false,objLayer,t.getVal(objLayer, 'top'),t.getVal(objLayer, 'left'),t.getVal(objLayer, 'align_hor'),t.getVal(objLayer, 'align_vert'));
+					u.organiseGroupsAndLayer(false);		
+					pobj.references.htmlLayer.addClass("inwork");
+					jQuery('#focusongroup').addClass("inwork");
+				}
+				
+			} else 
+
+			if (dropcontainer !=undefined &&  dropcontainer[0].classList.contains("slide_layer_type_column")) {  				
+				// ELEMENT IS DROPPED INTO A ROW'S COLUMN
+				if (!dropcontainer[0].getElementsByClassName('tp_layer_group_inner_wrapper')[0].contains(htmllayer[0]))
+					dropcontainer[0].getElementsByClassName('tp_layer_group_inner_wrapper')[0].appendChild(htmllayer[0]);				
+				p_uid =  htmllayer.closest('.slide_layer_type_column').data('uniqueid');						
+				
+				// SET ELEMENT WHITESPACE NORMAL IF IT COMES FROM ROOT
+				var oldcontainer = t.getLayerByUniqueId(objLayer.p_uid);
+				if (oldcontainer.type!=="column" && oldcontainer.type!=="group") 
+					objLayer = t.setVal(objLayer,'whitespace','normal');
+
+				objLayer.p_uid = p_uid;	
+				u.organiseGroupsAndLayer(false);
+				var ah = t.getVal(objLayer, 'align_hor'),
+					av = t.getVal(objLayer, 'align_vert');
+				ah = "left";
+				av = "top";
+				
+				
+				
+				objLayer = t.setVal(objLayer,'align_hor',ah);
+				objLayer = t.setVal(objLayer,'align_vert',av);
+				if (objLayer.type==="text") {
+				//	objLayer = t.setVal(objLayer, 'max_width', "auto", true);
+					objLayer = t.setVal(objLayer, 'max_height', "auto", true);
+				}
+				if (objLayer.type==="shape") {
+					var shapesizing = jQuery('#layer_cover_mode option:selected').val();					
+					if (shapesizing==="fullheight" || shapesizing==="cover" || shapesizing==="cover-proportional") {
+						jQuery('#layer_cover_mode option:selected').prop('selected',false);
+						var objUpdate = {};
+
+						if (shapesizing==="fullheight") {
+							jQuery('#layer_cover_mode option[value="custom"]').attr("selected","selected");
+							objUpdate = t.setVal(objUpdate, 'cover_mode', 'custom', true);
+						}
+						else {
+							jQuery('#layer_cover_mode option[value="fullwidth"]').attr("selected","selected");
+							objUpdate = t.setVal(objUpdate, 'cover_mode', 'fullwidth', true);
+						}						
+						t.updateLayer(objLayer.serial,objUpdate);
+						t.set_cover_mode();				
+					}
+				}
+				setTimeout(function() {
+					t.extendSlideHeightBasedOnRows();
+				},100);
+				unselectAllFocusedGroup();
+			} else 
+			
+			if (dropcontainer !=undefined &&  dropcontainer[0].id==="divLayers" && htmllayer[0].parentNode.id!=="divLayers") {
+				// Add Back to Mainstage								
+				var pos = htmllayer.position(),
+					pobj = t.getLayerByUniqueId(objLayer.p_uid),
+					off = pobj!=undefined && pobj.references!=undefined  && pobj.references.htmlLayer!=undefined ? pobj.references.htmlLayer.position() : {top:0,left:0},
+					zp = {left:0, top:0},
+					rp = {left:0, top:0};
+					
+					objLayer = t.setVal(objLayer,'align_hor',"left");
+					objLayer = t.setVal(objLayer,'align_vert',"top");
+				
+				if (objLayer.p_uid != -1) {
+					var oldcontainer = t.getLayerByUniqueId(objLayer.p_uid)
+					if (oldcontainer.type==="column") {												
+						ocp =  oldcontainer.references.htmlLayer.position();
+						var zc = oldcontainer.references.htmlLayer.closest(".row-zone-container"),
+							rc = oldcontainer.references.htmlLayer.closest(".slide_layer_type_row");
+						rp = rc === undefined || rp.length==0 ? {left:0, top:0} : rc.position();
+						zp = zc === undefined || zc.length==0 ? {left:0, top:0} : zc.position();
+						zp.top += zc === undefined || zc.length==0 ? 0 : parseInt(zc.css("marginTop"),0);
+						rp.top += rc === undefined || rc.length==0 ? 0 : parseInt(rc.css("marginTop"),0);						
+					}					
+				}
+				objLayer.p_uid = -1;
+				
+				document.getElementById('divLayers').appendChild(htmllayer[0]);				
+				
+				
+				jQuery.each(objLayer.left,function(i,key) {			
+					objLayer.left[i] = Math.round(pos.left+1+off.left+zp.left+rp.left);
+					objLayer.top[i] =  Math.round(pos.top+1+off.top+zp.top+rp.top);
+				});
+				
+				
+				t.updateHtmlLayerPosition(false,objLayer,t.getVal(objLayer, 'top'),t.getVal(objLayer, 'left'),"left","top");
+				u.organiseGroupsAndLayer(false);	
+				unselectAllFocusedGroup();												
+			}
+		}	
+		t.setMiddleRowZone();		
+		t.resetLayerSelected(objLayer);
+	}
+
+	t.checkRowZoneContents = function() {
+		jQuery('.row-zone-container').each(function() {
+			if (this.children.length === 0)
+				jQuery(this).addClass("emptyzone");
+			else
+				jQuery(this).removeClass("emptyzone");
+		})
+	}
+
+	t.setMiddleRowZone = function(delay) {		
+		delay = delay === undefined ? 0 : delay;
+		setTimeout(function() {
+			var rzm = document.getElementById('row-zone-middle');
+			rzm.style.marginTop = (0 - jQuery(rzm).height()/2)+"px";		
+		},delay);
+	}
 
 	t.showHideToggleContent = function(objLayer) {		
 		if (objLayer["toggle"]===true) {
@@ -1853,6 +2639,7 @@ var UniteLayersRev = new function(){
 	}
 
 	t.showHideContentEditor = function(show) {
+
 		if (show) {
 			jQuery('#button_edit_layer').hide();
 			jQuery('#button_delete_layer').hide();
@@ -1866,8 +2653,7 @@ var UniteLayersRev = new function(){
 			jQuery('#layer_text_wrapper').addClass('currently_editing_txt');
 			jQuery('#layer-short-tool-placeholder-a').hide();
 			jQuery('#layer-short-tool-placeholder-b').hide();
-		} else {
-		
+		} else {		
 			jQuery('#layer-short-tool-placeholder-a').show();
 			jQuery('#layer-short-tool-placeholder-b').show();
 			jQuery('#button_edit_layer').hide();
@@ -1883,10 +2669,13 @@ var UniteLayersRev = new function(){
 			jQuery('#layer_text_wrapper').removeClass('currently_editing_txt');			
 		}
 		
-		var objLayer = selectedLayerSerial === -1 ? "" : t.getLayer(selectedLayerSerial);	
+		var objLayer = t.selectedLayerSerial === -1 ? "" : t.getLayer(t.selectedLayerSerial);	
+
 		t.toolbarInPos(objLayer);
 		t.showHideToggleContent(objLayer);
 	}
+
+	
 	
 	t.changeSlotBGs = function() {
 		
@@ -1900,7 +2689,7 @@ var UniteLayersRev = new function(){
 			gallery_type = jQuery('input[name="rs-gallery-type"]').val();
 
 			jQuery('#the_image_source_url').html(bgimg);
-
+		
 		jQuery('#video-settings').hide();
 		jQuery('#bg-setting-wrap').show();
 		jQuery('#vid-rev-youtube-options').hide();
@@ -1909,6 +2698,7 @@ var UniteLayersRev = new function(){
 		jQuery('#streamvideo_cover_both').hide();
 		
 		jQuery('#button_change_image').show();
+		jQuery('#button_change_image_objlib').show();
 		
 		jQuery('.video_volume_wrapper').hide();
 		
@@ -1917,10 +2707,12 @@ var UniteLayersRev = new function(){
 		switch(bbggtt){
 			case "image":
 				jQuery('#button_change_image').hide();
+				jQuery('#button_change_image_objlib').hide();
 				
 				switch(gallery_type){
 					case 'gallery':
 						jQuery('#button_change_image').show();
+						jQuery('#button_change_image_objlib').show();
 					break;
 					case 'posts':
 						bgimg = rs_plugin_url+'public/assets/assets/sources/post.png';
@@ -1952,16 +2744,24 @@ var UniteLayersRev = new function(){
 				jQuery('.mainbg-sub-parallax-selector').show();
 				jQuery('.mainbg-sub-settings-selector').show();
 				jQuery('#button_change_image').appendTo(jQuery('#tp-bgimagewpsrc'));
+				jQuery('#button_change_image_objlib').appendTo(jQuery('#tp-bgimagewpsrc'));
 								
 				nextsh.find('.defaultimg, .slotslidebg').css({
 						backgroundImage:("url("+bgimg+")"),
 						backgroundPosition:bgpos,
 						backgroundSize:bgfit,
-						backgroundColor:"transparent"});		
+						backgroundColor:"transparent"});	
+				jQuery('#ken_burn_slot_example').css({
+						backgroundImage:("url("+bgimg+")"),
+						backgroundPosition:bgpos,
+						backgroundSize:bgfit,
+						backgroundColor:"transparent"}).data('src',bgimg);
+				t.updateKenBurnExampleValues();
 			break;
 			case "trans":
 
-				jQuery('#slide_selector .list_slide_links li.selected .slide-media-container ').css("background-image","").addClass("mini-transparent").css({backgroundSize:"inherit"});
+				jQuery('#slide_selector .list_slide_links li.selected .slide-media-container ').css("background-image","").css("background-repeat","").addClass("mini-transparent").css({backgroundSize:"inherit"});
+
 				nextsh.find('.defaultimg, .slotslidebg').css({
 						backgroundImage:"none",
 						backgroundPosition:bgpos,
@@ -1995,6 +2795,12 @@ var UniteLayersRev = new function(){
 						backgroundPosition:bgpos,
 						backgroundSize:bgfit,
 						backgroundColor:"transparent"});
+				jQuery('#ken_burn_slot_example').css({
+						backgroundImage:("url("+bgimg+")"),
+						backgroundPosition:bgpos,
+						backgroundSize:bgfit,
+						backgroundColor:"transparent"}).data('src',bgimg);
+				t.updateKenBurnExampleValues();
 				jQuery('.mainbg-sub-kenburns-selector').show();
 				jQuery('.mainbg-sub-parallax-selector').show();
 				jQuery('.mainbg-sub-settings-selector').show();
@@ -2004,15 +2810,22 @@ var UniteLayersRev = new function(){
 				jQuery('#streamvideo_cover').show();
 				jQuery('#streamvideo_cover_both').show();
 				bgimg = rs_plugin_url+'public/assets/assets/sources/tw.png';
-				nextsh.find('.defaultimg, .slotslidebg').css({
+				nextsh.find('.defaultimg, .slotslidebg, #ken_burn_slot_example').css({
 						backgroundImage:("url("+bgimg+")"),
 						backgroundPosition:'center center',
 						backgroundSize:'cover',
 						backgroundColor:"transparent"});
+				jQuery('#ken_burn_slot_example').css({
+						backgroundImage:("url("+bgimg+")"),
+						backgroundPosition:'center center',
+						backgroundSize:'cover',
+						backgroundColor:"transparent"}).data('src',bgimg);
+				t.updateKenBurnExampleValues();
 				jQuery('.mainbg-sub-kenburns-selector').hide();
 				jQuery('.mainbg-sub-parallax-selector').show();
 				jQuery('.mainbg-sub-settings-selector').show();
 				jQuery('#button_change_image').appendTo(jQuery('#vimeo-image-picker'));
+				jQuery('#button_change_image_objlib').appendTo(jQuery('#vimeo-image-picker'));
 				jQuery('#video-settings').show();
 				jQuery('#bg-setting-wrap').hide();
 				jQuery('#vid-rev-vimeo-options').show();
@@ -2026,15 +2839,22 @@ var UniteLayersRev = new function(){
 				jQuery('#streamvideo_cover_both').show();
 				bgimg = rs_plugin_url+'public/assets/assets/sources/yt.png';
 			case "youtube":
-				nextsh.find('.defaultimg, .slotslidebg').css({
+				nextsh.find('.defaultimg, .slotslidebg, #ken_burn_slot_example').css({
 						backgroundImage:("url("+bgimg+")"),
 						backgroundPosition:'center center',
 						backgroundSize:'cover',
 						backgroundColor:"transparent"});
+				jQuery('#ken_burn_slot_example').css({
+						backgroundImage:("url("+bgimg+")"),
+						backgroundPosition:'center center',
+						backgroundSize:'cover',
+						backgroundColor:"transparent"}).data('src',bgimg);
+				t.updateKenBurnExampleValues();
 				jQuery('.mainbg-sub-kenburns-selector').hide();
 				jQuery('.mainbg-sub-parallax-selector').show();
 				jQuery('.mainbg-sub-settings-selector').show();
 				jQuery('#button_change_image').appendTo(jQuery('#youtube-image-picker'));
+				jQuery('#button_change_image_objlib').appendTo(jQuery('#youtube-image-picker'));
 				jQuery('#video-settings').show();
 				jQuery('#bg-setting-wrap').hide();
 				jQuery('#vid-rev-youtube-options').show();
@@ -2046,15 +2866,22 @@ var UniteLayersRev = new function(){
 				jQuery('#streamvideo_cover_both').show();
 				bgimg = rs_plugin_url+'public/assets/assets/sources/vm.png';
 			case "vimeo":
-				nextsh.find('.defaultimg, .slotslidebg').css({
+				nextsh.find('.defaultimg, .slotslidebg, #ken_burn_slot_example').css({
 						backgroundImage:("url("+bgimg+")"),
 						backgroundPosition:'center center',
 						backgroundSize:'cover',
 						backgroundColor:"transparent"});
+				jQuery('#ken_burn_slot_example').css({
+						backgroundImage:("url("+bgimg+")"),
+						backgroundPosition:'center center',
+						backgroundSize:'cover',
+						backgroundColor:"transparent"}).data('src',bgimg);
+				t.updateKenBurnExampleValues();
 				jQuery('.mainbg-sub-kenburns-selector').hide();
 				jQuery('.mainbg-sub-parallax-selector').show();
 				jQuery('.mainbg-sub-settings-selector').show();
 				jQuery('#button_change_image').appendTo(jQuery('#vimeo-image-picker'));
+				jQuery('#button_change_image_objlib').appendTo(jQuery('#vimeo-image-picker'));
 				jQuery('#video-settings').show();
 				jQuery('#bg-setting-wrap').hide();
 				jQuery('#vid-rev-vimeo-options').show();
@@ -2071,10 +2898,17 @@ var UniteLayersRev = new function(){
 						backgroundPosition:'center center',
 						backgroundSize:'cover',
 						backgroundColor:"transparent"});
+				jQuery('#ken_burn_slot_example').css({
+						backgroundImage:("url("+bgimg+")"),
+						backgroundPosition:'center center',
+						backgroundSize:'cover',
+						backgroundColor:"transparent"}).data('src',bgimg);	
+				t.updateKenBurnExampleValues();			
 				jQuery('.mainbg-sub-kenburns-selector').hide();
 				jQuery('.mainbg-sub-parallax-selector').show();
 				jQuery('.mainbg-sub-settings-selector').show();
 				jQuery('#button_change_image').appendTo(jQuery('#html5video-image-picker'));
+				jQuery('#button_change_image_objlib').appendTo(jQuery('#html5video-image-picker'));
 				jQuery('#video-settings').show();
 				jQuery('#bg-setting-wrap').hide();
 
@@ -2168,11 +3002,11 @@ var UniteLayersRev = new function(){
 				switch(alignHor){
 					case "left":
 						inpX.html(inpX.data("textnormal")).css("width","auto");
-						jQuery("#layer_left").val("10");
+						jQuery("#layer_left").val("0");
 					break;
 					case "right":
 						inpX.html(inpX.data("textoffset")).css("width","42px");
-						jQuery("#layer_left").val("10");
+						jQuery("#layer_left").val("0");
 					break;
 					case "center":
 						inpX.html(inpX.data("textoffset")).css("width","42px");
@@ -2187,11 +3021,11 @@ var UniteLayersRev = new function(){
 				switch(alignVert){
 					case "top":
 						inpY.html(inpY.data("textnormal")).css("width","auto");
-						jQuery("#layer_top").val("10");
+						jQuery("#layer_top").val("0");
 					break;
 					case "bottom":
 						inpY.html(inpY.data("textoffset")).css("width","42px");
-						jQuery("#layer_top").val("10");
+						jQuery("#layer_top").val("0");
 					break;
 					case "middle":
 						inpY.html(inpY.data("textoffset")).css("width","42px");
@@ -2201,10 +3035,26 @@ var UniteLayersRev = new function(){
 				jQuery("#layer_align_vert").val(alignVert);
 			}
 
+			var objLayer = t.getLayer(t.selectedLayerSerial);
+			if (objLayer.type==="row") {
+				switch (alignVert) {
+					case "top":
+						document.getElementById("row-zone-top").appendChild(objLayer.references.htmlLayer[0]);												
+					break;
+					case "middle":
+						document.getElementById("row-zone-middle").appendChild(objLayer.references.htmlLayer[0]);
+					break;
+					case "bottom":
+						document.getElementById("row-zone-bottom").appendChild(objLayer.references.htmlLayer[0]);
+					break;
+				}
+				objLayer = t.setVal(objLayer,"align_vert",alignVert,true,null,true);
+				t.checkRowZoneContents();
+			}			
 			obj.addClass('selected');
 			t.updateLayerFromFields();
-			t.toolbarInPos();
-			//updateHtmlLayersFromObject(selectedLayerSerial,true); (Already managed due updateLayerFromFields)
+			t.toolbarInPos();			
+			t.setMiddleRowZone(100);
 		});
 	}
 
@@ -2214,8 +3064,10 @@ var UniteLayersRev = new function(){
 	 */
 	var initMainEvents = function(){		
 		//unselect layers on container click
-		container.click(function() {			
+		container.click(function(event) {			
 			if (!layerresized) {
+				
+				if(event.target == this || jQuery(event.target).hasClass("slide_layers_border")) u.checkMultipleSelectedItems(true);
 				unselectLayers();
 				jQuery('#quick-layers-wrapper').slideUp(300);						
 				jQuery('.current-active-main-toolbar').removeClass("opened");
@@ -2231,7 +3083,7 @@ var UniteLayersRev = new function(){
 	/**
 	 * show / hide offset row accorging the slide link value
 	 */
-	var showHideLinkActions = function(v){
+	var showHideLinkActions = function(v, updatetimelines){
 
 		var li = v.closest('li'),
 			value = v.val();
@@ -2242,10 +3094,16 @@ var UniteLayersRev = new function(){
 		li.find('.action-target-layer').hide();
 		li.find('.action-callback').hide();
 		li.find('.action-toggle_layer').hide();
+		li.find('.action-toggleclass').hide();
+		li.find('.action-delay-wrapper').show();
+		
 		
 		switch (value) {
+			case "none":
+				li.find('.action-delay-wrapper').hide();				
+			break;
 			case "link":
-				li.find('.action-link-wrapper').show();
+				li.find('.action-link-wrapper').show();				
 			break;
 			case "jumpto":
 				li.find('.action-jump-to-slide').show();
@@ -2327,6 +3185,8 @@ var UniteLayersRev = new function(){
 				});
 			break;
 		}
+		
+		if (updatetimelines) u.updateAllLayerTimeline();
 	}
 	
 	var showHideToolTip = function(){
@@ -2351,8 +3211,17 @@ var UniteLayersRev = new function(){
 	}
 
 	// SET SUFFIX FOR INPUT FIELD OR LEAVE THE CURRENT VALUE 
-	var specOrVal = function(putin,possiblevalues,suffix) {			
-		var result = jQuery.inArray(putin,possiblevalues)>=0 ? putin : putin===undefined || !jQuery.isNumeric(parseInt(putin,0)) || putin.length===0 ? "" : parseInt(putin,0)+suffix;		
+	var specOrVal = function(putin,possiblevalues,forcesuffix,suffix) {
+		var n = parseFloat(putin),
+			newsuffix = suffix===undefined && n!==undefined && jQuery.isNumeric(n) && !jQuery.isNumeric(putin) ? 
+					putin.replace(n,"") 
+					: suffix === undefined ? 
+						forcesuffix===undefined ? 
+							"" 
+							: forcesuffix 
+						: suffix;		
+		
+		result = jQuery.inArray(putin,possiblevalues)>=0 ? putin : putin===undefined || !jQuery.isNumeric(parseInt(putin)) || putin.length===0 ? "" : parseInt(putin)+newsuffix;				
 		return result;
 	}
 	
@@ -2451,8 +3320,32 @@ var UniteLayersRev = new function(){
 		//show / hide slide link offset
 		
 		jQuery('body').on('change', 'select[name="layer_action[]"], select[name="no_layer_action[]"]',function() {
+			
 			showHideLinkActions(jQuery(this));
 		});
+
+		jQuery('body').on('click','#kenburn-playpause-wrapper', function() {
+			var pb = jQuery('#kenburn-playpause-wrapper'),
+				tl = jQuery('#ken_burn_example').data('kbtl');
+			
+			if (pb.hasClass("playing")) {
+				pb.html('<i class="eg-icon-play"></i><span>PLAY</span>');
+				pb.removeClass("playing");
+				tl.pause();
+			} else {
+				pb.html('<i class="eg-icon-pause"></i><span>PAUSE</span>');
+				pb.addClass("playing");
+				tl.play();
+			}
+		});
+
+		jQuery('body').on('click','#kenburn-backtoidle',function() {
+			var tl = jQuery('#ken_burn_example').data('kbtl');
+			tl.progress(0);
+		});
+
+		jQuery('.kb_input_values').change(t.updateKenBurnExampleValues);
+
 
 		jQuery('#layer_tooltip_event').change(showHideToolTip);
 
@@ -2483,6 +3376,7 @@ var UniteLayersRev = new function(){
 					updateSubStyleParameters(layer, true);
 				}
 				jQuery('#layer_caption').change();
+				jQuery('#css_font-family').change();
 				
 				t.updateLayerFromFields();
 			}/*,
@@ -2544,7 +3438,7 @@ var UniteLayersRev = new function(){
 						jQuery('.tp-present-caption-small').parent().addClass("tp-present-wrapper-small");
 						jQuery('.tp-present-caption-small').parent().parent().addClass("tp-present-wrapper-parent-small");
 					},10);
-					return '<div class="tp-present-caption-small"><div class="tp-caption '+this.getAttribute('original-title')+'">example</div></div>';
+					return '<div class="tp-present-caption-small"><div class="example-dark-blinker"></div><div class="tp-caption '+this.getAttribute('original-title')+'">example</div></div>';
 				}
 			});
 		});
@@ -2584,11 +3478,11 @@ var UniteLayersRev = new function(){
 		});
 
 		//set events:
-		jQuery('body').on('change', ".form_layers select, #layer_proportional_scale, #layer_auto_line_break", function(){
+		jQuery('body').on('change', ".form_layers select, #layer_proportional_scale, #layer_auto_line_break, #layer_displaymode", function(){
 			t.updateLayerFromFields();
 		});
 
-		jQuery('#layer_proportional_scale, #layer_auto_line_break').change(function(){
+		jQuery('#layer_proportional_scale, #layer_auto_line_break, #layer_displaymode').change(function(){
 			if(jQuery(this)[0].checked)
 				jQuery(this).parent().removeClass("notselected")
 			else
@@ -2601,7 +3495,7 @@ var UniteLayersRev = new function(){
 			clearTimeout(keyuprefresh);
 			var v = jQuery(this).val();
 			keyuprefresh = setTimeout(function() {						
-				updateLayerTextField("",jQuery('.sortlist li.ui-state-hover .tl-fullanim'),v);						
+				updateLayerTextField("",jQuery('.sortlist li.ui-state-hover'),v);						
 				t.toolbarInPos();
 				t.updateLayerFromFields();
 				u.updateCurrentLayerTimeline();
@@ -2612,7 +3506,7 @@ var UniteLayersRev = new function(){
 			clearTimeout(keyuprefresh);
 			var v = jQuery(this).val();
 			keyuprefresh = setTimeout(function() {						
-				updateLayerTextField("",jQuery('.sortlist li.ui-state-hover .tl-fullanim'),v);						
+				updateLayerTextField("",jQuery('.sortlist li.ui-state-hover'),v);						
 				t.toolbarInPos();
 				t.updateLayerFromFields();
 			},150);
@@ -2646,11 +3540,11 @@ var UniteLayersRev = new function(){
 			if (Number(jQuery('#delay').val())>0) g_slideTime = jQuery('#delay').val();
 
 			var w = g_slideTime/10;
-			jQuery('#mastertimer-maxtime').css({left:(w+15)+"px"});
+			jQuery('#mastertimer-maxtime').css({left:(w)+"px"});
 			jQuery('#mastertimer-maxcurtime').html(u.convToTime(w));
-			jQuery('.slide-idle-section').css({left:w+15});
+			jQuery('.slide-idle-section').css({left:w});
 			jQuery('.mastertimer-slide .tl-fullanim').css({width:(w)+"px"});
-			u.mainMaxTimeLeft = w+15;
+			u.mainMaxTimeLeft = w;
 			u.masterTimerPositionChange(true);
 			u.compareLayerEndsVSSlideEnd();
 		});
@@ -2661,7 +3555,7 @@ var UniteLayersRev = new function(){
 		})
 
 		// MIN, MAX VALUES - SUFFIX ADD ONS
-		jQuery('.form_layers input').on("change blur focus",function() {	
+		jQuery('.form_layers input').on("change blur focus",function(event) {	
 
 			var inp = jQuery(this),
 				cv = parseFloat(inp.val()),
@@ -2671,10 +3565,14 @@ var UniteLayersRev = new function(){
 				ltsuffix = inp.val().slice(-2) || "",
 				usuffix = inp.data('suffix'),
 				asuffix = inp.data('suffixalt');
+
+			//if (event.type==="focus") 
+			//	var saveprefix = inp.val().replace(cv,"");
 			
 			lastchangedinput = inp.attr('id');
+			
+			if (usuffix!=undefined) {		
 
-			if (usuffix!=undefined) {				
 				if (jQuery.isNumeric(cv) && cv > -9999999 && cv<9999999 ) {
 					if (min!=undefined && cv<min) cv = min;
 					if (min!=undefined && cv>max) cv = max;					
@@ -2693,7 +3591,8 @@ var UniteLayersRev = new function(){
 							inp.val(cv+usuffix);
 					}
 				}
-			}						
+			}		
+			if (event.type==="focus") this.select();
 		});
 
 		jQuery('.form_layers select').on("change blur focus",function() {	
@@ -2701,33 +3600,18 @@ var UniteLayersRev = new function(){
 			lastchangedinput = jQuery(this).attr('id');
 		});
 
-		jQuery('#clayer_start_time, #clayer_end_time, #clayer_start_speed, #clayer_end_speed').on("change blur", function() {
-			var objLayer = t.getLayer(selectedLayerSerial);
-			
-			objLayer.time = jQuery('#clayer_start_time').val();
-			objLayer.endtime = jQuery('#clayer_end_time').val();
-			objLayer.speed = jQuery('#clayer_start_speed').val();
-			objLayer.endspeed = jQuery('#clayer_end_speed').val();
-			
-			jQuery('#layer_speed').val(objLayer.speed);
-			jQuery('#layer_endspeed').val(objLayer.endspeed);
-			t.updateLayerFromFields();
-			u.updateCurrentLayerTimeline();
-		});
+		
 
 		jQuery('#layer_speed, #layer_endspeed, #layer_splitdelay, #layer_endsplitdelay, #layer_split, #layer_endsplit').on("change blur", function() {
+			t.updateLayerFromFields();
 			u.updateCurrentLayerTimeline();
+
 		});
 		
 
 
-		jQuery('body').on('click','.timer-manual-edit, #layers-right .sortablelayers',function() {
-			jQuery('#timline-manual-dialog').show();
-		});
-
-		jQuery('#timline-manual-closer').on('click',function() {
-			jQuery('#timline-manual-dialog').hide();
-		});
+		
+		
 
 		jQuery('body').on('focus','#layer_text, #layer_text_toggle',function() {		
 			jQuery('#layer_text').removeClass("lasteditedlayertext");
@@ -2735,6 +3619,10 @@ var UniteLayersRev = new function(){
 			jQuery(this).addClass("lasteditedlayertext")
 		})
 
+	}
+	t.nextNewLayerToPosition = function(c) {
+		t.newlayercoord.x = c.x;
+		t.newlayercoord.y = c.y;
 	}
 	
 	t.setLayersAutoComplete = function(){
@@ -2791,6 +3679,14 @@ var UniteLayersRev = new function(){
 			jQuery(this).data('is_open',false);
 		});
 		
+	}
+
+	var switchLayerBackground = function(objData){
+
+		t.updateCurrentLayer(objData);			
+		t.add_layer_change();		
+		var objLayer = t.getCurrentLayer();				
+		u.rebuildLayerIdleProgress(objLayer.references.htmlLayer);
 	}
 
 	/**
@@ -2872,65 +3768,271 @@ var UniteLayersRev = new function(){
 		});
 		
 		
-		jQuery('#button_add_layer_svg').click(function(){
+		jQuery('#button_add_layer_svg, #button_add_object_layer').click(function(){
 			setExampleButtons();
 			//jQuery('#svg-items-filter').change();
-
-			jQuery('#dialog_addsvg').dialog({				
-				minWidth: 651,
-				minHeight: 540,
-				modal: true,
-				dialogClass: 'tpdialogs',
-				create:function(ui) {				
-					jQuery(ui.target).parent().find('.ui-dialog-titlebar').addClass("tp-slider-new-dialog-title");
-				},
-				open:function() {
-					 jQuery('#object_library_results-inner').perfectScrollbar("update");
-					 if (jQuery('.obj_library_cats.selected').length==0)
-						jQuery('.obj_library_cats').first().click();
-				}
-			});
+			t.callObjectLibraryDialog("object");
 		});
 
-		jQuery('body').on('click','.svgadd-single-item',function() {			
-			if (jQuery('#dialog_addsvg').data('changesvg')!==true) {
-				var data = {},
-					w = jQuery(this).find('svg').attr('width'),
-					h = jQuery(this).find('svg').attr('height');
+		//change image actions
+		jQuery("#button_change_image_objlib").click(function(){		
+			setExampleButtons();			
+			t.callObjectLibraryDialog("background");			
+		});	//change image click.
 
-				data['static_styles'] = {};
-				data['static_styles'] = t.setVal(data['static_styles'], 'color', "#000000", true);
-				data['deformation'] = {};
-				data['deformation-hover'] = {};
-				data.text = ' ';
-				data.alias = 'SVG';
-				data.type = 'svg';			
-				data.style = '';
-				data.svg = {};
-				data.svg.src = jQuery(this).data('src');
-				data = t.setVal(data, 'max_width', w, true);
-				data = t.setVal(data, 'max_height', h, true);				
-				data.createdOnInit = false;		
-				addLayer(data);						
-			} else {
-				var src = jQuery(this).data('src'),
-					w = jQuery(this).find('svg').attr('width'),
-					h = jQuery(this).find('svg').attr('height');
+		jQuery("#button_change_image_yt").click(function(){		
+			var bgimg = "https://img.youtube.com/vi/"+jQuery('#slide_bg_youtube').val()+"/sddefault.jpg";
+			
+			switchYTBGObject(bgimg);
+			//bgimg = rs_plugin_url+'public/assets/assets/sources/yt.png';
+			
+		});
+		
+		// SWITCH THE MAIN BG FROM OBJECT LIBRARY
+		function switchYTBGObject(urlImage) {
+			
+			
+			//set visual image
+			jQuery("#divbgholder").css("background-image","url("+urlImage+")");
+			jQuery('#slide_selector .list_slide_links li.selected .slide-media-container ').css("background-image","url("+urlImage+")")
 
-				serial = jQuery('#dialog_addsvg').data('changesvgserial')				
-				jQuery.get(src, function(data) {
-					jQuery("#slide_layer_"+serial+" .innerslide_layer.tp-caption").html("");
-					jQuery("#slide_layer_"+serial+" .innerslide_layer.tp-caption")[0].innerHTML = new XMLSerializer().serializeToString(data.documentElement);
-					u.rebuildLayerIdle(jQuery("#slide_layer_"+serial));
-					var objLayer = t.getLayer(serial);
-					objLayer.svg.src = src;				  
-					objLayer = t.setVal(objLayer, 'max_width', w, true);
-					objLayer = t.setVal(objLayer, 'max_height', h, true);				
-				});
-				t.add_layer_change();
-				jQuery('#dialog_addsvg').data('changesvg',false);
+			//update setting input
+			jQuery("#image_url").val(urlImage);
+			jQuery("#image_id").val("");
+			
+			t.changeSlotBGs();
+			
+			jQuery('.bgsrcchanger:checked').click();
+
+			if(jQuery('input[name="kenburn_effect"]').is(':checked')){
+				jQuery('input[name="kb_start_fit"]').change();
 			}
-			jQuery('#dialog_addsvg').dialog('close');
+		}
+		
+		// SWITCH THE MAIN BG FROM OBJECT LIBRARY
+		function switchMainBGObject(urlImage) {
+			
+			var selectedBGType = jQuery('input[name="background_type"]:checked').val();
+			if (jQuery.inArray(selectedBGType,['trans','solid','external']!=-1)) {
+				jQuery('#radio_back_image').attr('checked','checked').change().click();
+			}
+			//set visual image
+			jQuery("#divbgholder").css("background-image","url("+urlImage+")");
+			jQuery('#slide_selector .list_slide_links li.selected .slide-media-container ').css("background-image","url("+urlImage+")")
+
+			//update setting input
+			jQuery("#image_url").val(urlImage);
+			jQuery("#image_id").val("");
+			
+			t.changeSlotBGs();
+			
+			jQuery('.bgsrcchanger:checked').click();
+
+			if(jQuery('input[name="kenburn_effect"]').is(':checked')){
+				jQuery('input[name="kb_start_fit"]').change();
+			}
+		}
+		
+		
+		
+
+		// LOAD THE OBJECT ORIGINAL IMAGE SINCE IT WAS NOT YET LOADED IN THE UPLOADS FOLDER
+		function getMediaObjectUrl(handle, par,size,change,target,addAsBg){
+			UniteAdminRev.ajaxRequest('load_library_object', {'handle': handle, 'type': "orig"}, function(response){
+				if(response.success){					
+					var imgobj = {imgurl: response.url, imglib:"objectlibrary", imgproportion:true, imgwidth: parseInt(response.width,0)*size, imgheight: parseInt(response.height,0)*size};
+					if (target==="object" && !addAsBg) {
+						if (!change) {
+							addLayerImage(imgobj, par);	
+						} else {
+							var objData = {};
+							objData.image_url = response.url;
+							objData.image_librarysize = {};
+							objData.image_librarysize.width = parseInt(response.width,0)*size;
+							objData.image_librarysize.height = parseInt(response.height,0)*size;
+							objData.scaleProportional = true;							
+							t.updateCurrentLayer(objData);						
+							resetCurrentElementSize();
+							redrawLayerHtml(t.selectedLayerSerial);
+							
+							t.add_layer_change();
+							
+						}
+					} else if(target === 'background') {
+						switchMainBGObject(response.url);
+					} else if(target === 'layer'){
+						var objData = {};
+						objData.bgimage_url = response.url;
+						objData.image_librarysize = {};
+						objData.image_librarysize.width = parseInt(response.width,0)*size;
+						objData.image_librarysize.height = parseInt(response.height,0)*size;
+						switchLayerBackground(objData);
+					}
+				} 
+			});
+		}
+
+		jQuery('body').on('click','.layer-link-type-element',function() {
+			var _ = jQuery(this),
+				_p = _.closest('.list-of-layer-links'),
+				_s = _p.find('.layer-link-type-element-cs'),
+				objLayer = t.getLayerByUniqueId(_p.data('uniqueid')),
+				objUpdate = {};
+			objUpdate.groupLink = _.data('linktype');
+			t.updateLayer(objLayer.serial,objUpdate);
+			for (var i=0;i<6;i++) {
+				_s.removeClass('layer-link-type-'+i);
+				objLayer.references.htmlLayer.removeClass("ldles_"+i);
+				
+			}
+			objLayer.references.htmlLayer.addClass("ldles_"+objUpdate.groupLink);
+			_s.addClass("layer-link-type-"+objUpdate.groupLink);
+		})
+
+		// CLICK ON THE "ADD OBJECT" ELEMENT AND ITS HANDLING
+		jQuery('body').on('click','.objadd-single-item, .obj-item-size-selector',function() {	
+			
+			var so = jQuery(this);				
+			if (jQuery.inArray(so.data('type'),[1,2,"1","2","img"])!==-1) return;
+			if (so.hasClass("obj-item-size-selector")) {
+				var size = "1";
+				switch (so.data('s')) {
+					case "xs": size = 0.1;break;
+					case "s": size = 0.25;break;
+					case "m": size = 0.50;break;
+					case "l": size = 0.75;break;
+					case "o": size = 1;break;
+				};
+				so = so.closest('.objadd-single-item');
+			}
+
+			//WHERE THE OBJECT LIBRARY WAS STARTED FROM (BG OR LAYER)
+			var lastState = jQuery('#dialog_addobj').data('last_open_state'),
+				addAsBg = jQuery('#obj-layer-bg-switcher').hasClass("addthisasbg");
+			
+			addAsBg = so.data('type')==="2" || so.data('type')===2 ? addAsBg : false;
+			addAsBg = lastState==="layer" ? false : addAsBg;
+
+			
+			switch (so.data('type')) {
+				case "img":
+				case "1":
+				case "2":
+				case 1:
+				case 2:
+					if(!rs_plugin_validated){ //load image only if activated
+						show_premium_dialog('register-to-acess-object-library');
+						jQuery('#dialog_addobj').dialog('close');
+						return false;
+					}
+					
+					var stat = jQuery('#button_add_layer_image').data('isstatic'),
+						targ = stat == true ? rev_lang.select_static_layer_image : rev_lang.select_layer_image,
+						par = stat ? 'static' : null,
+						src = so.data('origsrc');
+
+						if (src.indexOf("/")!==-1) {
+							if (jQuery('#dialog_addobj').data('changeimg')!==true) {								
+								var imgobj = {imgurl: src, imglib:"objectlibrary", imgproportion:true, imgwidth: parseInt(so.data('mediawidth'),0)*size, imgheight: parseInt(so.data('mediaheight'),0)*size};													
+								if (lastState==="object" && !addAsBg)
+									addLayerImage(imgobj, par);
+								else
+								if (lastState==="background" || addAsBg)
+									switchMainBGObject(src);
+								else
+								if (lastState==="layer") {									
+									var objData = {};
+									objData.bgimage_url = src;
+									objData.image_librarysize = {};
+									objData.image_librarysize.width = parseInt(so.data('mediawidth'),0)*size;
+									objData.image_librarysize.height = parseInt(so.data('mediaheight'),0)*size;																			
+									switchLayerBackground(objData);
+								}
+								
+							} else {
+								if (lastState==="object" && !addAsBg) {
+									var objData = {};
+									objData.image_url = src;
+									objData.image_librarysize = {};
+									objData.image_librarysize.width = parseInt(so.data('mediawidth'),0)*size;
+									objData.image_librarysize.height = parseInt(so.data('mediaheight'),0)*size;	
+									objData.scaleProportional = true;													
+
+									t.updateCurrentLayer(objData);
+									resetCurrentElementSize();
+									redrawLayerHtml(t.selectedLayerSerial);									
+									t.add_layer_change();
+								}
+								else
+								if (lastState==="background" || addAsBg)
+									switchMainBGObject(src);
+								else
+								if (lastState==="layer") {
+									var objData = {};
+									objData.bgimage_url = src;
+									objData.image_librarysize = {};
+									objData.image_librarysize.width = parseInt(so.data('mediawidth'),0)*size;
+									objData.image_librarysize.height = parseInt(so.data('mediaheight'),0)*size;																			
+									switchLayerBackground(objData);								
+								}
+							}
+						} else {
+							//Lade Image Über Get Object URL
+							getMediaObjectUrl(src,par,size,jQuery('#dialog_addobj').data('changeimg'),lastState,addAsBg);
+						}
+						jQuery('#dialog_addobj').data('changeimg',false);									
+				break;
+				case "svg":
+					var svg = so.find('svg');
+					if (jQuery('#dialog_addobj').data('changesvg')!==true) {
+						var data = {},
+							w = svg.attr('width'),
+							h = svg.attr('height');
+
+						data['static_styles'] = {};
+						data['static_styles'] = t.setVal(data['static_styles'], 'color', "#000000", true);
+						data['deformation'] = {};
+						data['deformation-hover'] = {};
+						data.text = ' ';
+						data.alias = 'SVG';
+						data.type = 'svg';			
+						data.style = '';
+						data.svg = {};
+						data.svg.src = jQuery(this).data('src');
+						data = t.setVal(data, 'max_width', w, true);
+						data = t.setVal(data, 'max_height', h, true);				
+						data.createdOnInit = false;		
+						addLayer(data);						
+					} else {
+						var src = jQuery(this).data('src'),
+							w = svg.attr('width'),
+							h = svg.attr('height');					
+
+						serial = jQuery('#dialog_addobj').data('changesvgserial')				
+						jQuery.get(src, function(data) {
+							jQuery("#slide_layer_"+serial+" .innerslide_layer.tp-caption").first().html("");
+							jQuery("#slide_layer_"+serial+" .innerslide_layer.tp-caption").first()[0].innerHTML = new XMLSerializer().serializeToString(data.documentElement);
+							u.rebuildLayerIdle(jQuery("#slide_layer_"+serial));
+							var objLayer = t.getLayer(serial),
+								curw = parseInt(t.getVal(objLayer,'max_width'),0),
+								curh = parseInt(t.getVal(objLayer,'max_height'),0);
+							
+							h = (curw / w) * h;
+							w = curw;
+							
+							objLayer.svg.src = src;				  
+							objLayer = t.setVal(objLayer, 'max_width', w, true);
+							objLayer = t.setVal(objLayer, 'max_height', h, true);				
+						});
+						t.add_layer_change();
+						jQuery('#dialog_addobj').data('changesvg',false);
+					}
+				break;
+				case "icon":
+					addLayerText(jQuery(this).data('isstatic') == true ? 'static' : null, '<i class="'+so.data('src')+'"></i>',50);
+				break;
+			}
+			jQuery('#dialog_addobj').dialog('close');
 		});
 		
 		
@@ -3016,6 +4118,14 @@ var UniteLayersRev = new function(){
 					jQuery(ui.target).parent().find('.ui-dialog-titlebar').addClass("tp-slider-new-dialog-title");
 				},
 			});
+		});
+
+		jQuery('#button_add_layer_group, #add_new_group').click(function(){
+			addLayerGroup(jQuery(this).data('isstatic') == true ? 'static' : null);
+		});
+
+		jQuery('#add_new_row').click(function(){
+			addLayerRow(jQuery(this).data('isstatic') == true ? 'static' : null);
 		});
 		
 		
@@ -3105,6 +4215,7 @@ var UniteLayersRev = new function(){
 							//remove actions of first layer that are connected to other layers
 							layers_to_add[lta] = t.remove_import_layer_actions(layers_to_add[lta]);
 							layers_to_add[lta].createdOnInit = false;
+							layers_to_add[lta]['p_uid'] = -1;
 							addLayer(layers_to_add[lta], true);
 							li.addClass("layerimported");
 							btn.find('i').addClass("eg-icon-ok").removeClass("eg-icon-plus");
@@ -3115,6 +4226,118 @@ var UniteLayersRev = new function(){
 			}
 		});
 		
+		t.object_library_loaded = false;
+		t.callObjectLibraryDialog = function(type) {
+
+			if(!t.object_library_loaded){
+				
+				
+				UniteAdminRev.ajaxRequest('load_object_library', {}, function(response){
+					if(response.success){
+						//add data['list'] and data['html']
+						for(var key in response.data['html']){
+							
+							if(response.data['html'][key]['type'] == 'tag'){				
+
+								jQuery('.object-tag-list').append('<span class="obj_library_cats" id="obj_library_cats_'+response.data['html'][key]['handle']+'" data-tag="'+response.data['html'][key]['handle']+'">'+response.data['html'][key]['name']+'</span>');
+							}else if(response.data['html'][key]['type'] == 'inner'){
+								jQuery('#object_library_results-inner').append('<div style="display:none" class="rs-obj-library"></div>');
+							}
+						}
+						
+						for(var key in response.data['list']){
+							var obj = { handle:key, list: []};
+							for(var l in response.data['list'][key]){
+								obj.list.push(response.data['list'][key][l]);
+							}														
+							obj_libraries.push(obj);														
+						}
+						
+						push_objects_to_library();
+						
+						t.object_library_loaded = true;
+						t.call_object_dialog(type);
+					}
+				});
+			}else{
+				t.call_object_dialog(type);
+			}
+		}
+		
+		t.call_object_dialog = function(type){
+
+			jQuery('#dialog_addobj').dialog({								
+				width:jQuery(window).width(),
+				height:jQuery(window).height(),				
+				modal: true,
+				dialogClass: 'tpdialogs fullscreen-dialog-window objectlibrary_dialog',
+				create:function(event,ui) {				
+					var title = jQuery(event.target).parent().find('.ui-dialog-titlebar');
+					title.addClass("tp-slider-new-dialog-title");
+					title.prepend('<span class="revlogo-mini" style="margin-right:15px;"></span>');
+
+				},
+				hide:{effect:"",delay:250},
+				open:function(event) {
+					var holder = jQuery(event.target).parent();
+					setTimeout(function() {
+						holder.addClass("show");
+					},200);
+					if (jQuery('#dialog_addobj').data('last_open_state') !== type) {
+						jQuery('#dialog_addobj').data('last_open_state',type);
+						 
+						var title = holder.find('.ui-dialog-titlebar .ui-dialog-title');
+						if (type==="background") {							
+							jQuery('.obj_library_cats_filter').hide();
+							jQuery('#object_library_results').addClass("backgrounds");
+							jQuery('#obj_lib_main_cat_filt_bgimage').show().click();							
+							title.html("Add Background Image");
+						} else if(type==='object') {
+							jQuery('#object_library_results').removeClass("backgrounds");
+							jQuery('.obj_library_cats_filter').show();
+							jQuery('#obj_lib_main_cat_filt_all').show().click();
+							title.html("Add Object Layer");
+						} else if(type==='layer') {
+							jQuery('.obj_library_cats_filter').hide();
+							jQuery('#object_library_results').addClass("backgrounds");
+							jQuery('#obj_lib_main_cat_filt_bgimage').show();
+							jQuery('#obj_lib_main_cat_filt_image').show();							
+							jQuery('#obj_lib_main_cat_filt_allimages').click();																					
+							title.html("Add Image as Layer Background");
+						}
+					}
+					 jQuery('#object_library_results-inner').perfectScrollbar("update");
+					 if (jQuery('.obj_library_cats.selected').length==0)
+						jQuery('.obj_library_cats').first().click();
+					//ui is not available !?
+					var ui = jQuery('#dialog_addobj').closest('.ui-dialog');
+					ui.addClass("visible-fullscreen-dialog");
+					t.setObjectLibraryHeight();										
+				},
+				beforeClose:function(event) {
+					jQuery(event.target).parent().removeClass("show");
+				},
+				close:function(event) {
+				
+					var ui = jQuery('#dialog_addobj').closest('.ui-dialog');
+					ui.removeClass("visible-fullscreen-dialog");
+				}
+			});	
+		}
+		
+		
+		t.setObjectLibraryHeight = function() {
+			var das = jQuery('#dialog_addobj');
+			if (das.is(":visible")) {				
+				var	ol = jQuery('#object_library_results'),
+					wh = jQuery(window).height(),
+					hh = jQuery('#addobj-dialog-header').height(),
+					th = das.parent().find('.tp-slider-new-dialog-title').height(),
+					newh = wh-(hh+th+100);			
+				das.height(wh-th);
+				ol.height(newh);
+			}
+		}
 		
 		t.get_action_dependencies = function(li, slide_id, dependencies){
 			var action_dependencies = li.data('actiondep');
@@ -3244,6 +4467,7 @@ var UniteLayersRev = new function(){
 				if(typeof(layers[key]['layer_action']) !== 'undefined' && typeof(layers[key]['layer_action']['action']) !== 'undefined' && layers[key]['layer_action']['action'].length > 0){
 					for(var lkey in layers[key]['layer_action']['layer_target']){
 						for(var l in map){
+
 							if(l == layers[key]['layer_action']['layer_target'][lkey]){
 								layers[key]['layer_action']['layer_target'][lkey] = map[l];
 								break;
@@ -3426,6 +4650,7 @@ var UniteLayersRev = new function(){
 			
 			data['deformation']['padding'] = [jQuery(this).css('paddingTop'), jQuery(this).css('paddingRight'), jQuery(this).css('paddingBottom'), jQuery(this).css('paddingLeft')];
 			
+			
 			data['deformation']['font-family'] = jQuery('input[name="adbutton-fontfamily"]').val();
 			data['deformation']['background-color'] = jQuery('input[name="adbutton-color-1"]').val();
 			data['deformation']['background-transparency'] = jQuery('input[name="adbutton-opacity-1"]').val();
@@ -3434,7 +4659,8 @@ var UniteLayersRev = new function(){
 			data['deformation']['border-color'] = jQuery('input[name="adbutton-border-color"]').val();
 			data['deformation']['border-transparency'] = jQuery('input[name="adbutton-border-opacity"]').val();
 			data['deformation']['border-opacity'] = jQuery('input[name="adbutton-border-opacity"]').val();
-			data['deformation']['border-width'] = jQuery('input[name="adbutton-border-width"]').val();
+			//data['deformation']['border-width'] = jQuery('input[name="adbutton-border-width"]').val();
+			data['deformation']['border-width'] = [jQuery('input[name="adbutton-border-width"]').val(),jQuery('input[name="adbutton-border-width"]').val(),jQuery('input[name="adbutton-border-width"]').val(),jQuery('input[name="adbutton-border-width"]').val()];
 			data['deformation']['border-style'] = 'solid';
 			
 			if(jQuery(this).hasClass('rev-withicon')){
@@ -3453,7 +4679,8 @@ var UniteLayersRev = new function(){
 			data['deformation-hover']['border-color'] = jQuery('input[name="adbutton-border-color-h"]').val();
 			data['deformation-hover']['border-transparency'] = jQuery('input[name="adbutton-border-opacity-h"]').val();
 			data['deformation-hover']['border-opacity'] = jQuery('input[name="adbutton-border-opacity-h"]').val();
-			data['deformation-hover']['border-width'] = jQuery('input[name="adbutton-border-width-h"]').val();
+			//data['deformation-hover']['border-width'] = jQuery('input[name="adbutton-border-width-h"]').val();
+			data['deformation-hover']['border-width'] = [jQuery('input[name="adbutton-border-width-h"]').val(),jQuery('input[name="adbutton-border-width-h"]').val(),jQuery('input[name="adbutton-border-width-h"]').val(),jQuery('input[name="adbutton-border-width-h"]').val()];
 			data['deformation-hover']['border-style'] = 'solid';
 			
 			if(jQuery(this).hasClass('rev-hiddenicon')){
@@ -3525,6 +4752,7 @@ var UniteLayersRev = new function(){
 			
 			data['deformation']['padding'] = [btn.css('paddingTop'), btn.css('paddingRight'), btn.css('paddingBottom'), btn.css('paddingLeft')];
 			
+			
 			data['deformation']['background-color'] = UniteAdminRev.rgb2hex(btn.css('backgroundColor'));
 			var bgOpacity = UniteAdminRev.getTransparencyFromRgba(btn.css('backgroundColor'));
 		    bgOpacity = bgOpacity === false ? 1 : bgOpacity;
@@ -3545,7 +4773,8 @@ var UniteLayersRev = new function(){
 			
 			data['deformation']['border-radius'] = [btn.css('borderTopLeftRadius'),btn.css('borderTopRightRadius'),btn.css('borderBottomRightRadius'),btn.css('borderBottomLeftRadius')];
 			
-			data['deformation']['border-width'] = btn.css('borderTopWidth');
+			//data['deformation']['border-width'] = btn.css('borderTopWidth');
+			data['deformation']['border-width'] = [btn.css('borderTopWidth'),btn.css('borderRightWidth'),btn.css('borderBottomWidth'),btn.css('borderLeftWidth')];
 			data['deformation']['border-style'] = btn.css('borderTopStyle');
 			
 			data['deformation-hover']['css_cursor'] = btn.css('cursor');
@@ -3592,7 +4821,10 @@ var UniteLayersRev = new function(){
 			data['static_styles']['color'] = UniteAdminRev.rgb2hex(jQuery(this).css('color'));
 			
 			data['deformation']['font-family'] = jQuery(this).css('font-family');
-			data['deformation']['text-align'] = jQuery(this).css('text-align');
+			data['text-align'] = jQuery(this).css('text-align');
+			//data['deformation']['text-align'] = jQuery(this).css('text-align');
+			data['deformation']['vertical-align'] = jQuery(this).css('vertical-align');
+			
 			
 			
 			data.createdOnInit = false;
@@ -3696,6 +4928,8 @@ var UniteLayersRev = new function(){
 			customAnim['skewx'] = jQuery('input[name="layer_skew_xstart"]').val();
 			customAnim['skewy'] = jQuery('input[name="layer_skew_ystart"]').val();
 			customAnim['captionopacity'] = jQuery('input[name="layer_opacity_start"]').val();
+			customAnim['blurfilter'] = jQuery('input[name="blurfilter_start"]').val();
+			customAnim['grayscalefilter'] = jQuery('input[name="grayscalefilter_start"]').val();
 			customAnim['mask'] = jQuery('#masking-start')[0].checked;
 			customAnim['mask_x'] = jQuery('input[name="mask_anim_xstart"]').val();
 			customAnim['mask_y'] = jQuery('input[name="mask_anim_ystart"]').val();
@@ -3776,6 +5010,8 @@ var UniteLayersRev = new function(){
 			if(obj_v['skewx'] !== undefined) { jQuery('input[name="layer_skew_xstart"]').val(obj_v['skewx']); }else{ jQuery('input[name="layer_skew_xstart"]').val(0); }
 			if(obj_v['skewy'] !== undefined) { jQuery('input[name="layer_skew_ystart"]').val(obj_v['skewy']); }else{ jQuery('input[name="layer_skew_ystart"]').val(0); }
 			if(obj_v['captionopacity'] !== undefined) { jQuery('input[name="layer_opacity_start"]').val(obj_v['captionopacity']); }else{ jQuery('input[name="layer_opacity_start"]').val(0); }
+			if(obj_v['blurfilter'] !== undefined) { jQuery('input[name="blurfilter_start"]').val(obj_v['blurfilter']); }else{ jQuery('input[name="blurfilter_start"]').val(0); }
+			if(obj_v['grayscalefilter'] !== undefined) { jQuery('input[name="grayscalefilter_start"]').val(obj_v['grayscalefilter']); }else{ jQuery('input[name="grayscalefilter_start"]').val(0); }
 			if(obj_v['mask'] !== undefined && (obj_v['mask'] == 'true' || obj_v['mask'] == true)) { jQuery('#masking-start').attr('checked', true); }else{ jQuery('#masking-start').attr('checked', false); }
 			if(obj_v['mask_x'] !== undefined) { jQuery('input[name="mask_anim_xstart"]').val(obj_v['mask_x']); }else{ jQuery('input[name="mask_anim_xstart"]').val(0); }
 			if(obj_v['mask_y'] !== undefined) { jQuery('input[name="mask_anim_ystart"]').val(obj_v['mask_y']); }else{ jQuery('input[name="mask_anim_ystart"]').val(0); }
@@ -3852,14 +5088,14 @@ var UniteLayersRev = new function(){
 
 
 	var checkMaskingAvailabity = function() {	
-	 
+	 	
 		if (jQuery('#layer__scalex').val()!=1 || jQuery('#layer__scaley').val()!=1 ||
 			parseInt(jQuery('#layer__skewx').val(),0)!=0 || parseInt(jQuery('#layer__skewy').val(),0)!=0 ||
 			parseInt(jQuery('#layer__xrotate').val(),0)!=0 || parseInt(jQuery('#layer__yrotate').val(),0)!=0 || parseInt(jQuery('#layer_2d_rotation').val(),0)!=0) {
 				jQuery('.mask-not-available').show();
-				jQuery('.mask-is-available').hide();
-				jQuery('#masking-start').removeAttr("checked");
-				jQuery('#masking-end').removeAttr("checked");
+				jQuery('.mask-is-available').hide(); 
+				jQuery('#masking-start').prop("checked",false);
+				jQuery('#masking-end').prop("checked",false);
 				jQuery('.mask-start-settings').hide();
 				jQuery('.mask-end-settings').hide();
 				jQuery('.tp-showmask').removeClass('tp-showmask');
@@ -3868,9 +5104,9 @@ var UniteLayersRev = new function(){
 				u.rebuildLayerIdle(getjQueryLayer());
 				
 				t.updateLayerFromFields();
-
+				
 		} else {
-
+			
 			jQuery('.mask-not-available').hide();
 			jQuery('.mask-is-available').show();
 		}
@@ -3990,7 +5226,8 @@ var UniteLayersRev = new function(){
 				var raw_handle = handle.replace('customin-', '').replace('customout-', '');
 				
 				for(var key in t.arrLayers){
-					if(t.arrLayers[key]['endanimation'] == 'customout-'+raw_handle){
+
+					if(t.arrLayers[key].frames.frame_999.animation == 'customout-'+raw_handle){
 						t.arrLayers[key].x_end = animObj['params']['movex'];
 						t.arrLayers[key].y_end = animObj['params']['movey'];
 						t.arrLayers[key].z_end = animObj['params']['movez'];
@@ -4021,11 +5258,11 @@ var UniteLayersRev = new function(){
 						t.arrLayers[key].mask_x_end_reverse = animObj['params']['mask_x_reverse'];
 						t.arrLayers[key].mask_y_end_reverse = animObj['params']['mask_y_reverse'];
 
-						t.arrLayers[key].endeasing = animObj['params']['easing'];
-						t.arrLayers[key].endsplit = animObj['params']['split'];
-						t.arrLayers[key].endsplitdelay = animObj['params']['splitdelay'];
-						t.arrLayers[key].endspeed = animObj['params']['speed'];
-					}else if(t.arrLayers[key]['animation'] == 'customin-'+raw_handle){
+						t.arrLayers[key].frames.frame_999.easing = animObj['params']['easing'];
+						t.arrLayers[key].frames.frame_999.split = animObj['params']['split'];
+						t.arrLayers[key].frames.frame_999.splitdelay = animObj['params']['splitdelay'];
+						t.arrLayers[key].frames.frame_999.speed = animObj['params']['speed'];
+					}else if(t.arrLayers[key].frames.frame_0.animation == 'customin-'+raw_handle){
 						t.arrLayers[key].x_start = animObj['params']['movex'];
 						t.arrLayers[key].y_start = animObj['params']['movey'];
 						t.arrLayers[key].z_start = animObj['params']['movez'];
@@ -4035,6 +5272,8 @@ var UniteLayersRev = new function(){
 						t.arrLayers[key].scale_x_start = animObj['params']['scalex'];
 						t.arrLayers[key].scale_y_start = animObj['params']['scaley'];
 						t.arrLayers[key].opacity_start = animObj['params']['captionopacity'];
+						t.arrLayers[key].blurfilter_start = animObj['params']['blurfilter'];
+						t.arrLayers[key].grayscalefilter_start = animObj['params']['grayscalefilter'];
 						t.arrLayers[key].skew_x_start = animObj['params']['skewx'];
 						t.arrLayers[key].skew_y_start = animObj['params']['skewy'];
 						t.arrLayers[key].mask_start = animObj['params']['mask'];
@@ -4056,10 +5295,10 @@ var UniteLayersRev = new function(){
 						t.arrLayers[key].mask_x_start_reverse = animObj['params']['mask_x_reverse'];
 						t.arrLayers[key].mask_y_start_reverse = animObj['params']['mask_y_reverse'];
 
-						t.arrLayers[key].easing = animObj['params']['easing'];
-						t.arrLayers[key].split = animObj['params']['split'];
-						t.arrLayers[key].splitdelay = animObj['params']['splitdelay'];
-						t.arrLayers[key].speed = animObj['params']['speed'];
+						t.arrLayers[key].frames.frame_0.easing = animObj['params']['easing'];
+						t.arrLayers[key].frames.frame_0.split = animObj['params']['split'];
+						t.arrLayers[key].frames.frame_0.splitdelay = animObj['params']['splitdelay'];
+						t.arrLayers[key].frames.frame_0.speed = animObj['params']['speed'];
 					}
 					
 				}
@@ -4168,7 +5407,7 @@ var UniteLayersRev = new function(){
 	 */
 	var enableFormFields = function(){
 		
-		jQuery(".form_layers input, .form_layers select, .form_layers textarea").not(".rs_disabled_field").removeAttr("disabled").removeClass("setting-disabled");
+		jQuery(".form_layers input, .form_layers select, .form_layers textarea").not(".rs_disabled_field").prop("disabled",false).removeClass("setting-disabled");
 
 		jQuery("#button_delete_layer").removeClass("button-now-disabled");
 		jQuery("#button_duplicate_layer").removeClass("button-now-disabled");
@@ -4197,7 +5436,7 @@ var UniteLayersRev = new function(){
 	 */
 	t.getLayers = function(){
 		
-		if(selectedLayerSerial != -1){
+		if(t.selectedLayerSerial != -1){
 			t.updateLayerFromFields();
 		}
 		//update sizes in images
@@ -4222,9 +5461,8 @@ var UniteLayersRev = new function(){
 		for (serial in t.arrLayers){
 			var layer = t.arrLayers[serial];
 			if(layer.type == "image"){
-				var htmlLayer = t.getHtmlLayerFromSerial(serial);
-				var objUpdate = {};
-
+				var htmlLayer = layer.references.htmlLayer;
+				var objUpdate = {};				
 				objUpdate = t.setVal(objUpdate, 'width', htmlLayer.width());
 				objUpdate = t.setVal(objUpdate, 'height', htmlLayer.height());
 				t.updateLayer(serial,objUpdate);
@@ -4233,30 +5471,114 @@ var UniteLayersRev = new function(){
 		
 	}
 
+	t.clickInsideElement = function( e, className ) {
+		var el = e.srcElement || e.target;			
+		if ( el.classList.contains(className) ) {
+			return el;
+		} else {
+			while ( el = el.parentNode ) {
+				if ( el.classList && el.classList.contains(className) ) {
+				  return el;
+				}
+			}
+		}
+
+		return false;
+	}	
+
+
+	var unselectAllFocusedGroup = function() {
+		jQuery('.slide_layer_type_group.inwork').removeClass("inwork");
+		jQuery('#focusongroup').removeClass("inwork");
+	}
 	/*! LAYER EVENTS */
 
 	/**
 	 * refresh layer events
 	 */
 	var refreshEvents = function(serial){
-		var layer = t.getHtmlLayerFromSerial(serial);
-
-		var grid_size = jQuery('#rs-grid-sizes option:selected').val();
+		var layer = t.getHtmlLayerFromSerial(serial),
+			grid_size = jQuery('#rs-grid-sizes option:selected').val();
 
 		//update layer events.
+		var connect_to_sortable = layer[0].classList.contains("slide_layer_type_row") ? "#row-zone-top, #row-zone-middle, #row-zone-bottom" :  layer[0].classList.contains("slide_layer_type_column") || layer[0].classList.contains("slide_layer_type_group") ? "" : ".slide_layer_type_column .tp_layer_group_inner_wrapper",
+			handle_item = layer[0].classList.contains("slide_layer_type_row") ? ".row_moveme" : false;
+		
 		layer.draggable({
+			handle:handle_item,
 			start:onLayerDragStart,
+			refreshPositions:true,	
 			drag: t.onLayerDrag,				//set ondrag event
+			connectToSortable: connect_to_sortable,
 			cancel:" textbox, #layer_text, .layer_on_lock",
 			grid: [grid_size,grid_size],
-			stop: onLayerDragEnd	
+			stop: onLayerDragEnd
 		});
 
-		layer.click(function(event){
+		jQuery('#focusongroup').click(unselectAllFocusedGroup);
 
-			//if (!u.isLayerLocked(serial)) {
-				jQuery(':focus').blur();
-				t.setLayerSelected(serial);
+		jQuery('body').on('dblclick','.inlaydecor',function(event) {
+			jQuery(this).closest('.slide_layer_type_group').addClass("inwork");
+			jQuery('#focusongroup').addClass("inwork");
+		});
+
+		layer.click(function(event){		
+			
+			var context = t.clickInsideElement( event, 'groupinfo');
+			if (context!==false) {		
+				jQuery(context).closest('.slide_layer_type_group').addClass("inwork");
+				jQuery('#focusongroup').addClass("inwork");
+				return false;
+			}
+
+			if(event.metaKey || (navigator.platform.toUpperCase().indexOf('WIN')!==-1 && event.ctrlKey)) {
+    			var objLayer = t.getLayer(serial),
+    				inp = jQuery('input#lots_id_'+objLayer.unique_id);
+    			
+    			if (inp.attr('checked')=="checked")
+    				inp.prop("checked",false);
+    			else
+    				inp.attr('checked','checked');
+    			u.checkMultipleSelectedItems();
+  			} else {
+				cm.toggleMenuOff();
+				if (jQuery(':focus').attr('id')==="rs-row-layout") return false;			
+				jQuery(':focus').blur();			
+				t.setLayerSelected(serial);		
+				var objLayer = t.getLayer(serial),
+					inp = jQuery('input#lots_id_'+objLayer.unique_id);
+				
+				if (jQuery.inArray(objLayer.unique_id,t.selectedLayers)==-1) u.checkMultipleSelectedItems(true);
+				inp.attr('checked','checked');
+				t.setLayerSelected(serial);    				
+
+				if (layer.hasClass("slide_layer_type_row")) {
+					var objLayer = t.getCurrentLayer();
+						
+					
+					if ((event.srcElement!==undefined && (event.srcElement.className==='eg-icon-menu' || event.srcElement.className==='row_editor')) || (event.target!=undefined && (event.target.className==='eg-icon-menu' || event.target.className==='row_editor'))) {						
+						var btn = layer.find('.row_editor'),
+							row_composer = jQuery('#rs-layout-row-composer');
+						jQuery('.row_editor.open_re').removeClass("open_re");
+						btn.addClass("open_re");
+						row_composer.show();
+						jQuery('.rs-row-break-selector').removeClass("selected");
+						jQuery('.rs-row-break-selector.rs-slide-ds-'+jQuery('#column_break_at option:selected').val()).addClass("selected")	
+						//row_composer.appendTo(btn.closest('.row_toolbar'));						
+					} else 
+					if ((event.srcElement!=undefined && (event.srcElement.className==='eg-icon-cancel' || event.srcElement.className==='row_editor')) || (event.target!=undefined && (event.target.className==='eg-icon-cancel' || event.target.className==='row_editor'))) {
+						var btn = layer.find('.row_editor'),
+							row_composer = jQuery('#rs-layout-row-composer');
+						jQuery('.row_editor.open_re').removeClass("open_re");
+						row_composer.hide();
+						//row_composer.appendTo(jQuery('#divLayers'));
+					} else 					
+					if ((event.srcElement!=undefined && (event.srcElement.className==='eg-icon-droplet' || event.srcElement.className==='row_config')) || (event.target!=undefined && (event.target.className==='eg-icon-droplet' || event.target.className==='row_config'))) {
+						var morestyle = jQuery('#style-morestyle');
+						if (!morestyle.hasClass("showmore")) morestyle.click();
+					}
+				}
+				
 				event.stopPropagation();
 				// IF ANIMATION TAB IS VISIBLE, AND PLAY IS SELECTED, WE CAN ALLOW TO ANIMATE THE SINGLE LAYER
 				if (u.checkAnimationTab()) {
@@ -4268,9 +5590,7 @@ var UniteLayersRev = new function(){
 					u.stopAllLayerAnimation();
 					u.callCaptionLoops();
 				}
-
-
-			//}
+			}						
 		});
 	}
 
@@ -4321,17 +5641,21 @@ var UniteLayersRev = new function(){
 	/**
 	 * show all layers
 	 */
-	t.showAllLayers = function(){
-		for (serial in t.arrLayers)
-			u.showLayer(serial,true);
+	t.showAllLayers = function(except_serial){
+		for (var i in t.arrLayers) {
+			if (except_serial!==t.arrLayers[i].serial)
+				u.showLayer(t.arrLayers[i],true);
+		}		
 	}
 
 	/**
 	 * hide all layers
 	 */
-	t.hideAllLayers = function(){
-		for (serial in t.arrLayers)
-			u.hideLayer(serial,true);
+	t.hideAllLayers = function(except_serial){		
+		for (var i in t.arrLayers) {	
+			if (except_serial!==t.arrLayers[i].serial)		
+				u.hideLayer(t.arrLayers[i],true);
+		}		
 	}
 
 
@@ -4362,6 +5686,10 @@ var UniteLayersRev = new function(){
 		for(var key in t.arrLayers){
 			if(t.arrLayers[key]['unique_id'] == uid) return t.getLayer(key);
 		}
+
+		for(var key in t.arrLayersDemo){
+			if(t.arrLayersDemo[key]['unique_id'] == uid) return t.getLayer(key);
+		}
 		
 		return false;
 	}
@@ -4372,6 +5700,9 @@ var UniteLayersRev = new function(){
 	t.getLayerIdByUniqueId = function(uid){
 		for(var key in t.arrLayers){
 			if(t.arrLayers[key]['unique_id'] == uid) return key;
+		}
+		for(var key in t.arrLayersDemo){
+			if(t.arrLayersDemo[key]['unique_id'] == uid) return key;
 		}
 		
 		return false;
@@ -4410,8 +5741,8 @@ var UniteLayersRev = new function(){
 			//UniteAdminRev.showErrorMessage("getLayer error, Layer with serial: "+serial+" not found");
 		}else{
 			//modify some data
-			layer.speed = Number(layer.speed);
-			layer.endspeed = Number(layer.endspeed);
+			layer.frames.frame_0.speed = Number(layer.frames.frame_0.speed);
+			layer.frames.frame_999.speed = Number(layer.frames.frame_999.speed);
 			return layer;
 		}
 		return false;
@@ -4421,12 +5752,12 @@ var UniteLayersRev = new function(){
 	 * get current layer object
 	 */
 	t.getCurrentLayer = function(){
-		if(selectedLayerSerial == -1){
+		if(t.selectedLayerSerial == -1){
 			return false;
 			//UniteAdminRev.showErrorMessage(rev_lang.sel_layer_not_set);
 			//return(null);
 		}
-		return t.getLayer(selectedLayerSerial);
+		return t.getLayer(t.selectedLayerSerial);
 	}
 
 
@@ -4446,10 +5777,12 @@ var UniteLayersRev = new function(){
 			type = objLayer.type;
 
 
-		var zIndex = Number(objLayer.order)+100;
-
-		var style = "z-index:"+zIndex+";position:absolute;";
-		var stylerot ="";
+		var zIndex = Number(objLayer.order)+100,
+			style = "z-index:"+zIndex+";position:absolute;",
+			stylerot ="",
+			contaddon = "",
+			precont = "",
+			subcont = "";
 		
 		
 		if(t.getVal(objLayer, 'max_width') !== 'auto')
@@ -4469,11 +5802,19 @@ var UniteLayersRev = new function(){
 		var internal_class = '';
 		if(typeof objLayer.type !== 'undefined' && (objLayer.type == 'button' || objLayer.type == 'shape')) internal_class = ' '+objLayer.internal_class; // || objLayer.type == 'no_edit' 
 		
-
+		var linkgroup = objLayer.groupLink;
+		linkgroup = linkgroup === undefined ? 0 : linkgroup;
+		linkgroup = 'ldles_'+linkgroup;
 		if(type == "image") style += "line-height:0;";
-
+		if (type=="column") {
+			precont = '<div class="slide_layer_col_sizer">';
+			subcont = '</div>';
+			
+			contaddon = '<div class="column_background"></div>';
+		}
+						
 		if(!isDemo){
-			var html = '<div id="slide_layer_' + serial + '" data-type="'+type+'" style="' + style + '" class="slide_layer_type_'+type+' slide_layer"><div style="'+stylerot+'" class="innerslide_layer tp-caption '+objLayer.style+static_class+internal_class+'" >';
+			var html = '<div id="slide_layer_' + serial + '" data-uniqueid="'+objLayer.unique_id+'" data-serial="'+serial+'" data-type="'+type+'" style="' + style + '"               class="slide_layer_type_'+type+' slide_layer '+linkgroup+'">'+contaddon+precont+'<div style="'+stylerot+'" class="innerslide_layer tp-caption '+objLayer.style+static_class+internal_class+'" >';
 		}else{
 			if(rev_adv_resp_sizes === true){
 
@@ -4484,15 +5825,16 @@ var UniteLayersRev = new function(){
 				style += ' font-weight: '+t.getVal(objLayer['static_styles'],'font-weight')+';';
 				style += ' color: '+t.getVal(objLayer['static_styles'],'color')+';';
 			}
-			var html = '<div id="demo_layer_' + serial + '" style="' + style + ' display: none;" class="demo_layer_type_'+type+' demo_layer demo_layer_'+curDemoSlideID+' slide_layer" ><div class="innerslide_layer tp-caption '+objLayer.style+static_class+internal_class+'" >';
+			var html = '<div id="demo_layer_' + serial + '" data-uniqueid="'+objLayer.unique_id+'" data-serial="'+serial+'"  data-type="'+type+'" style="' + style + '" class="invisible_demolayer demo_layer_type_'+type+' demo_layer demo_layer_'+curDemoSlideID+' slide_layer" >'+contaddon+precont+'<div style="'+stylerot+'" class="innerslide_layer tp-caption '+objLayer.style+static_class+internal_class+'" >';
 		}
 
 		//add layer specific html
 		switch(type){
 			case "image":
 				var addStyle = '';
-				if(t.getVal(objLayer,'scaleX') != "") addStyle += "width: " + t.getVal(objLayer,'scaleX') + "px; ";
-				if(t.getVal(objLayer,'scaleY') != "") addStyle += "height: " + t.getVal(objLayer,'scaleY') + "px;";
+				
+				//if(t.getVal(objLayer,'scaleX') != "") addStyle += "width: " + t.getVal(objLayer,'scaleX') + "px; ";
+				//if(t.getVal(objLayer,'scaleY') != "") addStyle += "height: " + t.getVal(objLayer,'scaleY') + "px;";
 				
 				html += '<img src="'+objLayer.image_url+'" alt="'+objLayer.alt+'" style="'+addStyle+'"></img>';
 			break;
@@ -4501,6 +5843,17 @@ var UniteLayersRev = new function(){
 			case "button":
 			//case 'no_edit':
 				html += objLayer.text;
+				
+			break;
+			case "group":
+				html += '<div class="inlaydecor"></div><div class="groupinfo"><i class="fa-icon-object-group"></i><span class="group_info_text">Edit Group Layers</span></div><div class="tp_layer_group_inner_wrapper"></div>';
+			break;
+			case "column":
+				html += '<div class="tp_layer_group_inner_wrapper"></div>';
+			break;
+			case "row":
+				html += '<div class="tp_layer_group_inner_wrapper"></div>';
+				if (!isDemo) html +='<div class="row_toolbar"><div class="row_editor"><i class="eg-icon-menu"></i><i class="eg-icon-cancel"></i></div><div class="row_moveme"><i class="eg-icon-arrow-combo"></i></div><div class="row_config"><i class="eg-icon-droplet"></i></div></div>';
 			break;
 			case "video":				
 				//var styleVideo = "width:"+parseInt(t.getVal(objLayer, 'video_width'),0)+"px;height:"+parseInt(t.getVal(objLayer, 'video_height'),0)+"px;";
@@ -4558,16 +5911,16 @@ var UniteLayersRev = new function(){
 				if (objLayer.svg!=undefined && objLayer.svg.src!=undefined) 
 				jQuery.get(objLayer.svg.src, function(data) {
 					var pref = !isDemo ? "#slide_layer_" : "#demo_layer_"
-				  jQuery(pref+serial+" .innerslide_layer.tp-caption").html("");
-				  jQuery(pref+serial+" .innerslide_layer.tp-caption")[0].innerHTML = new XMLSerializer().serializeToString(data.documentElement);
+				  jQuery(pref+serial+" .innerslide_layer.tp-caption").first().html("");
+				  jQuery(pref+serial+" .innerslide_layer.tp-caption").first()[0].innerHTML = new XMLSerializer().serializeToString(data.documentElement);
 				  u.rebuildLayerIdle(jQuery(pref+serial));
 				});
 				
 			break;
 		}
-
-		html +="</div>";
-
+		
+		html +="</div>"+subcont;
+		
 		//add cross icon:
 		html += "<div class='icon_cross'></div>";
 		html += '</div>';
@@ -4661,9 +6014,9 @@ var UniteLayersRev = new function(){
 	/**
 	 * update layer by data object
 	 */
-	t.updateLayer = function(serial,objData,del_certain){
+	t.updateLayer = function(serial,objData,del_certain,ignoreCallUndo){
 		
-
+		
 		var layer = t.getLayer(serial);
 		if(!layer){
 			return(false);
@@ -4682,6 +6035,7 @@ var UniteLayersRev = new function(){
 				delete layer[del_certain[key]];
 			}
 		}
+		
 		
 		
 		for(var key in objData){
@@ -4710,19 +6064,18 @@ var UniteLayersRev = new function(){
 			// Reset Fields from Style Template
 			updateSubStyleParameters(layer);
 		}
-
+		
 		if(!t.arrLayers[serial]){
 			UniteAdminRev.showErrorMessage("setLayer error, Layer with ID: "+serial+" not found");
 			return(false);
 		}
-
-		if(update_layer_changes){
-			t.add_layer_change(serial, objData);
-		}
-
+		
+		if (!ignoreCallUndo)
+			if(update_layer_changes){
+				t.add_layer_change(serial, objData);
+			}
+		
 		t.arrLayers[serial] = jQuery.extend({},layer);
-		
-		
 		
 		t.updateReverseList();
 		
@@ -4774,7 +6127,7 @@ var UniteLayersRev = new function(){
 
 		// FOR FURTHER DEBUGS
 		if (obj.undogroup==undefined) {
-			console.log("Attribute :"+chain+" Could not be Recorded as Undo / Redo Step");
+			
 			obj.addtoarray = false;
 		}
 
@@ -4786,59 +6139,61 @@ var UniteLayersRev = new function(){
 	function objRek (a, b, chain,found) {	
 		chain = chain===undefined ? "" : chain;		
 		jQuery.each(a, function(key,val) {
-			if (found) return true;	
-
-			if (val instanceof(Object)) {				
-				var originalchain = chain;
-				chain = chain.length==0 ? key : chain+"."+key;		
-				found = objRek(val,b[key],chain,found);				
-				chain = originalchain;				
-			} else {				
-				var originalchain = chain;						
-				chain = chain == undefined || chain.length==0 ? key : chain+"."+key;				
-				// CHECK IF THE VALUES ARE DIFFERENT					
-				if (((val!==b[key] && parseInt(val,0) != parseInt(b[key],0) && val!=undefined && b[key]!=undefined) && key!="renderedData"))	{	
-					
-					if ((t.arrLayersChanges["undo"] && t.arrLayersChanges["undo"].length==0) ||  t.arrLayersChanges["undo"][t.arrLayersChanges["undo"].length-1].chain != chain) {
-						var obj = checkKeyGroups(chain);						
-						if (obj.addtoarray===true) {
-							t.arrLayersChanges["redo"].splice(0,t.arrLayersChanges["redo"].length);
-							t.arrLayersChanges["undo"].push({amount:0, backup:jQuery.extend(true,{},t.arrLayersClone),restore:jQuery.extend(true,{},t.arrLayers),icon:obj.icon, id:obj.id, undogroup:obj.undogroup,serial:obj.serial, key:key, chain:chain, oldval:val, newval:b[key]});																		
-							t.set_save_needed(true);
-							found = true;
+			if (found) return true;				
+			if (key!=="references") 
+				if (val instanceof(Object)) {				
+					var originalchain = chain;
+					chain = chain.length==0 ? key : chain+"."+key;		
+					found = objRek(val,b[key],chain,found);				
+					chain = originalchain;				
+				} else {				
+					var originalchain = chain;						
+					chain = chain == undefined || chain.length==0 ? key : chain+"."+key;				
+					// CHECK IF THE VALUES ARE DIFFERENT					
+					if (((val!==b[key] && parseInt(val,0) != parseInt(b[key],0) && val!=undefined && b[key]!=undefined) && key!="renderedData"))	{	
+						
+						if ((t.arrLayersChanges["undo"] && t.arrLayersChanges["undo"].length==0) ||  t.arrLayersChanges["undo"][t.arrLayersChanges["undo"].length-1].chain != chain) {
+							var obj = checkKeyGroups(chain);						
+							if (obj.addtoarray===true) {
+								t.arrLayersChanges["redo"].splice(0,t.arrLayersChanges["redo"].length);
+								t.arrLayersChanges["undo"].push({amount:0, backup:jQuery.extend(true,{},t.arrLayersClone),restore:jQuery.extend(true,{},t.arrLayers),icon:obj.icon, id:obj.id, undogroup:obj.undogroup,serial:obj.serial, key:key, chain:chain, oldval:val, newval:b[key]});																		
+								t.set_save_needed(true);
+								found = true;
+							} else {
+								if (obj.addtoarray=="samegroup") {
+									t.arrLayersChanges["redo"].splice(0,t.arrLayersChanges["redo"].length);
+									t.arrLayersChanges["undo"][t.arrLayersChanges["undo"].length-1].amount++;
+									t.set_save_needed(true);
+									found = true;
+								}
+							}		
 						} else {
-							if (obj.addtoarray=="samegroup") {
+							if (t.arrLayersChanges["undo"][t.arrLayersChanges["undo"].length-1].chain === chain) {
 								t.arrLayersChanges["redo"].splice(0,t.arrLayersChanges["redo"].length);
 								t.arrLayersChanges["undo"][t.arrLayersChanges["undo"].length-1].amount++;
 								t.set_save_needed(true);
 								found = true;
 							}
-						}		
-					} else {
-						if (t.arrLayersChanges["undo"][t.arrLayersChanges["undo"].length-1].chain === chain) {
-							t.arrLayersChanges["redo"].splice(0,t.arrLayersChanges["redo"].length);
-							t.arrLayersChanges["undo"][t.arrLayersChanges["undo"].length-1].amount++;
-							t.set_save_needed(true);
-							found = true;
-						}
-					}	
-				}																
-				chain = originalchain;
-			}
+						}	
+					}																
+					chain = originalchain;
+				}
 		})		
 		return found;
 	}
 
 	// CHECK IF ANY CHANGES HAPPEND SINCE LAST ARRAY CLONE
-	t.add_layer_change = function() {	
-		
+	t.add_layer_change = function() {			
+		if (t.ignorAllUndoRedoLogs) return;
 		if (t.arrLayersChanges["undo"].length-1 > 27) 
 			var removed = t.arrLayersChanges["undo"].splice(0,1);
 		objRek(t.arrLayersClone,t.arrLayers,"");	
 		if (t.arrLayersChanges["redo"].length==0 && t.arrLayersChanges["undo"].length>0)
 			t.arrLayersChanges["undo"][t.arrLayersChanges["undo"].length-1].restore = jQuery.extend(true,{},t.arrLayers);
+		
 		t.cloneArrLayers();		
-		t.update_undo_redo_list();	
+		
+		t.update_undo_redo_list();			
 		
 	}
 	
@@ -4926,6 +6281,13 @@ var UniteLayersRev = new function(){
 				case "svg":
 					quicksb += '<span class="layer-title-with-icon"><i class="rs-icon-layersvg_n"></i></span>';					
 				break;
+				case "row":
+				case "group":
+					quicksb += '<span class="layer-title-with-icon"><i class="fa-icon-object-group"></i></span>';					
+				break;
+				case "column":
+					quicksb += '<span class="layer-title-with-icon"><i class="rs-icon-layercolumn_n"></i></span>';					
+				break;
 			}
 			var suf = "";
 			if (obj.amount >0) suf = ' ('+obj.amount+')';
@@ -4997,40 +6359,47 @@ var UniteLayersRev = new function(){
 		return r;
 	}
 
-	function forceShowHideLayer(serial,todo) {
-		var htmlLayer = t.getHtmlLayerFromSerial(serial),
-			sortLayer = u.getHtmlSortItemFromSerial(serial),
-			sortLayerTime = u.getHtmlSortTimeItemFromSerial(serial),
-			quicksort = u.getHtmlQuickTimeItemFromSerial(serial);
+
+	function forceShowHideLayer(objLayer,todo) {
+		
+		if (objLayer===undefined || objLayer === false) return;
+
 		if (todo=="hide") {
-			htmlLayer.addClass("layer-deleted");
-			sortLayer.addClass("layer-deleted");
-			quicksort.addClass("layer-deleted");
-			sortLayerTime.addClass("layer-deleted");
+			objLayer.references.htmlLayer.addClass("layer-deleted");
+			if (objLayer.references.sorttable!=undefined) {
+				objLayer.references.sorttable.layer.addClass("layer-deleted");
+				objLayer.references.sorttable.timeline.addClass("layer-deleted");
+				objLayer.references.quicklayer.addClass("layer-deleted");
+			}
+			
 		} else {
-			htmlLayer.removeClass("layer-deleted");
-			sortLayer.removeClass("layer-deleted");
-			quicksort.removeClass("layer-deleted");
-			sortLayerTime.removeClass("layer-deleted");				
+			objLayer.references.htmlLayer.removeClass("layer-deleted");
+			if (objLayer.references.sorttable!=undefined) {
+				objLayer.references.sorttable.layer.removeClass("layer-deleted");
+				objLayer.references.sorttable.timeline.removeClass("layer-deleted");
+				objLayer.references.quicklayer.removeClass("layer-deleted");
+			}		
 		}
 
-
+		u.timeLineTableDimensionUpdate();
 	}
 
 	function showHideDeletedLayers(force) {
+
 		jQuery.each(t.arrLayers,function(i,objLayer) {						
 			if (objLayer.layer_unavailable || objLayer.deleted===true) 	
-				forceShowHideLayer(objLayer.serial,"hide");
+				forceShowHideLayer(objLayer,"hide");
 			else					
-				forceShowHideLayer(objLayer.serial,"show");
+				forceShowHideLayer(objLayer,"show");
 		});
 	}
 
 	function checkInvisibleRedoItems() {
 		jQuery.each(t.arrLayersChanges["redo"],function(i,change){
 			jQuery.each(change.backup,function(i,objLayer){
-				if (objLayer.layer_unavailable) 
-					forceShowHideLayer(objLayer.serial,"hide");
+				if (objLayer.layer_unavailable) {					
+					forceShowHideLayer(objLayer,"hide");
+				}
 			});					
 		});				
 	}
@@ -5064,6 +6433,10 @@ var UniteLayersRev = new function(){
 	
 	t.undo_redo_layer = function(type, step){
 		t.set_save_needed(true);
+		jQuery('.layer-on-timeline-selector').each(function() {
+			this.checked = false;
+		});
+		t.selectedLayers=[];
 		if (type=="undo") {				
 			t.arrLayers = jQuery.extend(true,{},t.arrLayersChanges["undo"][step].backup);	
 			showHideDeletedLayers();
@@ -5086,21 +6459,46 @@ var UniteLayersRev = new function(){
 			checkChangedSources("restore");
 		} 
 
+
+		t.recreateLayerReferences();
 		u.redrawSortbox();
 		unselectLayers();
 		t.cloneArrLayers();				
 		updateHtmlLayersFromObject();						
 		u.allLayerToIdle();
 		u.stopAllLayerAnimation();
+		u.organiseGroupsAndLayer();
 		setTimeout(function() {
 			t.update_undo_redo_list();
+			
 			u.updateAllLayerTimeline();
+
 		},10);		
 	}
 
 
 	/********************************************************************************************************/
 	
+	t.recreateLayerReferences = function() {
+
+		for (var i in t.arrLayers) {
+			var objLayer = t.arrLayers[i];
+			objLayer.references = objLayer.references === undefined ? {} : objLayer.references;
+			objLayer.references.htmlLayer = jQuery(document.getElementById('slide_layer_'+objLayer.serial));
+			objLayer.references.sorttable.layer = jQuery(document.getElementById('layer_sort_'+objLayer.serial));
+			objLayer.references.sorttable.timeline = jQuery(document.getElementById('layer_sort_time_'+objLayer.serial));
+			objLayer.references.quicklayer = jQuery(document.getElementById('layer_quicksort_'+objLayer.serial));
+		}
+
+		for (var i in t.arrLayersDemo) {
+			var objLayer = t.arrLayersDemo[i];
+			objLayer.references = objLayer.references === undefined ? {} : objLayer.references;
+			objLayer.references.htmlLayer = jQuery(document.getElementById('demo_layer_'+objLayer.serial));
+			objLayer.references.sorttable.layer = jQuery(document.getElementById('demo_sort_'+objLayer.serial));
+			objLayer.references.sorttable.timeline = jQuery(document.getElementById('demo_sort_time_'+objLayer.serial));
+			objLayer.references.quicklayer = jQuery(document.getElementById('demo_quicksort_'+objLayer.serial));
+		}
+	}
 	
 	t.updateReverseList = function() {
 		clearTimeout(updateRevTimer);
@@ -5136,12 +6534,13 @@ var UniteLayersRev = new function(){
 	 */
 	t.updateCurrentLayer = function(objData,del_certain){
 		
-		if(!t.arrLayers[selectedLayerSerial]){
-			UniteAdminRev.showErrorMessage("error! the layer with serial: "+selectedLayerSerial+" doesn't exists");
+		if(!t.arrLayers[t.selectedLayerSerial]){
+			UniteAdminRev.showErrorMessage("error! the layer with serial: "+t.selectedLayerSerial+" doesn't exists");
 			return(false);
 		}
 		
-		t.updateLayer(selectedLayerSerial,objData,del_certain);
+		
+		t.updateLayer(t.selectedLayerSerial,objData,del_certain);
 
 	}
 
@@ -5155,8 +6554,19 @@ var UniteLayersRev = new function(){
 			style: "",
 			text: "Image " + (id_counter+1),
 			type: "image",
-			image_url: imgobj.imgurl
+			image_url: imgobj.imgurl				
 		};
+
+		//Add Library Relevant Informations
+		if (imgobj.imglib!==undefined) {
+			objLayer.image_library = imgobj.imglib;
+			objLayer.image_librarysize = {} 
+			objLayer.image_librarysize.width = imgobj.imgwidth;
+			objLayer.image_librarysize.height = imgobj.imgheight;
+			
+		}
+		
+		objLayer.scaleProportional = true;
 		
 		objLayer = t.setVal(objLayer, 'scaleX', imgobj.imgwidth, true);
 		objLayer = t.setVal(objLayer, 'scaleY', imgobj.imgheight, true);
@@ -5281,10 +6691,11 @@ var UniteLayersRev = new function(){
 	/**
 	 * add text layer
 	 */
-	var addLayerText = function(special_type){
-		
+	var addLayerText = function(special_type,content){
+		content = content===undefined ? initText + (id_counter+1) : content;
+
 		var objLayer = {
-			text:initText + (id_counter+1),
+			text:content,
 			type:"text"
 		};
 
@@ -5295,10 +6706,71 @@ var UniteLayersRev = new function(){
 		addLayer(objLayer);
 
 		setTimeout(function() {
-				t.showHideContentEditor(true);				
-				jQuery('#layer_text').data('new_content',true);
-				jQuery('#layer_text').focus();						
-			},50);
+			t.showHideContentEditor(true);				
+			jQuery('#layer_text').data('new_content',true);
+			jQuery('#layer_text').focus();						
+		},50);
+	}
+
+	
+	
+	
+	/**
+	 * add Layer Group
+	 */
+	var addLayerGroup = function(special_type) {
+		var objLayer = {
+				type:"group",
+				text:initGroupName + (id_counter +1),
+				createdOnInit: false,
+				grouptype:"logical",
+
+			},
+			c_objLayer =  {};
+		
+		if(typeof special_type !== 'undefined')
+			objLayer['special_type'] = special_type;
+		
+		//get group unique ID to add it to the columns for reference
+		var layer_id = addLayer(objLayer);
+		t.makeRowSortableDroppable();
+	}
+
+
+	/**
+	 * add Layer Row
+	 */
+	var addLayerRow = function(special_type) {
+		var objLayer = {
+				type:"row",
+				text:initRowName + (id_counter +1),
+				createdOnInit: false
+			},
+			c_objLayer =  {};
+		
+		if(typeof special_type !== 'undefined')
+			objLayer['special_type'] = special_type;
+		
+		//get group unique ID to add it to the columns for reference
+		var layer_id = addLayer(objLayer);
+		var ml = t.getLayer(layer_id);
+		var groupid = ml.unique_id;
+
+		for (var i=0;i<2;i++) {
+			c_objLayer = {
+				type:"column",
+				text:initColumnName + (id_counter +1),
+				ref_group:groupid,
+				p_uid:groupid,
+				column_size:"1/2",
+				createdOnInit: false
+			}
+			addLayer(c_objLayer);
+		}
+		
+		//jump to the group tab and open it		
+		t.makeRowSortableDroppable();
+		t.setLayerSelected(layer_id);
 	}
 
 
@@ -5311,6 +6783,29 @@ var UniteLayersRev = new function(){
 	///////////////////////////
 	var addLayer = function(objLayer, isInit, isDemo, skipScroller){
 		
+		// UPDATE FROM PRE VERSION 5.3 TO VERSION 5.3+ 
+		if (objLayer.version===undefined) {
+			if (objLayer.endtime !== undefined && objLayer.endspeed!==undefined) {
+				if (jQuery.isNumeric(objLayer.endtime))
+					objLayer.endtime = objLayer.endtime - objLayer.endspeed;
+			}
+			
+			// UPDATE FROM PREVERSION 4.x TO Max. 5.2.x
+			if (objLayer.realEndTime && objLayer.realEndTime!="undefined" && objLayer.realEndTime!=undefined) {				
+				 objLayer.endtime = objLayer.realEndTime;
+				 
+				 delete objLayer.realEndTime;
+				 delete objLayer.endTimeFinal;
+				 delete objLayer.endSpeedFinal;			 
+			}
+		}
+		
+		objLayer.version=t.core+""+t.sub+""+t.subsub;		
+
+
+
+		if (objLayer.frames===undefined) objLayer.frames = {};
+
 		isInit = isInit || false;
 		isDemo = isDemo || false;
 		
@@ -5332,21 +6827,40 @@ var UniteLayersRev = new function(){
 			objLayer.unique_id = unique_layer_id;
 		}
 		
-		//set init position
-		if(objLayer.type == "video"){
-			objLayer = t.getVal(objLayer, 'left') == undefined ? t.setVal(objLayer, 'left', initLeftVideo, true) : typeof(objLayer.left) !== 'object' ? t.setVal(objLayer, 'left', objLayer.left, true) : objLayer;
-			objLayer = t.getVal(objLayer, 'top') == undefined ? t.setVal(objLayer, 'top', initTopVideo, true) : typeof(objLayer.top) !== 'object' ? t.setVal(objLayer, 'top', objLayer.top, true) : objLayer;			
-			objLayer = checkUpdateFullwidthVideo(objLayer);
-		}else{			
-			objLayer = t.getVal(objLayer, 'left') == undefined ? t.setVal(objLayer, 'left', initLeft, true) : typeof(objLayer.left) !== 'object' ? t.setVal(objLayer, 'left', objLayer.left, true) : objLayer;
-			objLayer = t.getVal(objLayer, 'top') == undefined ? t.setVal(objLayer, 'top', initTop, true) : typeof(objLayer.top) !== 'object' ? t.setVal(objLayer, 'top', objLayer.top, true) : objLayer;
-		}
+		if (objLayer.unique_id===undefined) {
+			unique_layer_id++;
+			objLayer.unique_id = unique_layer_id;
+		} 
 		
-		/*if(objLayer.type == 'no_edit'){
-			
-		}*/
+		if (jQuery.inArray(objLayer.unique_id,alluniqueids)>=0) {
+			objLayer.unique_id = objLayer.unique_id+Math.round(Math.random()*100+100);
+			unique_layer_id = objLayer.unique_id;
+		}
 
+		if (unique_layer_id<objLayer.unique_id)
+				unique_layer_id = objLayer.unique_id+1;
+		
+		
+		if (!isDemo) alluniqueids.push(objLayer.unique_id);
 
+		
+		var _x = objLayer.type === "video" ? initLeftVideo : initLeft,
+			_y = objLayer.type === "video" ? initTopVideo : initTop;
+
+		_x = t.newlayercoord.x!==-1 ? t.newlayercoord.x : _x;
+		_y = t.newlayercoord.y!==-1 ? t.newlayercoord.y : _y;
+		
+
+		//set init position
+		objLayer = t.getVal(objLayer, 'left') == undefined ? t.setVal(objLayer, 'left', _x, true) : typeof(objLayer.left) !== 'object' ? t.setVal(objLayer, 'left', objLayer.left, true) : objLayer;
+		objLayer = t.getVal(objLayer, 'top') == undefined ? t.setVal(objLayer, 'top', _y, true) : typeof(objLayer.top) !== 'object' ? t.setVal(objLayer, 'top', objLayer.top, true) : objLayer;			
+
+		if(objLayer.type == "video") objLayer = checkUpdateFullwidthVideo(objLayer);
+		
+		t.newlayercoord.x = -1;
+		t.newlayercoord.y = -1;
+
+		objLayer.isDemo = isDemo;
 		
 		
 
@@ -5370,7 +6884,13 @@ var UniteLayersRev = new function(){
 		objLayer.layer_unavailable = false;
 		objLayer.deleted = false;
 		objLayer.createdOnInit = objLayer.createdOnInit != undefined ? objLayer.createdOnInit : isInit==true ? true : false;
-
+		
+		//background image settings for layer
+		objLayer.layer_bg_position = objLayer.layer_bg_position 	|| "center center";
+		objLayer.layer_bg_size = objLayer.layer_bg_size 	|| "cover";
+		objLayer.layer_bg_repeat = objLayer.layer_bg_repeat 	|| "no-repeat";
+		
+		
 		//set Loop Animations
 		objLayer.loop_animation = objLayer.loop_animation 	|| "none";
 		objLayer.loop_easing = objLayer.loop_easing 		|| "linearEaseNone";
@@ -5387,6 +6907,8 @@ var UniteLayersRev = new function(){
 		objLayer.loop_zoomend = objLayer.loop_zoomend != undefined ? objLayer.loop_zoomend : 1;
 		objLayer.loop_angle = objLayer.loop_angle != undefined ? objLayer.loop_angle : 0;
 		objLayer.loop_radius = objLayer.loop_radius != undefined ? objLayer.loop_radius : 10;
+
+		objLayer.layer_blend_mode = objLayer.layer_blend_mode != undefined ? objLayer.layer_blend_mode : "normal";
 		
 		objLayer.html_tag = objLayer.html_tag 		|| "div";
 		objLayer.parallax_layer_ddd_zlevel = objLayer.parallax_layer_ddd_zlevel 		|| "front";
@@ -5394,7 +6916,15 @@ var UniteLayersRev = new function(){
 		// set Mask Animation
 		objLayer.mask_start = objLayer.mask_start	 		|| false;
 		objLayer.mask_end = objLayer.mask_end		 		|| false;
+
+		// Hover Force
+		//objLayer.force_hover = objLayer.force_hover===undefined ? true : objLayer.force_hover;
+
 		
+		
+		// Column Break At
+		if (objLayer.type==="row")
+			objLayer.column_break_at = objLayer.column_break_at || "mobile";
 
 		// Set Reverse Basics					
 		objLayer.x_start_reverse = objLayer.x_start_reverse || false;
@@ -5447,30 +6977,35 @@ var UniteLayersRev = new function(){
 		objLayer.layer_action.action_delay = objLayer.layer_action.action_delay || [];
 		objLayer.layer_action.toggle_layer_type = objLayer.layer_action.toggle_layer_type || [];
 		objLayer.layer_action.toggle_class = objLayer.layer_action.toggle_class || [];
+		
+		
 
-				
-		//set animation:		
-		objLayer.animation = objLayer.animation || 'tp-fade';
-
-		//set easing:
-		objLayer.easing = objLayer.easing || "Power2.easeInOut";
-		objLayer.split = objLayer.split || "none";
-		objLayer.endsplit = objLayer.endsplit || "none";
-		objLayer.splitdelay = objLayer.splitdelay != undefined ? objLayer.splitdelay : 10;
-		objLayer.endsplitdelay = objLayer.endsplitdelay != undefined ? objLayer.endsplitdelay : 10;
+		
 		
 		objLayer = t.getVal(objLayer, 'max_height') == undefined ? 
 			t.setVal(objLayer, 'max_height', "auto", true) : 
 			typeof(objLayer.max_height) !== 'object' ? 
 				t.setVal(objLayer, 'max_height', objLayer.max_height, true) : 
 				objLayer;
-				
+			
+		objLayer = t.getVal(objLayer, 'min_height') == undefined ? 
+			t.setVal(objLayer, 'min_height', "40", true) : 
+			typeof(objLayer.min_height) !== 'object' ? 
+				t.setVal(objLayer, 'min_height', objLayer.min_height, true) : 
+				objLayer;
+
+
 		if(t.getVal(objLayer, 'max_width') == undefined){			
 			objLayer = t.setVal(objLayer, 'max_width', "auto", true);
 		}else{
 			if(typeof(objLayer.max_width) !== 'object'){				
 				objLayer = t.setVal(objLayer, 'max_width', objLayer.max_width, true);
 			}
+		}
+
+		if (objLayer.type === "group" && t.getVal(objLayer, 'max_height') == "auto") {
+			objLayer = t.setVal(objLayer, 'max_width', "200", true);
+			objLayer = t.setVal(objLayer, 'max_height', "200", true);
 		}
 		
 		if(objLayer.type == 'video' && typeof(objLayer.video_width) == 'undefined' && typeof(objLayer.video_data.width) !== 'undefined') objLayer.video_width = objLayer.video_data.width; //fallback to RS video prior 5.0
@@ -5505,14 +7040,20 @@ var UniteLayersRev = new function(){
 			}
 		}
 
+		if(t.getVal(objLayer, 'display') == undefined){
+			objLayer = t.setVal(objLayer, 'display', jQuery("#layer_display option:selected").val(), true);
+		}else{
+			if(typeof(objLayer.display) !== 'object'){
+				objLayer = t.setVal(objLayer, 'display', objLayer.display, true);
+			}
+		}
+
 		if(objLayer.static_start == undefined)
 			objLayer.static_start = jQuery("#layer_static_start option:selected").val();
 
 		if(objLayer.static_end == undefined)
 			objLayer.static_end = 'last'; 
 
-		//set speed:
-		objLayer.speed = objLayer.speed || initSpeed;
 		
 
 		if(t.getVal(objLayer, 'align_hor') == undefined){
@@ -5571,19 +7112,60 @@ var UniteLayersRev = new function(){
 		objLayer['lazy-load'] = objLayer['lazy-load'] || 'auto';			
 		objLayer['image-size'] = objLayer['image-size'] || 'auto';
 		
-		//add time		
-		
-		objLayer.time = objLayer.time != undefined ? objLayer.time : getNextTime();				
-		objLayer.time = Number(objLayer.time);	//casting
+		//if(objLayer.type == "group"){
+			objLayer['css-position'] = objLayer['css-position'] || 'relative';
+		//}
+		//add time
+
 
 		
 
-		// END ANIMATION		
-		objLayer.endspeed = objLayer.endspeed!=undefined ? objLayer.endspeed : initSpeed;		
-		objLayer.endtime = objLayer.endtime!=undefined ? objLayer.endtime : parseInt(g_slideTime,0)+parseInt(objLayer.endspeed,0);		
-		objLayer.endanimation = objLayer.endanimation || 'fadeout';		
-		objLayer.endeasing = objLayer.endeasing || jQuery("#layer_endeasing").val();
+		// FIRST FRAME ANIMATION UPDATE
+		if (objLayer.time!==undefined) {			
+			objLayer.frames.frame_0 = {time:Number(objLayer.time), delay:0, split:objLayer.split, split_extratime: 0, splitdelay:objLayer.splitdelay, speed:objLayer.speed,animation:objLayer.animation, easing:objLayer.easing };
+			 delete objLayer.time;
+			 delete objLayer.splitdelay;
+			 delete objLayer.speed;	
+			 delete objLayer.split;
+			 delete objLayer.easing;
+			 delete objLayer.animation;			 
+		} 
 
+		// LAST FRAME ANIMATION UPDATE
+		if (objLayer.endtime!==undefined) {
+			objLayer.frames.frame_999 = {time:objLayer.endtime, delay:0,split:objLayer.endsplit, split_extratime:0, splitdelay:objLayer.endsplitdelay, speed:objLayer.endspeed!=undefined ? objLayer.endspeed : initSpeed, animation:objLayer.endanimation, easing:objLayer.endeasing};
+			 delete objLayer.endtime;
+			 delete objLayer.endsplitdelay;
+			 delete objLayer.endspeed;	
+			 delete objLayer.endeasing;
+			 delete objLayer.endsplit;
+			 delete objLayer.endanimation;
+		}
+		
+		
+		if (objLayer.frames.frame_0===undefined)  objLayer.frames.frame_0 = {time:0, delay:0, split:"none", splitdelay:10, split_extratime:0, speed:300,animation:"tp-fade", easing:"Power3.easeInOut"};		
+		if (objLayer.frames.frame_999===undefined) objLayer.frames.frame_999 = {time:g_slideTime, delay:0, split:"none", splitdelay:10, split_extratime:0, speed:300,animation:"tp-fade", easing:"Power3.easeInOut"};
+		
+		objLayer.frames.frame_0.time =  objLayer.frames.frame_0.time===undefined ? 10 : objLayer.frames.frame_0.time;
+		objLayer.frames.frame_0.delay =  objLayer.frames.frame_0.delay===undefined ? 0 : objLayer.frames.frame_0.delay;
+		objLayer.frames.frame_0.split =  objLayer.frames.frame_0.split===undefined ? "none" : objLayer.frames.frame_0.split;
+		objLayer.frames.frame_0.splitdelay =  objLayer.frames.frame_0.splitdelay===undefined ? 10 : objLayer.frames.frame_0.splitdelay;
+		objLayer.frames.frame_0.split_extratime =  objLayer.frames.frame_0.split_extratime===undefined ? 0 : objLayer.frames.frame_0.split_extratime;
+		objLayer.frames.frame_0.speed =  objLayer.frames.frame_0.speed===undefined ? 300 : objLayer.frames.frame_0.speed;
+		objLayer.frames.frame_0.animation =  objLayer.frames.frame_0.animation===undefined ? "tp-fade" : objLayer.frames.frame_0.animation;
+		objLayer.frames.frame_0.easing =  objLayer.frames.frame_0.easing===undefined ? "Power3.easeInOut" : objLayer.frames.frame_0.easing;
+
+		objLayer.frames.frame_999.time =  objLayer.frames.frame_999.time===undefined ? 10 : objLayer.frames.frame_999.time;
+		objLayer.frames.frame_999.delay =  objLayer.frames.frame_999.delay===undefined ? 0 : objLayer.frames.frame_999.delay;
+		objLayer.frames.frame_999.split =  objLayer.frames.frame_999.split===undefined ? "none" : objLayer.frames.frame_999.split;
+		objLayer.frames.frame_999.splitdelay =  objLayer.frames.frame_999.splitdelay===undefined ? 10 : objLayer.frames.frame_999.splitdelay;
+		objLayer.frames.frame_999.split_extratime =  objLayer.frames.frame_999.split_extratime===undefined ? 0 : objLayer.frames.frame_999.split_extratime;
+		objLayer.frames.frame_999.speed =  objLayer.frames.frame_999.speed===undefined ? 300 : objLayer.frames.frame_999.speed;
+		objLayer.frames.frame_999.animation =  objLayer.frames.frame_999.animation===undefined ? "tp-fade" : objLayer.frames.frame_999.animation;
+		objLayer.frames.frame_999.easing =  objLayer.frames.frame_999.easing===undefined ? "Power3.easeInOut" : objLayer.frames.frame_999.easing;
+
+		
+		
 		if(t.getVal(objLayer, 'width') == undefined){
 			objLayer = t.setVal(objLayer, 'width', -1, true);
 		}else{
@@ -5637,8 +7219,54 @@ var UniteLayersRev = new function(){
 				objLayer['static_styles'] = t.setVal(objLayer['static_styles'], 'color', objLayer['static_styles']['color'], true);
 			}
 		}
-
 		
+		
+		if(objLayer['margin'] == undefined){
+			objLayer['margin'] = {};
+			var cur_mar = [];
+			jQuery('input[name="css_margin[]"]').each(function(){
+				cur_mar.push(0);
+			});		
+
+			objLayer = t.setVal(objLayer,'margin' ,cur_mar, true);
+		}else{
+			if(typeof(objLayer['margin']) !== 'object'){
+				objLayer = t.setVal(objLayer, 'margin', objLayer['margin'], true);
+			}			
+		}
+		if(objLayer['padding'] == undefined){
+			//check if we have in deformation
+			if(objLayer['deformation'] !== undefined && objLayer['deformation']['padding'] !== undefined){ //fallback
+				objLayer = t.setVal(objLayer, 'padding', objLayer['deformation']['padding'], true);
+			}else{
+				objLayer['padding'] = {};
+				var cur_pad = [];
+				jQuery('input[name="css_padding[]"]').each(function(){
+					cur_pad.push(0);
+				});		
+				objLayer = t.setVal(objLayer, 'padding' ,cur_pad, true);
+			}
+		}else{
+			if(jQuery.type(objLayer['padding']) !== 'object'){
+				var a = objLayer['padding'];
+				delete(objLayer['padding']);
+				objLayer = t.setVal(objLayer, 'padding', a, true);
+			}
+		}
+		
+		if(objLayer['text-align'] == undefined){
+			//check if we have in deformation
+			if(objLayer['deformation'] !== undefined && objLayer['deformation']['text-align'] !== undefined){ //fallback
+				objLayer = t.setVal(objLayer, 'text-align', objLayer['deformation']['text-align'], true);
+			}else{
+				objLayer = t.setVal(objLayer, 'text-align', 'inherit', true);
+			}
+		}else{
+			if(jQuery.type(objLayer['text-align']) !== 'object'){
+				objLayer = t.setVal(objLayer, 'text-align', objLayer['text-align'], true);
+			}			
+		}
+
 
 		//round position
 		objLayer = t.setVal(objLayer, 'top', Math.round(t.getVal(objLayer, 'top')));
@@ -5671,11 +7299,44 @@ var UniteLayersRev = new function(){
 			}
 		}
 
+		
 		if(objLayer.opacity_end == undefined){
 			if(isInit == false){
 				objLayer.opacity_end = "0";
 			}else{
 				objLayer.opacity_end = "inherit";
+			}
+		}
+
+		if(objLayer.blurfilter_start == undefined){
+			if(isInit == false){
+				objLayer.blurfilter_start = "0";
+			}else{
+				objLayer.blurfilter_start = "0";
+			}
+		}
+
+		if(objLayer.blurfilter_end == undefined){
+			if(isInit == false){
+				objLayer.blurfilter_end = "0";
+			}else{
+				objLayer.blurfilter_end = "0";
+			}
+		}
+
+		if(objLayer.grayscalefilter_start == undefined){
+			if(isInit == false){
+				objLayer.grayscalefilter_start = "0";
+			}else{
+				objLayer.grayscalefilter_start = "0";
+			}
+		}
+
+		if(objLayer.grayscalefilter_end == undefined){
+			if(isInit == false){
+				objLayer.grayscalefilter_end = "0";
+			}else{
+				objLayer.grayscalefilter_end = "0";
 			}
 		}
 
@@ -5733,21 +7394,27 @@ var UniteLayersRev = new function(){
 		if(objLayer.deformation == undefined || jQuery.isEmptyObject(objLayer['deformation']))
 			objLayer.deformation = {};
 
-		if(objLayer['deformation']['font-family'] == undefined){
-			objLayer['deformation']['font-family'] = "";
+		if(objLayer['deformation']['font-family'] == undefined && (objLayer.type == 'text' || objLayer.type == 'button')){
+			objLayer['deformation']['font-family'] = "Open Sans";
+			sgfamilies.push('Open Sans');
 		}else{
 			if(objLayer['deformation']['font-family'] !== '' && sgfamilies.indexOf(objLayer['deformation']['font-family']) == -1){
 				sgfamilies.push(objLayer['deformation']['font-family']);
 			}
 		}
 		
-		if(objLayer['deformation']['padding'] == undefined){
+		/*if(objLayer['deformation']['padding'] == undefined){
 			var cur_pad = [];
 			jQuery('input[name="css_padding[]"]').each(function(){
 				cur_pad.push(0);
 			});
 			objLayer['deformation']['padding'] = cur_pad; //4 []
-		}
+		}*/
+
+		// Shadow Idle
+		//objLayer['deformation'].shadow_idle = objLayer['deformation'].shadow_idle===undefined ? true : objLayer['deformation'].shadow_idle;
+		//objLayer['deformation-hover'].shadow_hover = objLayer['deformation-hover'].shadow_hover===undefined ? true : objLayer['deformation-hover'].shadow_hover;
+
 		if(objLayer['deformation']['font-style'] == undefined){
 			objLayer['deformation']['font-style'] = 'normal'; // checkbox
 		}
@@ -5758,8 +7425,12 @@ var UniteLayersRev = new function(){
 		if(objLayer['deformation']['text-decoration'] == undefined)
 			objLayer['deformation']['text-decoration'] = "none";
 
-		if(objLayer['deformation']['text-align'] == undefined)
-			objLayer['deformation']['text-align'] = "left";
+		/*if(objLayer['deformation']['text-align'] == undefined)
+			objLayer['deformation']['text-align'] = "inherit";*/
+		
+		if(objLayer['deformation']['vertical-align'] == undefined)
+			objLayer['deformation']['vertical-align'] = "top";
+		
 
 		if(objLayer['deformation']['text-transform'] == undefined)
 			objLayer['deformation']['text-transform'] = "none";
@@ -5779,8 +7450,21 @@ var UniteLayersRev = new function(){
 		if(objLayer['deformation']['border-style'] == undefined)
 			objLayer['deformation']['border-style'] = "none";
 
-		if(objLayer['deformation']['border-width'] == undefined)
-			objLayer['deformation']['border-width'] = "0"
+		/*if(objLayer['deformation']['border-width'] == undefined)
+			objLayer['deformation']['border-width'] = "0";
+		*/
+		
+		if(objLayer['deformation']['border-width'] == undefined){
+			var cur_bor = [];
+			jQuery('input[name="css_border-width[]"]').each(function(){
+				cur_bor.push(0);
+			});
+			objLayer['deformation']['border-width'] = cur_bor; //4 []
+		}else{ //fallback
+			if(!jQuery.isArray(objLayer['deformation']['border-width'])){
+				objLayer['deformation']['border-width'] = [objLayer['deformation']['border-width'],objLayer['deformation']['border-width'],objLayer['deformation']['border-width'],objLayer['deformation']['border-width']];
+			}
+		}
 
 		if(objLayer['deformation']['border-radius'] == undefined){
 			var cur_bor = [];
@@ -5822,7 +7506,7 @@ var UniteLayersRev = new function(){
 
 		if(objLayer.svg['svgstroke-hover-width'] == undefined)
 			objLayer.svg['svgstroke-hover-width'] = "0";
-		//}
+		
 		if(objLayer['deformation']['x'] == undefined)
 			objLayer['deformation']['x'] = 0;
 
@@ -5873,6 +7557,14 @@ var UniteLayersRev = new function(){
 
 		if(objLayer['deformation']['parallax'] == undefined)
 			objLayer['deformation']['parallax'] = '-';
+
+		if (objLayer['deformation']['blurfilter'] == undefined) objLayer['deformation']['blurfilter'] = 0;
+		if (objLayer['deformation']['grayscalefilter'] == undefined) objLayer['deformation']['grayscalefilter'] = 0;
+		//if (objLayer['deformation']['ds_x'] == undefined) objLayer['deformation']['ds_x'] = 0;
+		//if (objLayer['deformation']['ds_y'] == undefined) objLayer['deformation']['ds_y'] = 0;
+		//if (objLayer['deformation']['ds_blur'] == undefined) objLayer['deformation']['ds_blur'] = 0;		
+		//if (objLayer['deformation']['ds_color'] == undefined) objLayer['deformation']['ds_color'] = "#000000";
+		//if (objLayer['deformation']['ds_opacity'] == undefined) objLayer['deformation']['ds_opacity'] = 0;
 		
 		//deformation part end
 		
@@ -5881,6 +7573,14 @@ var UniteLayersRev = new function(){
 			objLayer['deformation-hover'] = {};
 		}
 				
+
+		if (objLayer['deformation-hover']['blurfilter'] == undefined) objLayer['deformation-hover']['blurfilter'] = 0;
+		if (objLayer['deformation-hover']['grayscalefilter'] == undefined) objLayer['deformation-hover']['grayscalefilter'] = 0;
+		//if (objLayer['deformation-hover']['ds_x'] == undefined) objLayer['deformation-hover']['ds_x'] = 0;
+		//if (objLayer['deformation-hover']['ds_y'] == undefined) objLayer['deformation-hover']['ds_y'] = 0;
+		//if (objLayer['deformation-hover']['ds_blur'] == undefined) objLayer['deformation-hover']['ds_blur'] = 0;		
+		//if (objLayer['deformation-hover']['ds_color'] == undefined) objLayer['deformation-hover']['ds_color'] = "#000000";
+		//if (objLayer['deformation-hover']['ds_opacity'] == undefined) objLayer['deformation-hover']['ds_opacity'] = 0;
 
 		if(objLayer['deformation-hover']['color'] == undefined)
 			objLayer['deformation-hover']['color'] = "#ffffff";
@@ -5908,7 +7608,19 @@ var UniteLayersRev = new function(){
 
 		if(objLayer['deformation-hover']['border-width'] == undefined)
 			objLayer['deformation-hover']['border-width'] = 0;
-
+		
+		if(objLayer['deformation-hover']['border-width'] == undefined){
+			var cur_bor = [];
+			jQuery('input[name="hover_css_border-width[]"]').each(function(){
+				cur_bor.push(0);
+			});
+			objLayer['deformation-hover']['border-width'] = cur_bor; //4 []
+		}else{ //fallback
+			if(!jQuery.isArray(objLayer['deformation-hover']['border-width'])){
+				objLayer['deformation-hover']['border-width'] = [objLayer['deformation-hover']['border-width'],objLayer['deformation-hover']['border-width'],objLayer['deformation-hover']['border-width'],objLayer['deformation-hover']['border-width']];
+			}
+		}
+		
 		if(objLayer['deformation-hover']['border-radius'] == undefined){
 			var cur_bor = [];
 			jQuery('input[name="hover_css_border-radius[]"]').each(function(){
@@ -5975,6 +7687,9 @@ var UniteLayersRev = new function(){
 		
 		if(objLayer['deformation-hover']['speed'] == undefined)
 			objLayer['deformation-hover']['speed'] = 0;
+
+		if(objLayer['deformation-hover']['zindex'] == undefined)
+			objLayer['deformation-hover']['zindex'] = "auto";
 		
 		if(objLayer['deformation-hover']['easing'] == undefined)
 			objLayer['deformation-hover']['easing'] = 'Linear.easeNone';
@@ -5992,38 +7707,60 @@ var UniteLayersRev = new function(){
 			objLayer.trigger_memory = 'keep';
 		
 		objLayer.serial = id_counter;			
+
 		
+		
+		
+		
+		// HOOK FOR EXTERNAL ADDONS
+		jQuery.each(t.addon_callbacks, function(i,callback_element) {
+			
+			var callback = callback_element["callback"],                
+				env = callback_element["environment"],
+				env_sub = callback_element["function_position"];
+
+			if (env === "add_layer_to_stage" && env_sub=="data_definition")                 
+				objLayer = callback(objLayer);
+		});
+		
+		
+		//add html
+		
+		objLayer.isDemo = isDemo;
+		
+		var htmlLayer = t.makeLayerHtml(id_counter,objLayer,isDemo);				
+		container.append(htmlLayer);
+		
+		objLayer.references = objLayer.references === undefined ? {} : objLayer.references;
+
+		objLayer.references.htmlLayer = t.getHtmlLayerFromSerial(id_counter,isDemo);
+
 		if(!isDemo){
 			t.arrLayers[id_counter] = jQuery.extend({},objLayer);
 		}else{
 			t.arrLayersDemo[id_counter] = jQuery.extend({},objLayer);
 		}
-		//add html
+		
 
-		
-		
-		var htmlLayer = t.makeLayerHtml(id_counter,objLayer,isDemo);
-		
-		
-		container.append(htmlLayer);
-		
-		
-		var objHtmlLayer = t.getHtmlLayerFromSerial(id_counter,isDemo);
 		
 		//add layer to sortbox
 		if(!isDemo) {
-			u.addToSortbox(id_counter,objLayer);	
+			
+			u.addToSortbox(id_counter,objLayer);			
+			
 			if (skipScroller!=true)				
-				t.timeLineTableDimensionUpdate();			
+				u.timeLineTableDimensionUpdate();			
+			
 			
 		}
 		
 		
+		
 		if(objLayer['visible'] == false && !isDemo){
-			u.hideLayer(id_counter);
+			u.hideLayer(objLayer);
 		}
 		
-		
+
 		//refresh draggables
 		if(!isDemo)
 			refreshEvents(id_counter);
@@ -6043,17 +7780,20 @@ var UniteLayersRev = new function(){
 				t.arrLayersDemo[id_counter].layer_unavailable = false;
 			
 			t.add_layer_change();
-		}
 
+		}
+		
 		id_counter++;
 
 		//enable "delete all" button, not event, but anyway :)
 		jQuery("#button_delete_all").removeClass("button-now-disabled");
+		u.rebuildLayerIdle(objLayer.references.htmlLayer,0,isDemo);	
+
 		
-		u.rebuildLayerIdle(objHtmlLayer,0,isDemo);	
 
 		//select the layer
 		if(isInit == false && !isDemo){
+			
 			t.setLayerSelected(objLayer.serial);
 			jQuery("#layer_text").focus();
 		}
@@ -6065,26 +7805,38 @@ var UniteLayersRev = new function(){
 			updateSubStyleParameters(objLayer, true);
 		}
 		
-		t.cloneArrLayers();		
-		t.timeLineTableDimensionUpdate();				
+
+		
+		t.cloneArrLayers();						
+		
+		u.timeLineTableDimensionUpdate();	
+		// CHANGE GROUP SORTS FOR LAYERS
+		
+		u.organiseGroupsAndLayer(false,false,true);		
+		// END OF GROUP SORTS
+		
+		return objLayer.serial;
+		
 	}
+
 
 
 	/**
 	 * delete all representation of some layer
 	 */
-	var deleteLayer = function(serial){
+	t.deleteLayer = function(serial){
 		
 		/*t.checkActionsOnLayers(serial);
 		deleteLayerFromObject(serial);
 		deleteLayerFromHtml(serial);
 		u.deleteLayerFromSortbox(serial);
-		t.timeLineTableDimensionUpdate();*/
-		
-		t.arrLayers[serial].deleted = true;
-		forceShowHideLayer(serial,"hide")	
+		u.timeLineTableDimensionUpdate();*/
+		var objLayer = t.getLayer(serial);	
+
+		objLayer.deleted = true;		
+		forceShowHideLayer(objLayer,"hide")	
 		t.add_layer_change();
-		t.timeLineTableDimensionUpdate();
+		u.timeLineTableDimensionUpdate();
 	}
 
 
@@ -6094,14 +7846,14 @@ var UniteLayersRev = new function(){
 	 */
 	var deleteCurrentLayer = function(){
 		
-		if(selectedLayerSerial == -1) {
+		if(t.selectedLayerSerial == -1) {
 			return(false);
 		}
 
-		deleteLayer(selectedLayerSerial);
+		t.deleteLayer(t.selectedLayerSerial);
 
 		//set unselected
-		selectedLayerSerial = -1;
+		t.selectedLayerSerial = -1;
 
 		//clear form and disable buttons
 		disableFormFields();		
@@ -6112,15 +7864,25 @@ var UniteLayersRev = new function(){
 	/**
 	 * call "duplicateLayer" function with selected serial
 	 */
+	var duplicateLayerIntoNewGroup = function(obj) {
+		obj.order = undefined;
+		obj.time = undefined;
+		obj.createdOnInit = false;
+		unique_layer_id++;
+		obj.unique_id = unique_layer_id;
+		addLayer(obj, true);
+		u.timeLineTableDimensionUpdate();
+		return unique_layer_id;
+	}
+
 	var duplicateCurrentLayer = function(){		
-		if(selectedLayerSerial == -1)
+		if(t.selectedLayerSerial == -1)
 			return(false);
 
-		var obj = t.arrLayers[selectedLayerSerial];
+		var obj = t.arrLayers[t.selectedLayerSerial];
 		var obj2 = jQuery.extend(true, {}, obj);	//duplicate object
 		
-		t.getVal(objLayer, 'top');
-
+		//t.getVal(obj, 'top');
 		obj2 = t.setVal(obj2, 'left', t.getVal(obj2, 'left')+5);
 		obj2 = t.setVal(obj2, 'top', t.getVal(obj2, 'top')+5);
 		obj2.order = undefined;
@@ -6130,26 +7892,59 @@ var UniteLayersRev = new function(){
 		//unique_id change as the true in addLayer is not triggering this
 		unique_layer_id++;
 		obj2.unique_id = unique_layer_id;
+
+		if (obj2.groupOrder!==undefined && obj2.type==="row") 			
+			obj2.groupOrder = t.getHighestGroupOrder(t.getVal(obj2, 'align_vert'));
 		
 		addLayer(obj2, true);
 		initDisallowCaptionsOnClick();
+		u.timeLineTableDimensionUpdate();
+				
+		// DUPLICATE GROUP
+		if ((obj.type==="group") && t.getLayersInGroup(obj.unique_id).layers.length>0) {
+			jQuery.each(t.getLayersInGroup(obj.unique_id).layers,function(j,layer) {
+				var newobj = jQuery.extend(true, {}, layer);
+				newobj.p_uid = obj2.unique_id;
+				duplicateLayerIntoNewGroup(newobj);
+			});
+			t.makeRowSortableDroppable();
+		}
+
+		// DUPLICATE COLUMN
+		if ((obj.type==="row") && t.getLayersInGroup(obj.unique_id).layers.length>0) {
+			jQuery.each(t.getLayersInGroup(obj.unique_id).columns,function(j,column) {
+				var newcolumn = jQuery.extend(true, {}, column);
+				newcolumn.p_uid = obj2.unique_id;
+				newcolumn.ref_group = obj2.unique_id;
+				var column_uid = duplicateLayerIntoNewGroup(newcolumn);
+				jQuery.each(t.getLayersInGroup(column.unique_id).layers,function(j,layer) {
+					var newobj = jQuery.extend(true, {}, layer);
+					newobj.p_uid = column_uid;	
+					duplicateLayerIntoNewGroup(newobj);
+				});
+			});
+			t.makeRowSortableDroppable();
+		}
+
+
 		var key;
 		jQuery.each(t.getLayers(),function(k,layer) {
 			key = k;
-		});
-		
-		t.setLayerSelected(key);	
-		t.timeLineTableDimensionUpdate();	
+		});		
+		t.setLayerSelected(key);
+		if (obj2.p_uid!==-1 && t.getObjLayerType(obj2.p_uid)!=="group")
+			t.setInnerGroupOrders(obj2.references.htmlLayer.parent());
 	}
 
-	
+
 
 	/**
 	 * update the corners
 	 */
-	t.updateHtmlLayerCorners = function(htmlLayer,objLayer){
+	t.updateHtmlLayerCorners = function(objLayer){
 		
-		htmlLayer = htmlLayer.find('.innerslide_layer');
+		htmlLayer = jQuery(objLayer.references.htmlLayer[0].getElementsByClassName('innerslide_layer')[0]);
+		
 		var ncch = htmlLayer.outerHeight(),
 			bgcol = htmlLayer.css('backgroundColor'),
 			bgOpacity = UniteAdminRev.getTransparencyFromRgba(htmlLayer.css('backgroundColor'));
@@ -6214,7 +8009,7 @@ var UniteLayersRev = new function(){
 
 	// DELIVER THE SELECTED JQUERY OBJECT BASED ON SERIAL
 	var getjQueryLayer = function() {
-		return jQuery('#slide_layer_'+selectedLayerSerial);
+		return jQuery('#slide_layer_'+t.selectedLayerSerial);
 	}
 
 	
@@ -6222,26 +8017,23 @@ var UniteLayersRev = new function(){
 
 	// UPDATE LAYER TEXT ON WRITE && UPDATE TITLE OF LAYER
 	var updateLayerTextField = function(event,timerobj,txt) {
-		var jobj = getjQueryLayer();
-		
-		if (selectedLayerSerial!=-1 && jobj.length>0) jobj.find('.innerslide_layer.tp-caption').html(txt);			
+		var jobj = getjQueryLayer();		
+		if (t.selectedLayerSerial!=-1 && jobj.length>0) jobj[0].getElementsByClassName('innerslide_layer')[0].innerHTML = txt;			
 		var li = timerobj.closest("li");
-		txt = u.getSortboxText(txt);
-		li.find('.timer-layer-text').html(txt);		
-
-		
+		txt = u.getSortboxText(txt);		
+		if (li!=undefined) li[0].getElementsByClassName('timer-layer-text')[0].innerHTML = txt;				
 	}
 
 	/**
 	 * update the position of html cross
 	 */
-	t.updateCrossIconPosition = function(objHtmlLayer,objLayer){
+	t.updateCrossIconPosition = function(objLayer){
 		
-		var htmlCross = objHtmlLayer.find(".icon_cross");
+		var htmlCross = jQuery(objLayer.references.htmlLayer[0].getElementsByClassName("icon_cross")[0]);
 		var crossWidth = htmlCross.width();
 		var crossHeight = htmlCross.height();
-		var totalWidth = objHtmlLayer.outerWidth();
-		var totalHeight = objHtmlLayer.outerHeight();
+		var totalWidth = objLayer.references.htmlLayer.outerWidth();
+		var totalHeight = objLayer.references.htmlLayer.outerHeight();
 		var crossHalfW = Math.round(crossWidth / 2);
 		var crossHalfH = Math.round(crossHeight / 2);
 
@@ -6308,17 +8100,21 @@ var UniteLayersRev = new function(){
 	 */
 	var updateHtmlLayersFromObject = function(serial,posresets,isDemo){
 				
-		if(!serial) serial = selectedLayerSerial;
+		if(!serial) serial = t.selectedLayerSerial;
 
 		var objLayer = t.getLayer(serial, isDemo);
 
 		if(!objLayer) return(false);
 		
-		var htmlLayer = t.getHtmlLayerFromSerial(serial,isDemo);
+		var htmlLayer = objLayer.references.htmlLayer;
 
 		//set class name
 		var className = "innerslide_layer tp-caption";
-		if(serial == selectedLayerSerial) htmlLayer.addClass("layer_selected");
+		if(serial == t.selectedLayerSerial) {
+			htmlLayer.addClass("layer_selected");
+			htmlLayer.closest('.slide_layer_type_row').addClass('layerchild_selected');
+			htmlLayer.closest('.slide_layer_type_column').addClass('layerchild_selected');
+		}
 		
 		className += " "+objLayer.style;
 		
@@ -6332,7 +8128,7 @@ var UniteLayersRev = new function(){
 			break;*/
 		}
 		
-		htmlLayer.find('.innerslide_layer').attr("class",className);
+		htmlLayer[0].getElementsByClassName('innerslide_layer')[0].className = className;
 
 
 		//set html
@@ -6345,15 +8141,21 @@ var UniteLayersRev = new function(){
 			case "video":	//update fullwidth position
 				objLayer = checkUpdateFullwidthVideo(objLayer);
 			break;
+			case "row":
+			break;
+			case "group":
+			break;
+			case "column":
+			break;
 			default:
 			case "text":				
 			case "button":						
-				htmlLayer.find('.innerslide_layer').html(objLayer.text);
+				htmlLayer[0].getElementsByClassName('innerslide_layer')[0].innerHTML = objLayer.text;
 				t.makeCurrentLayerRotatable(serial);
-				t.updateHtmlLayerCorners(htmlLayer,objLayer);				
+				t.updateHtmlLayerCorners(objLayer);				
 			break;
 			case "svg":
-				objLayer.svg.renderedData = htmlLayer.find('.innerslide_layer').html();
+				objLayer.svg.renderedData = htmlLayer[0].getElementsByClassName('innerslide_layer')[0].innerHTML;
 				t.makeCurrentLayerRotatable(serial);
 			break;
 			case 'audio':				
@@ -6375,8 +8177,9 @@ var UniteLayersRev = new function(){
 			return false;
 		}
 
-		var el = jQuery('.slide_layer.layer_selected .innerslide_layer');
-
+		var el = document.getElementsByClassName('slide_layer layer_selected')[0];
+		el = el!=undefined ? jQuery(el.getElementsByClassName('innerslide_layer')[0]) : el;
+		
 
 		if (el!=undefined && el!==null && el.length>0) {
 			try{el.rotatable("destroy");} 
@@ -6412,23 +8215,38 @@ var UniteLayersRev = new function(){
 	/**
 	 THE CHANGE OF POSITION FIELD TRIGGERS THE REPOSITIONINNG OF THE LAYER
 	**/
-	var positionChanged = function() {
-		
-		jQuery("#layer_top, #layer_left").change(function() {			
-			setTimeout(function() {
+	var positionChanged = function(force) {		
+		jQuery("#layer_top, #layer_left").change(function() {
+			setTimeout(function() {				
 				updateHtmlLayersFromObject(t.getSerialFromID(jQuery('.layer_selected').attr('id')),true);
 			},19);
 		});
 	}
+
+	var positionChanged_Core = function() {
+		try {
+			jQuery.each(t.arrLayers,function(i,layer) {								
+				try {					
+					t.updateHtmlLayerPosition(false,layer,t.getVal(layer, 'top'),t.getVal(layer, 'left'),t.getVal(layer,'align_hor'),t.getVal(layer,'align_vert'));
+				}  catch(e) {				
+					console.log("Position Changed Core Internal Function Error:");
+					console.log(e);
+				}
+			});	
+		} catch(e) {
+			console.log("Position Changed Core Function Error:");
+			console.log(e);
+		}
+	}
 	
 	
 	t.set_cover_mode = function(){
-		var objLayer = t.getLayer(selectedLayerSerial);
+		var objLayer = t.getLayer(t.selectedLayerSerial);
 		
-		jQuery('#layer_scaleX').removeAttr('disabled');
-		jQuery('#layer_scaleY').removeAttr('disabled');
-		jQuery('#layer_max_width').removeAttr('disabled');
-		jQuery('#layer_max_height').removeAttr('disabled');
+		jQuery('#layer_scaleX').prop("disabled",false);
+		jQuery('#layer_scaleY').prop("disabled",false);
+		jQuery('#layer_max_width').prop("disabled",false);
+		jQuery('#layer_max_height').prop("disabled",false);
 		
 		switch(objLayer.type) {
 			case 'shape':
@@ -6481,7 +8299,7 @@ var UniteLayersRev = new function(){
 	 	//},350);
 	 }
 
-	t.updateLayerFromFields_Core = function(){
+	t.updateLayerFromFields_Core = function(){		
 		
 		var objUpdate = {};
 
@@ -6496,211 +8314,232 @@ var UniteLayersRev = new function(){
 		});
 
 
-		if(selectedLayerSerial == -1) return(false);		
+		if(t.selectedLayerSerial == -1) return(false);		
 		UniteCssEditorRev.compare_to_original(); //compare style changes and mark elements depending on state
 		
 
-		objUpdate.style = jQuery("#layer_caption").val();			
-		objUpdate['hover'] = jQuery('#hover_allow')[0].checked;
-		objUpdate['toggle'] = jQuery('#toggle_allow')[0].checked;
+		objUpdate.style = document.getElementById("layer_caption").value;			
+		objUpdate['hover'] = document.getElementById("hover_allow").checked;
+		//objUpdate['force_hover'] = document.getElementById("force_hover").checked;
+		
+		objUpdate['toggle'] = document.getElementById("toggle_allow").checked;
 
-		objUpdate['toggle_use_hover'] = jQuery('#toggle_use_hover')[0].checked;
+		objUpdate['toggle_use_hover'] = document.getElementById("toggle_use_hover").checked;
+		objUpdate['toggle_inverse_content'] = document.getElementById("toggle_inverse_content").checked;
 		
 		
-		objUpdate['visible-desktop'] = jQuery('#visible-desktop')[0].checked;
-		objUpdate['visible-notebook'] = jQuery('#visible-notebook')[0].checked;
-		objUpdate['visible-tablet'] = jQuery('#visible-tablet')[0].checked;
-		objUpdate['visible-mobile'] = jQuery('#visible-mobile')[0].checked;
+		objUpdate['visible-desktop'] = document.getElementById("visible-desktop").checked;
+		objUpdate['visible-notebook'] = document.getElementById("visible-notebook").checked;
+		objUpdate['visible-tablet'] = document.getElementById("visible-tablet").checked;
+		objUpdate['visible-mobile'] = document.getElementById("visible-mobile").checked;
 		
-		objUpdate['show-on-hover'] = jQuery('#layer_on_slider_hover')[0].checked;
+		objUpdate['show-on-hover'] = document.getElementById("layer_on_slider_hover").checked;
 		
-		objUpdate['lazy-load'] = jQuery('#layer-lazy-loading option:selected').val();
-		objUpdate['image-size'] = jQuery('#layer-image-size option:selected').val();
-				
-		objUpdate.text = jQuery("#layer_text").val();
-		objUpdate.texttoggle = jQuery("#layer_text_toggle").val() || "";
+		objUpdate['lazy-load'] = jQuery("#layer-lazy-loading option:selected").val();
+		objUpdate['image-size'] = jQuery("#layer-image-size option:selected").val();
 		
-		objUpdate.alias = jQuery('#layer_sort_'+selectedLayerSerial+" .timer-layer-text").val();
+		objUpdate['css-position'] = jQuery("#layer-css-position option:selected").val();
+		
+		objUpdate.text = document.getElementById("layer_text").value;
+		objUpdate.texttoggle = document.getElementById("layer_text_toggle").value || "";
+		
+		objUpdate.alias = jQuery('#layer_sort_'+t.selectedLayerSerial+">.layer_sort_inner_wrapper .timer-layer-text").val();
 
 		// IF NEW CONTENT IS EDITED FIRST TIME, USE THE SAME CONTENT FOR LAYER DESCRIPTION
 		if (jQuery('#layer_text').data('new_content'))
-			jQuery('#layer_sort_'+selectedLayerSerial+" .timer-layer-text").val(objUpdate.text);
+			jQuery('#layer_sort_'+t.selectedLayerSerial+">.layer_sort_inner_wrapper .timer-layer-text").val(objUpdate.text);
 
 		
-		jQuery('#layer_quicksort_'+selectedLayerSerial+" .layer-title-in-list").val(objUpdate.alias);
+		jQuery('#layer_quicksort_'+t.selectedLayerSerial+" .layer-title-in-list").val(objUpdate.alias);
 		jQuery('#the_current-editing-layer-title').val(objUpdate.alias);		
-		jQuery('#layer-short-toolbar').data('serial',selectedLayerSerial)
+		jQuery('#layer-short-toolbar').data('serial',t.selectedLayerSerial)
 
 
-		objUpdate = t.setVal(objUpdate, 'top', Number(parseInt(jQuery("#layer_top").val(),0)));
-		objUpdate = t.setVal(objUpdate, 'left', Number(parseInt(jQuery("#layer_left").val(),0)));
+		objUpdate = t.setVal(objUpdate, 'top', Number(parseInt(document.getElementById("layer_top").value,0)));
+		objUpdate = t.setVal(objUpdate, 'left', Number(parseInt(document.getElementById("layer_left").value,0)));
 		
 		
 		objUpdate = t.setVal(objUpdate, 'whitespace', jQuery("#layer_whitespace option:selected").val());
-		objUpdate = t.setVal(objUpdate, 'max_height', jQuery("#layer_max_height").val());
-		objUpdate = t.setVal(objUpdate, 'max_width', jQuery("#layer_max_width").val());
+		objUpdate = t.setVal(objUpdate, 'display', jQuery("#layer_display option:selected").val());
+		objUpdate = t.setVal(objUpdate, 'max_height', document.getElementById("layer_max_height").value);
+		objUpdate = t.setVal(objUpdate, 'min_height', document.getElementById("layer_min_height").value);		
+		objUpdate = t.setVal(objUpdate, 'max_width', document.getElementById("layer_max_width").value);
 		
-		objUpdate = t.setVal(objUpdate, 'video_height', jQuery("#layer_video_height").val());
-		objUpdate = t.setVal(objUpdate, 'video_width', jQuery("#layer_video_width").val());
+		objUpdate = t.setVal(objUpdate, 'video_height', document.getElementById("layer_video_height").value);
+		objUpdate = t.setVal(objUpdate, 'video_width', document.getElementById("layer_video_width").value);
 		
 
-		objUpdate = t.setVal(objUpdate, 'scaleX', jQuery("#layer_scaleX").val());
-		objUpdate = t.setVal(objUpdate, 'scaleY', jQuery("#layer_scaleY").val());
+		objUpdate = t.setVal(objUpdate, 'scaleX', document.getElementById("layer_scaleX").value);
+		objUpdate = t.setVal(objUpdate, 'scaleY', document.getElementById("layer_scaleY").value);
 		
 		objUpdate = t.setVal(objUpdate, 'cover_mode', jQuery("#layer_cover_mode option:selected").val());
 
-		objUpdate['2d_rotation'] =  parseInt(jQuery("#layer_2d_rotation").val(),0);
+		objUpdate['2d_rotation'] =  parseInt(document.getElementById("layer_2d_rotation").value,0);
 
-		objUpdate['2d_origin_x'] =  parseInt(jQuery("#layer_2d_origin_x").val(),0);
-		objUpdate['2d_origin_y'] =  parseInt(jQuery("#layer_2d_origin_y").val(),0);
+		objUpdate['2d_origin_x'] =  parseInt(document.getElementById("layer_2d_origin_x").value,0);
+		objUpdate['2d_origin_y'] =  parseInt(document.getElementById("layer_2d_origin_y").value,0);
 		objUpdate['static_start'] = jQuery("#layer_static_start option:selected").val();
 		objUpdate['static_end'] = jQuery("#layer_static_end option:selected").val();
-				
+		
+		objUpdate.layer_bg_position = jQuery("#layer_bg_position option:selected").val();
+		objUpdate.layer_bg_size = jQuery("#layer_bg_size option:selected").val();
+		objUpdate.layer_bg_repeat = jQuery("#layer_bg_repeat option:selected").val();
+		
 		//set Loop Animations
 		objUpdate.loop_animation = jQuery("#layer_loop_animation option:selected").val();
-		objUpdate.loop_easing = jQuery("#layer_loop_easing").val();
-		objUpdate.loop_speed = jQuery("#layer_loop_speed").val();
-		objUpdate.loop_startdeg =  parseInt(jQuery("#layer_loop_startdeg").val(),0);
-		objUpdate.loop_enddeg =  parseInt(jQuery("#layer_loop_enddeg").val(),0);
-		objUpdate.loop_xorigin =  parseInt(jQuery("#layer_loop_xorigin").val(),0);
-		objUpdate.loop_yorigin =  parseInt(jQuery("#layer_loop_yorigin").val(),0);
-		objUpdate.loop_xstart =  parseInt(jQuery("#layer_loop_xstart").val(),0);
-		objUpdate.loop_xend =  parseInt(jQuery("#layer_loop_xend").val(),0);
-		objUpdate.loop_ystart =  parseInt(jQuery("#layer_loop_ystart").val(),0);
-		objUpdate.loop_yend =  parseInt(jQuery("#layer_loop_yend").val(),0);
-		objUpdate.loop_zoomstart = jQuery("#layer_loop_zoomstart").val();
-		objUpdate.loop_zoomend = jQuery("#layer_loop_zoomend").val();
-		objUpdate.loop_angle = jQuery("#layer_loop_angle").val();
-		objUpdate.loop_radius = jQuery("#layer_loop_radius").val();
+		objUpdate.loop_easing = document.getElementById("layer_loop_easing").value;
+		objUpdate.loop_speed = document.getElementById("layer_loop_speed").value;
+		objUpdate.loop_startdeg =  parseInt(document.getElementById("layer_loop_startdeg").value,0);
+		objUpdate.loop_enddeg =  parseInt(document.getElementById("layer_loop_enddeg").value,0);
+		objUpdate.loop_xorigin =  parseInt(document.getElementById("layer_loop_xorigin").value,0);
+		objUpdate.loop_yorigin =  parseInt(document.getElementById("layer_loop_yorigin").value,0);
+		objUpdate.loop_xstart =  parseInt(document.getElementById("layer_loop_xstart").value,0);
+		objUpdate.loop_xend =  parseInt(document.getElementById("layer_loop_xend").value,0);
+		objUpdate.loop_ystart =  parseInt(document.getElementById("layer_loop_ystart").value,0);
+		objUpdate.loop_yend =  parseInt(document.getElementById("layer_loop_yend").value,0);
+		objUpdate.loop_zoomstart = document.getElementById("layer_loop_zoomstart").value;
+		objUpdate.loop_zoomend = document.getElementById("layer_loop_zoomend").value;
+		objUpdate.loop_angle = document.getElementById("layer_loop_angle").value;
+		objUpdate.loop_radius = document.getElementById("layer_loop_radius").value;
 		
 		objUpdate.html_tag = jQuery("#layer_html_tag option:selected").val();
 		objUpdate.parallax_layer_ddd_zlevel = jQuery("#parallax_layer_ddd_zlevel option:selected").val();
 		
-		if (jQuery('#layer__scalex').val()!=1 || jQuery('#layer__scaley').val()!=1 || parseInt(jQuery('#layer__skewx').val(),0)!=0 || parseInt(jQuery('#layer__skewy').val(),0)!=0 || parseInt(jQuery('#layer__xrotate').val(),0)!=0 || parseInt(jQuery('#layer__yrotate').val(),0)!=0 || parseInt(jQuery('#layer_2d_rotation').val(),0)!=0) {
-				jQuery('.mask-not-available').show();
-				jQuery('.mask-is-available').hide();
-				jQuery('#masking-start').removeAttr("checked");
-				jQuery('#masking-end').removeAttr("checked");
-				jQuery('.mask-start-settings').hide();
-				jQuery('.mask-end-settings').hide();
+		var layer = t.getHtmlLayerFromSerial(t.selectedLayerSerial);
+
+		if (document.getElementById("layer__scalex").value!=1 || document.getElementById("layer__scaley").value!=1 || parseInt(document.getElementById("layer__skewx").value,0)!=0 || parseInt(document.getElementById("layer__skewy").value,0)!=0 || parseInt(document.getElementById("layer__xrotate").value,0)!=0 || parseInt(document.getElementById("layer__yrotate").value,0)!=0 || parseInt(document.getElementById("layer_2d_rotation").value,0)!=0) {			
+				jQuery(document.getElementsByClassName('mask-not-available')[0]).show();
+				jQuery(document.getElementsByClassName('mask-is-available')[0]).hide(); 
+				document.getElementById('masking-start').removeAttribute("checked");
+				document.getElementById('masking-end').removeAttribute("checked");
+				jQuery(document.getElementsByClassName('mask-start-settings')[0]).hide();
+				jQuery(document.getElementsByClassName('mask-end-settings')[0]).hide();
 				jQuery('.tp-showmask').removeClass('tp-showmask');
 				RevSliderSettings.onoffStatus(jQuery('#masking-start'));
 				RevSliderSettings.onoffStatus(jQuery('#masking-end'));			
-				jQuery(t.getHtmlLayerFromSerial(selectedLayerSerial)).find('.tp-mask-wrap').css({overflow:"visible"});
+				layer.find('.tp-mask-wrap').css({overflow:"visible"});
 		} else {
-			jQuery('.mask-not-available').hide();
-			jQuery('.mask-is-available').show();
+			jQuery(document.getElementsByClassName('mask-not-available')[0]).hide();
+			jQuery(document.getElementsByClassName('mask-is-available')[0]).show(); 
 		}
 
 		//set Mask Animations
-		objUpdate.mask_start = jQuery('#masking-start')[0].checked;
-		objUpdate.mask_end = jQuery('#masking-end')[0].checked;
-		objUpdate.mask_x_start = jQuery("#mask_anim_xstart").val();
-		objUpdate.mask_y_start =  jQuery("#mask_anim_ystart").val();
-		objUpdate.mask_speed_start =  jQuery("#mask_speed").val();
-		objUpdate.mask_ease_start =  jQuery("#mask_easing").val();
-		objUpdate.mask_x_end =  jQuery("#mask_anim_xend").val();
-		objUpdate.mask_y_end = jQuery("#mask_anim_yend").val();
-		//objUpdate.mask_speed_end = jQuery("#mask_speed_end").val();
-		//objUpdate.mask_ease_end =  jQuery("#mask_easing_end").val();
-
-
-
+		objUpdate.mask_start = document.getElementById("masking-start").checked;
+		objUpdate.mask_end = document.getElementById("masking-end").checked;
+		objUpdate.mask_x_start = document.getElementById("mask_anim_xstart").value;
+		objUpdate.mask_y_start =  document.getElementById("mask_anim_ystart").value;				
+		objUpdate.mask_x_end =  document.getElementById("mask_anim_xend").value;
+		objUpdate.mask_y_end = document.getElementById("mask_anim_yend").value;
 		
-		objUpdate.animation = jQuery("#layer_animation option:selected").val();
-		objUpdate.speed = jQuery("#layer_speed").val();
+		
+		
 						
-		objUpdate = t.setVal(objUpdate, 'align_hor', jQuery("#layer_align_hor").val());
-		objUpdate = t.setVal(objUpdate, 'align_vert', jQuery("#layer_align_vert").val());
+		objUpdate = t.setVal(objUpdate, 'align_hor', document.getElementById("layer_align_hor").value);
+		objUpdate = t.setVal(objUpdate, 'align_vert', document.getElementById("layer_align_vert").value);
 		
-		objUpdate.hiddenunder = jQuery("#layer_hidden")[0].checked;
-		objUpdate.resizeme = jQuery("#layer_resizeme")[0].checked;
-		objUpdate['resize-full'] = jQuery("#layer_resize-full")[0].checked;
+		objUpdate.hiddenunder = document.getElementById("layer_hidden").checked;
+		objUpdate.resizeme = document.getElementById("layer_resizeme").checked;
+		objUpdate['resize-full'] = document.getElementById("layer_resize-full").checked;
 
 		//objUpdate['seo-optimized'] = jQuery("#layer-seo-optimized")[0].checked;
 		
-		objUpdate.basealign = jQuery("#layer_align_base").val();
-		objUpdate.responsive_offset = jQuery("#layer_resp_offset")[0].checked;
+		objUpdate.basealign = document.getElementById("layer_align_base").value;
+		objUpdate.responsive_offset = document.getElementById("layer_resp_offset").checked;
 		
-		objUpdate.easing = jQuery("#layer_easing").val();
-		objUpdate.split = jQuery("#layer_split").val();
-		objUpdate.endsplit = jQuery("#layer_endsplit").val();
-		objUpdate.splitdelay = jQuery("#layer_splitdelay").val();
-		objUpdate.endsplitdelay = jQuery("#layer_endsplitdelay").val();
+		objUpdate.frames={};
+		objUpdate.frames.frame_0 = {};
+		objUpdate.frames.frame_999 = {};
+		
+		objUpdate.frames["frame_0"].animation = jQuery("#layer_animation option:selected").val();
+		objUpdate.frames["frame_0"].speed = document.getElementById("layer_speed").value;
+		objUpdate.frames["frame_0"].easing = document.getElementById("layer_easing").value;
+		objUpdate.frames["frame_0"].split = document.getElementById("layer_split").value;
+		objUpdate.frames["frame_0"].splitdelay = document.getElementById("layer_splitdelay").value;
+		
+		objUpdate.frames["frame_999"].split = document.getElementById("layer_endsplit").value;		
+		objUpdate.frames["frame_999"].splitdelay = document.getElementById("layer_endsplitdelay").value;
+		objUpdate.frames["frame_999"].animation = document.getElementById("layer_endanimation").value;
+		objUpdate.frames["frame_999"].speed = document.getElementById("layer_endspeed").value;
+		objUpdate.frames["frame_999"].easing = document.getElementById("layer_endeasing").value;
 		
 		objUpdate.alt_option = jQuery("#layer_alt_option option:selected").val();
-		objUpdate.alt = jQuery("#layer_alt").val();
+		objUpdate.alt = document.getElementById("layer_alt").value;
 		objUpdate = t.setVal(objUpdate, 'scaleX', jQuery("#layer_scaleX").val());
 		objUpdate = t.setVal(objUpdate, 'scaleY', jQuery("#layer_scaleY").val());
 
-		objUpdate.x_start =  jQuery("#layer_anim_xstart").val();
-		objUpdate.y_start =  jQuery("#layer_anim_ystart").val();
-		objUpdate.z_start =  jQuery("#layer_anim_zstart").val();
-		objUpdate.x_end =  jQuery("#layer_anim_xend").val();
-		objUpdate.y_end =  jQuery("#layer_anim_yend").val();
-		objUpdate.z_end =  jQuery("#layer_anim_zend").val();
-		objUpdate.opacity_start = jQuery("#layer_opacity_start").val();
-		objUpdate.opacity_end = jQuery("#layer_opacity_end").val();
-		objUpdate.x_rotate_start =  jQuery("#layer_anim_xrotate").val();
-		objUpdate.y_rotate_start =  jQuery("#layer_anim_yrotate").val();
-		objUpdate.z_rotate_start =  jQuery("#layer_anim_zrotate").val();
-		objUpdate.x_rotate_end =  jQuery("#layer_anim_xrotate_end").val();
-		objUpdate.y_rotate_end =  jQuery("#layer_anim_yrotate_end").val();
-		objUpdate.z_rotate_end =  jQuery("#layer_anim_zrotate_end").val();
-		objUpdate.scale_x_start = jQuery("#layer_scale_xstart").val();
-		objUpdate.scale_y_start = jQuery("#layer_scale_ystart").val();
-		objUpdate.scale_x_end = jQuery("#layer_scale_xend").val();
-		objUpdate.scale_y_end = jQuery("#layer_scale_yend").val();
-		objUpdate.skew_x_start = jQuery("#layer_skew_xstart").val();
-		objUpdate.skew_y_start = jQuery("#layer_skew_ystart").val();
-		objUpdate.skew_x_end = jQuery("#layer_skew_xend").val();
-		objUpdate.skew_y_end = jQuery("#layer_skew_yend").val();
+		objUpdate.x_start =  document.getElementById("layer_anim_xstart").value;
+		objUpdate.y_start =  document.getElementById("layer_anim_ystart").value;
+		objUpdate.z_start =  document.getElementById("layer_anim_zstart").value;
+		objUpdate.x_end =  document.getElementById("layer_anim_xend").value;
+		objUpdate.y_end =  document.getElementById("layer_anim_yend").value;
+		objUpdate.z_end =  document.getElementById("layer_anim_zend").value;
+		objUpdate.opacity_start = document.getElementById("layer_opacity_start").value;
+		objUpdate.opacity_end = document.getElementById("layer_opacity_end").value;
+		objUpdate.blurfilter_start = document.getElementById("blurfilter_start").value;
+		objUpdate.blurfilter_end = document.getElementById("blurfilter_end").value;
+		objUpdate.grayscalefilter_start = document.getElementById("grayscalefilter_start").value;
+		objUpdate.grayscalefilter_end = document.getElementById("grayscalefilter_end").value;
+		objUpdate.x_rotate_start =  document.getElementById("layer_anim_xrotate").value;
+		objUpdate.y_rotate_start =  document.getElementById("layer_anim_yrotate").value;
+		objUpdate.z_rotate_start =  document.getElementById("layer_anim_zrotate").value;
+		objUpdate.x_rotate_end =  document.getElementById("layer_anim_xrotate_end").value;
+		objUpdate.y_rotate_end =  document.getElementById("layer_anim_yrotate_end").value;
+		objUpdate.z_rotate_end =  document.getElementById("layer_anim_zrotate_end").value;
+		objUpdate.scale_x_start = document.getElementById("layer_scale_xstart").value;
+		objUpdate.scale_y_start = document.getElementById("layer_scale_ystart").value;
+		objUpdate.scale_x_end = document.getElementById("layer_scale_xend").value;
+		objUpdate.scale_y_end = document.getElementById("layer_scale_yend").value;
+		objUpdate.skew_x_start = document.getElementById("layer_skew_xstart").value;
+		objUpdate.skew_y_start = document.getElementById("layer_skew_ystart").value;
+		objUpdate.skew_x_end = document.getElementById("layer_skew_xend").value;
+		objUpdate.skew_y_end = document.getElementById("layer_skew_yend").value;
 		
-		objUpdate.x_start_reverse =  jQuery('#layer_anim_xstart_reverse')[0].checked || false;
-		objUpdate.y_start_reverse =  jQuery('#layer_anim_ystart_reverse')[0].checked || false;
-		objUpdate.x_end_reverse =  jQuery('#layer_anim_xend_reverse')[0].checked || false;
-		objUpdate.y_end_reverse =  jQuery('#layer_anim_yend_reverse')[0].checked || false;
-		objUpdate.x_rotate_start_reverse =  jQuery('#layer_anim_xrotate_reverse')[0].checked || false;
-		objUpdate.y_rotate_start_reverse =  jQuery('#layer_anim_yrotate_reverse')[0].checked || false;
-		objUpdate.z_rotate_start_reverse =  jQuery('#layer_anim_zrotate_reverse')[0].checked || false;
-		objUpdate.x_rotate_end_reverse =  jQuery('#layer_anim_xrotate_end_reverse')[0].checked || false;
-		objUpdate.y_rotate_end_reverse =  jQuery('#layer_anim_yrotate_end_reverse')[0].checked || false;
-		objUpdate.z_rotate_end_reverse =  jQuery('#layer_anim_zrotate_end_reverse')[0].checked || false;
-		objUpdate.scale_x_start_reverse = jQuery('#layer_scale_xstart_reverse')[0].checked || false;
-		objUpdate.scale_y_start_reverse = jQuery('#layer_scale_ystart_reverse')[0].checked || false;
-		objUpdate.scale_x_end_reverse = jQuery('#layer_scale_xend_reverse')[0].checked || false;
-		objUpdate.scale_y_end_reverse = jQuery('#layer_scale_yend_reverse')[0].checked || false;
-		objUpdate.skew_x_start_reverse = jQuery('#layer_skew_xstart_reverse')[0].checked || false;
-		objUpdate.skew_y_start_reverse = jQuery('#layer_skew_ystart_reverse')[0].checked || false;
-		objUpdate.skew_x_end_reverse = jQuery('#layer_skew_xend_reverse')[0].checked || false;
-		objUpdate.skew_y_end_reverse = jQuery('#layer_skew_yend_reverse')[0].checked || false;
-		objUpdate.mask_x_start_reverse = jQuery('#mask_anim_xstart_reverse')[0].checked || false;
-		objUpdate.mask_y_start_reverse =  jQuery('#mask_anim_ystart_reverse')[0].checked || false;
-		objUpdate.mask_x_end_reverse =  jQuery('#mask_anim_xend_reverse')[0].checked || false;
-		objUpdate.mask_y_end_reverse =  jQuery('#mask_anim_yend_reverse')[0].checked || false;
+		objUpdate.x_start_reverse =  document.getElementById('layer_anim_xstart_reverse').checked || false;
+		objUpdate.y_start_reverse =  document.getElementById('layer_anim_ystart_reverse').checked || false;
+		objUpdate.x_end_reverse =  document.getElementById('layer_anim_xend_reverse').checked || false;
+		objUpdate.y_end_reverse =  document.getElementById('layer_anim_yend_reverse').checked || false;
+		objUpdate.x_rotate_start_reverse =  document.getElementById('layer_anim_xrotate_reverse').checked || false;
+		objUpdate.y_rotate_start_reverse =  document.getElementById('layer_anim_yrotate_reverse').checked || false;
+		objUpdate.z_rotate_start_reverse =  document.getElementById('layer_anim_zrotate_reverse').checked || false;
+		objUpdate.x_rotate_end_reverse =  document.getElementById('layer_anim_xrotate_end_reverse').checked || false;
+		objUpdate.y_rotate_end_reverse =  document.getElementById('layer_anim_yrotate_end_reverse').checked || false;
+		objUpdate.z_rotate_end_reverse =  document.getElementById('layer_anim_zrotate_end_reverse').checked || false;
+		objUpdate.scale_x_start_reverse = document.getElementById('layer_scale_xstart_reverse').checked || false;
+		objUpdate.scale_y_start_reverse = document.getElementById('layer_scale_ystart_reverse').checked || false;
+		objUpdate.scale_x_end_reverse = document.getElementById('layer_scale_xend_reverse').checked || false;
+		objUpdate.scale_y_end_reverse = document.getElementById('layer_scale_yend_reverse').checked || false;
+		objUpdate.skew_x_start_reverse = document.getElementById('layer_skew_xstart_reverse').checked || false;
+		objUpdate.skew_y_start_reverse = document.getElementById('layer_skew_ystart_reverse').checked || false;
+		objUpdate.skew_x_end_reverse = document.getElementById('layer_skew_xend_reverse').checked || false;
+		objUpdate.skew_y_end_reverse = document.getElementById('layer_skew_yend_reverse').checked || false;
+		objUpdate.mask_x_start_reverse = document.getElementById('mask_anim_xstart_reverse').checked || false;
+		objUpdate.mask_y_start_reverse =  document.getElementById('mask_anim_ystart_reverse').checked || false;
+		objUpdate.mask_x_end_reverse =  document.getElementById('mask_anim_xend_reverse').checked || false;
+		objUpdate.mask_y_end_reverse =  document.getElementById('mask_anim_yend_reverse').checked || false;
 		
 		
 		objUpdate.autolinebreak = jQuery("#layer_auto_line_break")[0].checked;
 
-		objUpdate.pers_start = jQuery("#layer_pers_start").val();
-		objUpdate.pers_end = jQuery("#layer_pers_end").val();
+		objUpdate.displaymode = jQuery('#layer_displaymode')[0].checked;
 
+		
 		objUpdate.scaleProportional = jQuery("#layer_proportional_scale")[0].checked;
 				
-		objUpdate.attrID = jQuery("#layer_id").val();
-		objUpdate.attrClasses = jQuery("#layer_classes").val();
-		objUpdate.attrTitle = jQuery("#layer_title").val();
-		objUpdate.attrRel = jQuery("#layer_rel").val();
-		objUpdate.link = jQuery("#layer_image_link").val();
-		objUpdate.link_open_in = jQuery("#layer_link_open_in").val();
-		objUpdate.link_id = jQuery("#layer_link_id").val();
-		objUpdate.link_class = jQuery("#layer_link_class").val();
-		objUpdate.link_title = jQuery("#layer_link_title").val();
-		objUpdate.link_rel = jQuery("#layer_link_rel").val();
+		objUpdate.attrID = document.getElementById("layer_id").value;
+		objUpdate.attrWrapperID = document.getElementById("layer_wrapper_id").value;
+		objUpdate.attrClasses = document.getElementById("layer_classes").value;
+		objUpdate.attrWrapperClasses = document.getElementById("layer_wrapper_classes").value;
+		objUpdate.attrTitle = document.getElementById("layer_title").value;
+		objUpdate.attrTabindex = document.getElementById("layer_tabindex").value;
+		objUpdate.attrRel = document.getElementById("layer_rel").value;
+		//objUpdate.link = document.getElementById("layer_image_link").value;
+		//objUpdate.link_open_in = document.getElementById("layer_link_open_in").value;
+		//objUpdate.link_id = document.getElementById("layer_link_id").value;
+		//objUpdate.link_class = document.getElementById("layer_link_class").value;
+		//objUpdate.link_title = document.getElementById("layer_link_title").value;
+		//objUpdate.link_rel = document.getElementById("layer_link_rel").value;
 
-		objUpdate.endanimation = jQuery("#layer_endanimation").val();
-		objUpdate.endspeed = jQuery("#layer_endspeed").val();
-		objUpdate.endeasing = jQuery("#layer_endeasing").val();
+		
 
 		objUpdate = t.setVal(objUpdate, 'scaleY', jQuery("#layer_scaleY").val());
 
@@ -6728,8 +8567,14 @@ var UniteLayersRev = new function(){
 		
 		//deformation part
 		if(objUpdate.deformation == undefined) objUpdate.deformation = {};
-		if (objUpdate["deformation"]["padding"] == undefined) objUpdate["deformation"]["padding"]=["0","0","0","0"];
+		//if (objUpdate["deformation"]["padding"] == undefined) objUpdate["deformation"]["padding"]=["0","0","0","0"];
+		
 		if (objUpdate["deformation"]["border-radius"] == undefined) objUpdate["deformation"]["border-radius"]=["0","0","0","0"];
+
+		// SHADOW FILTER
+		///objUpdate['deformation']['shadow_idle'] = document.getElementById("shadow_idle").checked;
+
+
 		
 		
 		
@@ -6739,83 +8584,132 @@ var UniteLayersRev = new function(){
 		objUpdate['layer-selectable'] = jQuery('#css_layer_selectable option:selected').val();
 		
 		//objUpdate = updateSubStyleParameters(objUpdate);
-		objUpdate['deformation']['color-transparency'] = jQuery('#css_font-transparency').val();
+		objUpdate['deformation']['color-transparency'] =  document.getElementById('css_font-transparency').value;
 		objUpdate['deformation']['font-style'] = (jQuery('#css_font-style')[0].checked) ? 'italic' : 'normal';
-		objUpdate['deformation']['font-family'] = jQuery('#css_font-family').val()
-		jQuery('input[name="css_padding[]"]').each(function(i){ objUpdate['deformation']['padding'][i] = jQuery(this).val();});
+		objUpdate['deformation']['font-family'] =  document.getElementById('css_font-family').value;
+		
+		
+		//jQuery('input[name="css_padding[]"]').each(function(i){ objUpdate['deformation']['padding'][i] = jQuery(this).val();});
+		var cur_pad = [];
+		jQuery('input[name="css_padding[]"]').each(function(i){
+			cur_pad.push(jQuery(this).val());
+		});			
+		objUpdate = t.setVal(objUpdate, 'padding', cur_pad, true);
+		
+		var cur_mar = [];
+		jQuery('input[name="css_margin[]"]').each(function(i){
+			cur_mar.push(jQuery(this).val());
+		});			
+		objUpdate = t.setVal(objUpdate, 'margin', cur_mar, true);
+		
+		objUpdate = t.setVal(objUpdate, 'text-align', jQuery('#css_text-align option:selected').val());
+
+
+		//objUpdate['deformation']['text-align'] = jQuery('#css_text-align option:selected').val();
+		
 		objUpdate['deformation']['text-decoration'] = jQuery('#css_text-decoration option:selected').val();
-		objUpdate['deformation']['text-align'] = jQuery('#css_text-align option:selected').val();
+		objUpdate['deformation']['overflow'] = jQuery('#css_overflow option:selected').val();
+		objUpdate['column_break_at'] = jQuery('#column_break_at option:selected').val();
+		objUpdate['deformation']['vertical-align'] = jQuery('#css_vertical-align option:selected').val();
+		
 		objUpdate['deformation']['text-transform'] = jQuery('#css_text-transform option:selected').val();
-		objUpdate['deformation']['background-color'] = jQuery('#css_background-color').val();
-		objUpdate['deformation']['background-transparency'] = jQuery('#css_background-transparency').val();
-		objUpdate['deformation']['border-color'] = jQuery('#css_border-color-show').val();
-		objUpdate['deformation']['border-transparency'] = jQuery('#css_border-transparency').val();
+		objUpdate['deformation']['background-color'] =  document.getElementById('css_background-color').value;
+		objUpdate['deformation']['background-transparency'] =  document.getElementById('css_background-transparency').value;
+		objUpdate['deformation']['border-color'] =  document.getElementById('css_border-color-show').value;
+		objUpdate['deformation']['border-transparency'] =  document.getElementById('css_border-transparency').value;
 		objUpdate['deformation']['border-style'] = jQuery('#css_border-style option:selected').val();
-		objUpdate['deformation']['border-width'] = jQuery('#css_border-width').val();
+		//objUpdate['deformation']['border-width'] =  document.getElementById('css_border-width').value;
+		if(objUpdate.deformation['border-width'] == undefined) objUpdate.deformation['border-width'] = new Array();	
+		jQuery('input[name="css_border-width[]"]').each(function(i){ objUpdate['deformation']['border-width'][i] = jQuery(this).val();});
+		
 		if(objUpdate.deformation['border-radius'] == undefined) objUpdate.deformation['border-radius'] = new Array();		
 		jQuery('input[name="css_border-radius[]"]').each(function(i){ objUpdate['deformation']['border-radius'][i] = jQuery(this).val();});
 
+		objUpdate['layer_blend_mode'] = jQuery('#layer_blend_mode option:selected').val();
 
 		
 		objUpdate['deformation']['x'] = 0; //parseInt(jQuery('input[name="layer__x"]').val(),0);
 		objUpdate['deformation']['y'] = 0; //parseInt(jQuery('input[name="layer__y"]').val(),0);
-		objUpdate['deformation']['z'] = parseInt(jQuery('#layer__z').val(),0);
-		objUpdate['deformation']['skewx'] = jQuery('#layer__skewx').val();
-		objUpdate['deformation']['skewy'] = jQuery('#layer__skewy').val();
-		objUpdate['deformation']['scalex'] = jQuery('#layer__scalex').val();
-		objUpdate['deformation']['scaley'] = jQuery('#layer__scaley').val();
-		objUpdate['deformation']['opacity'] = jQuery('#layer__opacity').val();
-		objUpdate['deformation']['xrotate'] = parseInt(jQuery('#layer__xrotate').val(),0);
-		objUpdate['deformation']['yrotate'] = parseInt(jQuery('#layer__yrotate').val(),0);
-		objUpdate['2d_rotation'] = parseInt(jQuery('#layer_2d_rotation').val(),0);
-		objUpdate['deformation']['2d_origin_x'] = jQuery('#layer_2d_origin_x').val();
-		objUpdate['deformation']['2d_origin_y'] = jQuery('#layer_2d_origin_y').val();
-		objUpdate['deformation']['pers'] = jQuery('#layer__pers').val();
+		objUpdate['deformation']['z'] = parseInt( document.getElementById('layer__z').value,0);
+		objUpdate['deformation']['skewx'] =  document.getElementById('layer__skewx').value;
+		objUpdate['deformation']['skewy'] =  document.getElementById('layer__skewy').value;
+		objUpdate['deformation']['scalex'] =  document.getElementById('layer__scalex').value;
+		objUpdate['deformation']['scaley'] =  document.getElementById('layer__scaley').value;
+		objUpdate['deformation']['opacity'] =  document.getElementById('layer__opacity').value;
+		objUpdate['deformation']['xrotate'] = parseInt( document.getElementById('layer__xrotate').value,0);
+		objUpdate['deformation']['yrotate'] = parseInt( document.getElementById('layer__yrotate').value,0);
+		objUpdate['2d_rotation'] = parseInt( document.getElementById('layer_2d_rotation').value,0);
+		objUpdate['deformation']['2d_origin_x'] =  document.getElementById('layer_2d_origin_x').value;
+		objUpdate['deformation']['2d_origin_y'] =  document.getElementById('layer_2d_origin_y').value;
+		objUpdate['deformation']['pers'] =  document.getElementById('layer__pers').value;
 		objUpdate['deformation']['corner_left'] = jQuery('#layer_cornerleft option:selected').val();
 		objUpdate['deformation']['corner_right'] = jQuery('#layer_cornerright option:selected').val();
 		objUpdate['deformation']['parallax'] = jQuery('#parallax_level option:selected').val();
 		
+		//FILTERS
+		objUpdate['deformation']['blurfilter'] =  document.getElementById('blurfilter_idle').value;
+		objUpdate['deformation']['grayscalefilter'] =  document.getElementById('grayscalefilter_idle').value;
+		//objUpdate['deformation']['ds_x'] =  document.getElementById('ds_x_idle').value;
+		//objUpdate['deformation']['ds_y'] =  document.getElementById('ds_y_idle').value;
+		//objUpdate['deformation']['ds_blur'] =  document.getElementById('ds_blur_idle').value;		
+		//objUpdate['deformation']['ds_color'] =  document.getElementById('ds_color_idle').value;
+		//objUpdate['deformation']['ds_opacity'] =  document.getElementById('ds_opacity_idle').value;
+
+		
+
 		//deformation hover part start
 		if(objUpdate['deformation-hover'] == undefined || jQuery.isEmptyObject(objUpdate['deformation-hover'])) objUpdate['deformation-hover'] = {};		
-		objUpdate['deformation-hover']['color'] = jQuery('#hover_layer_color_s').val();
-		objUpdate['deformation-hover']['color-transparency'] = jQuery('#hover_css_font-transparency').val();
+		//objUpdate['deformation-hover']['shadow_hover'] = document.getElementById("shadow_hover").checked;
+		objUpdate['deformation-hover']['color'] = document.getElementById('hover_layer_color_s').value;
+		objUpdate['deformation-hover']['color-transparency'] = document.getElementById('hover_css_font-transparency').value;
 		objUpdate['deformation-hover']['text-decoration'] = jQuery('#hover_css_text-decoration option:selected').val();
-		objUpdate['deformation-hover']['background-color'] = jQuery('#hover_css_background-color').val();
-		objUpdate['deformation-hover']['background-transparency'] = jQuery('#hover_css_background-transparency').val();
+		objUpdate['deformation-hover']['background-color'] = document.getElementById('hover_css_background-color').value;
+		objUpdate['deformation-hover']['background-transparency'] = document.getElementById('hover_css_background-transparency').value;
 		
+		//FILTERS
+		objUpdate['deformation-hover']['blurfilter'] =  document.getElementById('blurfilter_hover').value;
+		objUpdate['deformation-hover']['grayscalefilter'] =  document.getElementById('grayscalefilter_hover').value;
+		//objUpdate['deformation-hover']['ds_x'] =  document.getElementById('ds_x_hover').value;
+		//objUpdate['deformation-hover']['ds_y'] =  document.getElementById('ds_y_hover').value;
+		//objUpdate['deformation-hover']['ds_blur'] =  document.getElementById('ds_blur_hover').value;		
+		//objUpdate['deformation-hover']['ds_color'] =  document.getElementById('ds_color_hover').value;
+		//objUpdate['deformation-hover']['ds_opacity'] =  document.getElementById('ds_opacity_hover').value;
 
 
-		objUpdate['deformation-hover']['border-color'] = jQuery('#hover_css_border-color-show').val();
-		objUpdate['deformation-hover']['border-transparency'] = jQuery('#hover_css_border-transparency').val();
+		objUpdate['deformation-hover']['border-color'] = document.getElementById('hover_css_border-color-show').value;
+		objUpdate['deformation-hover']['border-transparency'] = document.getElementById('hover_css_border-transparency').value;
 		objUpdate['deformation-hover']['border-style'] = jQuery('#hover_css_border-style option:selected').val();
-		objUpdate['deformation-hover']['border-width'] = jQuery('#hover_css_border-width').val();
+		//objUpdate['deformation-hover']['border-width'] = document.getElementById('hover_css_border-width').value;
+		if(objUpdate['deformation-hover']['border-width'] == undefined) objUpdate['deformation-hover']['border-width'] = new Array();
+		jQuery('input[name="hover_css_border-width[]"]').each(function(i){ objUpdate['deformation-hover']['border-width'][i] = jQuery(this).val(); });
 		if(objUpdate['deformation-hover']['border-radius'] == undefined) objUpdate['deformation-hover']['border-radius'] = new Array();
 		jQuery('input[name="hover_css_border-radius[]"]').each(function(i){ objUpdate['deformation-hover']['border-radius'][i] = jQuery(this).val(); });
-		objUpdate['deformation-hover']['skewx'] = jQuery('#hover_layer__skewx').val();
-		objUpdate['deformation-hover']['skewy'] = jQuery('#hover_layer__skewy').val();
-		objUpdate['deformation-hover']['scalex'] = jQuery('#hover_layer__scalex').val();
-		objUpdate['deformation-hover']['scaley'] = jQuery('#hover_layer__scaley').val();
-		objUpdate['deformation-hover']['opacity'] = jQuery('#hover_layer__opacity').val();
-		objUpdate['deformation-hover']['xrotate'] = parseInt(jQuery('#hover_layer__xrotate').val(),0);
-		objUpdate['deformation-hover']['yrotate'] = parseInt(jQuery('#hover_layer__yrotate').val(),0);
-		objUpdate['deformation-hover']['2d_rotation'] = parseInt(jQuery('#hover_layer_2d_rotation').val(),0); //z rotate
+		objUpdate['deformation-hover']['skewx'] = document.getElementById('hover_layer__skewx').value;
+		objUpdate['deformation-hover']['skewy'] = document.getElementById('hover_layer__skewy').value;
+		objUpdate['deformation-hover']['scalex'] = document.getElementById('hover_layer__scalex').value;
+		objUpdate['deformation-hover']['scaley'] = document.getElementById('hover_layer__scaley').value;
+		objUpdate['deformation-hover']['opacity'] = document.getElementById('hover_layer__opacity').value;
+		objUpdate['deformation-hover']['xrotate'] = parseInt(document.getElementById('hover_layer__xrotate').value,0);
+		objUpdate['deformation-hover']['yrotate'] = parseInt(document.getElementById('hover_layer__yrotate').value,0);
+		objUpdate['deformation-hover']['2d_rotation'] = parseInt(document.getElementById('hover_layer_2d_rotation').value,0); //z rotate
 		
-		objUpdate['deformation-hover']['speed'] = jQuery('#hover_speed').val();
+		objUpdate['deformation-hover']['speed'] = document.getElementById('hover_speed').value;
+		objUpdate['deformation-hover']['zindex'] = document.getElementById('hover_zindex').value;
 		objUpdate['deformation-hover']['easing'] = jQuery('#hover_easing option:selected').val();
 		objUpdate['deformation-hover']['css_cursor'] = jQuery('#css_cursor option:selected').val();
 		
 		// READ SVG BASED CONTENT
 		if (objUpdate['svg']==undefined) objUpdate['svg']={};
-		objUpdate['svg']['svgstroke-color'] = jQuery('#css_svgstroke-color-show').val();
-		objUpdate['svg']['svgstroke-transparency'] = jQuery('#css_svgstroke-transparency').val();
-		objUpdate['svg']['svgstroke-dasharray'] = jQuery('#css_svgstroke-dasharray').val();
-		objUpdate['svg']['svgstroke-dashoffset'] = jQuery('#css_svgstroke-dashoffset').val();
-		objUpdate['svg']['svgstroke-width'] = jQuery('#css_svgstroke-width').val();
-		objUpdate['svg']['svgstroke-hover-color'] = jQuery('#css_svgstroke-hover-color-show').val();
-		objUpdate['svg']['svgstroke-hover-transparency'] = jQuery('#css_svgstroke-hover-transparency').val();
-		objUpdate['svg']['svgstroke-hover-dasharray'] = jQuery('#css_svgstroke-hover-dasharray').val();
-		objUpdate['svg']['svgstroke-hover-dashoffset'] = jQuery('#css_svgstroke-hover-dashoffset').val();
-		objUpdate['svg']['svgstroke-hover-width'] = jQuery('#css_svgstroke-hover-width').val();
+		objUpdate['svg']['svgstroke-color'] = document.getElementById('css_svgstroke-color-show').value;
+		objUpdate['svg']['svgstroke-transparency'] = document.getElementById('css_svgstroke-transparency').value;
+		objUpdate['svg']['svgstroke-dasharray'] = document.getElementById('css_svgstroke-dasharray').value;
+		objUpdate['svg']['svgstroke-dashoffset'] = document.getElementById('css_svgstroke-dashoffset').value;
+		objUpdate['svg']['svgstroke-width'] = document.getElementById('css_svgstroke-width').value;
+		objUpdate['svg']['svgstroke-hover-color'] = document.getElementById('css_svgstroke-hover-color-show').value;
+		objUpdate['svg']['svgstroke-hover-transparency'] = document.getElementById('css_svgstroke-hover-transparency').value;
+		objUpdate['svg']['svgstroke-hover-dasharray'] = document.getElementById('css_svgstroke-hover-dasharray').value;
+		objUpdate['svg']['svgstroke-hover-dashoffset'] = document.getElementById('css_svgstroke-hover-dashoffset').value;
+		objUpdate['svg']['svgstroke-hover-width'] = document.getElementById('css_svgstroke-hover-width').value;
 
 		
 
@@ -6858,7 +8752,7 @@ var UniteLayersRev = new function(){
 		});
 		
 		objUpdate['layer_action'].layer_target = [];
-		jQuery('select[name="layer_target[]"] option:selected').each(function(){
+		jQuery('select[name="layer_target[]"] option:selected').each(function(){			
 			objUpdate['layer_action'].layer_target.push(jQuery(this).val());
 		});
 		
@@ -6886,13 +8780,18 @@ var UniteLayersRev = new function(){
 		objUpdate.trigger_memory = jQuery('#layer-tigger-memory option:selected').val();
 
 
+				
+		// HOOK FOR EXTERNAL ADDONS
+		jQuery.each(t.addon_callbacks, function(i,callback_element) {
+			var callback = callback_element["callback"],				
+				env = callback_element["environment"],
+				env_sub = callback_element["function_position"];
+			if (env === "updateLayerFromFields_Core" && env_sub=="end"){
+				objUpdate = callback(objUpdate);
+			}
+			
+		});
 		
-		
-		
-		//ONLY FOR DEBUG!!
-		//objUpdate.internal_class = jQuery('#internal_classes').val();
-		//objUpdate.type = jQuery('#layer_type option:selected').val();
-
 		//update object - Write back changes in ObjArray
 		t.updateCurrentLayer(objUpdate, ['layer_action']);	
 		t.showHideToggleContent(objUpdate);			
@@ -6906,21 +8805,13 @@ var UniteLayersRev = new function(){
 		//event on element for href
 		initDisallowCaptionsOnClick();
 
-		var type = objLayer.type || "text";
+		//var type = objLayer.type || "text";
 		
-		u.rebuildLayerIdle(t.getHtmlLayerFromSerial(selectedLayerSerial));
+		u.rebuildLayerIdle(layer);
 
 		t.set_cover_mode();
 
-		// HOOK FOR EXTERNAL ADDONS
-		jQuery.each(t.addon_callbacks, function(i,callback_element) {
-			var callback = callback_element["callback"],				
-				env = callback_element["environment"],
-				env_sub = callback_element["function_position"];
-			if (env === "updateLayerFromFields_Core" && env_sub=="end") 				
-				objUpdate = callback(objUpdate);
-			
-		});
+		
 
 		//t.add_layer_change();
 
@@ -6935,7 +8826,7 @@ var UniteLayersRev = new function(){
 	var updateHtmlSortboxFromObject = function(serial){
 
 
-		serial = serial!=undefined ? serial : selectedLayerSerial;
+		serial = serial!=undefined ? serial : t.selectedLayerSerial;
 
 		var objLayer = t.getLayer(serial),
 			htmlSortItem = u.getHtmlSortItemFromSerial(serial);
@@ -6945,7 +8836,7 @@ var UniteLayersRev = new function(){
 				
 		var sortboxText = u.getSortboxText(objLayer.alias);
 		
-		htmlSortItem.find(".timer-layer-text").text(sortboxText);
+		htmlSortItem.find(">.layer_sort_inner_wrapper .timer-layer-text").text(sortboxText);
 
 	}
 
@@ -6965,23 +8856,25 @@ var UniteLayersRev = new function(){
 		jQuery('.slide_layer').each(function() {
 			u.rebuildLayerIdle(jQuery(this));
 		});
-		updateLayerFormFields(selectedLayerSerial);
+		t.updateLayerFormFields(t.selectedLayerSerial);
 		
 	}
+
 
 	/**
 	 * redraw some layer html
 	 */
-	var redrawLayerHtml = function(serial, isDemo){
-		
+	var redrawLayerHtml = function(serial, isDemo){		
 		if(isDemo == undefined) isDemo = false;
 		
-		var objLayer = t.getLayer(serial, isDemo);
-		var html = t.makeLayerHtml(serial,objLayer, isDemo)
-		var htmlInner = jQuery(html).html();
-		var htmlLayer = t.getHtmlLayerFromSerial(serial, isDemo);		
+		var objLayer = t.getLayer(serial, isDemo),
+			html = t.makeLayerHtml(serial,objLayer, isDemo);
 		
-		htmlLayer.html(htmlInner);
+		if (objLayer.type!="group" && objLayer.type!="row" && objLayer.type!="column") {
+			var htmlInner = jQuery(html).html();
+			
+			objLayer.references.htmlLayer.html(htmlInner);
+		}	
 		
 	}
 
@@ -7001,7 +8894,7 @@ var UniteLayersRev = new function(){
 		var reset = (typeof(reset_full) !== 'undefined' && reset_full === true) ? true : false;
 		
 		var fullstyles = UniteCssEditorRev.getStyleSettingsByHandle(objLayer["style"]);
-
+		
 		var styles = fullstyles.params,
 			svgstyles = UniteCssEditorRev.getStyleSettingsByHandle(objLayer["svg"]);
 		var hover_styles = fullstyles.hover;
@@ -7013,6 +8906,7 @@ var UniteLayersRev = new function(){
 			is_hover = fullstyles!==undefined ? fullstyles.hasOwnProperty('settings') ? (typeof(fullstyles.settings) !== 'undefined' && typeof(fullstyles.settings.hover) !== undefined) ? fullstyles.settings.hover : false : false : false;
 		} catch(e) { 
 		}
+		
 		
 		// INSERT STANDART SETTINGS FROM TEMPLATE STYLE
 		if(objLayer.deformation != undefined && styles !== undefined){
@@ -7030,7 +8924,7 @@ var UniteLayersRev = new function(){
 
 
 			// PADDING SETTINGS
-			if (nix(objLayer['deformation']['padding']) || (nix(objLayer['deformation']['padding'][0]) && nix(objLayer['deformation']['padding'][1]) &&  nix(objLayer['deformation']['padding'][2]) &&  nix(objLayer['deformation']['padding'][3])) || reset) {
+			/*if (nix(objLayer['deformation']['padding']) || (nix(objLayer['deformation']['padding'][0]) && nix(objLayer['deformation']['padding'][1]) &&  nix(objLayer['deformation']['padding'][2]) &&  nix(objLayer['deformation']['padding'][3])) || reset) {
 				
 				var pads = !nix(styles['padding']) ? typeof(styles['padding']) !== 'object' ? styles['padding'].split(" ") : styles['padding'] : ["0px","0px","0px","0px"];											
 				objLayer['deformation']['padding'] = ["0","0","0","0"];
@@ -7038,16 +8932,106 @@ var UniteLayersRev = new function(){
 				jQuery(objLayer['deformation']['padding']).each(function(i){
 					objLayer['deformation']['padding'][i] = pads.length<2 ? pads[0] : pads.length<4 ? i==0 || i==2 ? pads[0] : pads[1] : pads[i];									
 				});
+			}*/
+			
+			if(nix(objLayer['padding']) || reset){
+				if(!nix(styles["padding"])){
+					if(objLayer['padding'] != undefined){
+						delete(objLayer['padding']);
+					}
+						
+					if((typeof styles["padding"] === "object") && (styles["padding"] !== null)){
+						objLayer['padding'] = styles["padding"];
+						//objLayer = t.setVal(objLayer, 'padding', styles["padding"], true);
+					}else{
+						objLayer = t.setVal(objLayer, 'padding', styles["padding"].split(' '), true);
+					}
+				}else{
+					if(objLayer['padding'] == undefined){
+						objLayer['padding'] = {};
+						var cur_pad = [];
+						jQuery('input[name="css_padding[]"]').each(function(){
+							cur_pad.push(0);
+						});			
+						objLayer = t.setVal(objLayer, 'padding', cur_pad, true);
+					}else{
+						if(typeof(objLayer['padding']) !== 'object'){
+							objLayer = t.setVal(objLayer, 'padding', objLayer['padding'], true);
+						}
+					}
+				}
+			}
+			
+			if(nix(objLayer['margin']) || reset){
+				if(!nix(styles["margin"])){
+					if(objLayer['margin'] != undefined){
+						delete(objLayer['margin']);
+					}
+					
+					if((typeof styles["margin"] === "object") && (styles["margin"] !== null)){
+						objLayer['margin'] = styles["margin"];
+						//objLayer = t.setVal(objLayer, 'margin', styles["margin"], true);
+					}else{
+						objLayer = t.setVal(objLayer, 'margin', styles['margin'].split(' '), true);
+					}
+				}else{
+					if(objLayer['margin'] == undefined){
+						objLayer['margin'] = {};
+						var cur_pad = [];
+						jQuery('input[name="css_margin[]"]').each(function(){
+							cur_pad.push(0);
+						});			
+						objLayer = t.setVal(objLayer, 'margin', cur_pad, true);
+					}else{
+						if(typeof(objLayer['margin']) !== 'object'){
+							objLayer = t.setVal(objLayer, 'margin', objLayer['margin'], true);
+						}
+					}
+				}
 			}
 
+
+			// TEXT ALIGNMENT
+			/*if (nix(objLayer['deformation']['text-align']) || reset)
+				objLayer['deformation']['text-align'] = !nix(styles["text-align"]) ? styles["text-align"] : "inherit";*/
+			
+			if(nix(objLayer['text-align']) || reset){
+				if(!nix(styles["text-align"])){
+					if(objLayer['text-align'] != undefined){
+						delete(objLayer['text-align']);
+					}
+					
+					if((typeof styles["text-align"] === "object") && (styles["text-align"] !== null)){
+						objLayer['text-align'] = styles["text-align"];
+					}else{
+						objLayer = t.setVal(objLayer, 'text-align', styles['text-align'], true);
+					}
+				}else{
+					if(objLayer['text-align'] == undefined){
+						objLayer['text-align'] = {};
+						var cur_pad = [];
+						jQuery('input[name="css_text-align[]"]').each(function(){
+							cur_pad.push(0);
+						});			
+						objLayer = t.setVal(objLayer, 'text-align', cur_pad, true);
+					}else{
+						if(typeof(objLayer['text-align']) !== 'object'){
+							objLayer = t.setVal(objLayer, 'text-align', objLayer['text-align'], true);
+						}
+					}
+				}
+			}
+			
 			// TEXT DECORATION
 			if (nix(objLayer['deformation']['text-decoration']) || reset)
 				objLayer['deformation']['text-decoration'] = !nix(styles["text-decoration"]) ? styles["text-decoration"] : "none";
 				
-			// TEXT ALIGNMENT
-			if (nix(objLayer['deformation']['text-align']) || reset)
-				objLayer['deformation']['text-align'] = !nix(styles["text-align"]) ? styles["text-align"] : "left";
+			
 				
+			//  DISPLAY
+			if (nix(objLayer['deformation']['display']) || reset)
+				objLayer['deformation']['display'] = !nix(styles["display"]) ? styles["display"] : "block";
+			
 
 			// BACKGROUND COLOR
 			if (nix(objLayer['deformation']['background-color']) || reset) {
@@ -7074,9 +9058,18 @@ var UniteLayersRev = new function(){
 				objLayer['deformation']['border-style'] = !nix(styles['border-style']) ? styles['border-style'] : "none";
 				
 			// BORDER WIDTH
-			if (nix(objLayer['deformation']['border-width']) || reset)
-				objLayer['deformation']['border-width'] = !nix(styles['border-width']) ? styles['border-width'] : "0";
+			//if (nix(objLayer['deformation']['border-width']) || reset)
+			//	objLayer['deformation']['border-width'] = !nix(styles['border-width']) ? styles['border-width'] : "0";
+			
+			if (nix(objLayer['deformation']['border-width']) || (nix(objLayer['deformation']['border-width'][0]) && nix(objLayer['deformation']['border-width'][1]) && nix(objLayer['deformation']['border-width'][2]) && nix(objLayer['deformation']['border-width'][3])) || reset) {
 
+				var cor = !nix(styles['border-width']) ? typeof(styles['border-width']) !== 'object' ? styles['border-width'].split(" ") : styles['border-width'] : ["0px","0px","0px","0px"];											
+				objLayer['deformation']['border-width'] = ["0","0","0","0"];
+
+				jQuery(objLayer['deformation']['border-width']).each(function(i){
+					objLayer['deformation']['border-width'][i] = cor.length<2 ? cor[0] : cor.length<4 ? i==0 || i==2 ? cor[0] : cor[1] : cor[i];									
+				});
+			}
 				
 			// BORDER RADIUS
 			if (nix(objLayer['deformation']['border-radius']) || (nix(objLayer['deformation']['border-radius'][0]) && nix(objLayer['deformation']['border-radius'][1]) && nix(objLayer['deformation']['border-radius'][2]) && nix(objLayer['deformation']['border-radius'][3])) || reset) {
@@ -7115,6 +9108,15 @@ var UniteLayersRev = new function(){
 			if (nix(objLayer['deformation']['2d_origin_x']) || reset) objLayer['deformation']['2d_origin_x'] = !nix(styles['2d_origin_x']) ? styles['2d_origin_x'] : 50;
 			if (nix(objLayer['deformation']['2d_origin_y']) || reset) objLayer['deformation']['2d_origin_y'] = !nix(styles['2d_origin_y']) ? styles['2d_origin_y'] : 50;
 			if (nix(objLayer['deformation']['pers']) || reset) objLayer['deformation']['pers'] = !nix(styles['pers']) ? styles['pers'] : 600;
+
+			//FILTERS 
+			if (nix(objLayer['deformation']['blurfilter']) || reset) objLayer['deformation']['blurfilter'] =  !nix(styles['blurfilter']) ?  styles['blurfilter'] : 0;
+			if (nix(objLayer['deformation']['grayscalefilter']) || reset) objLayer['deformation']['grayscalefilter'] =  !nix(styles['grayscalefilter']) ?  styles['grayscalefilter'] : 0;
+			//if (nix(objLayer['deformation']['ds_x']) || reset) objLayer['deformation']['ds_x'] =  !nix(styles['ds_x']) ?  styles['ds_x'] : 0;
+			//if (nix(objLayer['deformation']['ds_y']) || reset) objLayer['deformation']['ds_y'] =  !nix(styles['ds_y']) ?  styles['ds_y'] : 0;
+			//if (nix(objLayer['deformation']['ds_blur']) || reset) objLayer['deformation']['ds_blur'] =  !nix(styles['ds_blur']) ?  styles['ds_blur'] : 0;			
+			//if (nix(objLayer['deformation']['ds_color']) || reset) objLayer['deformation']['ds_color'] =  !nix(styles['ds_color']) ?  styles['ds_color'] : 0;
+			//if (nix(objLayer['deformation']['ds_opacity']) || reset) objLayer['deformation']['ds_opacity'] =  !nix(styles['ds_opacity']) ?  styles['ds_opacity'] : 0;
 			
 			
 		}
@@ -7162,6 +9164,21 @@ var UniteLayersRev = new function(){
 		}
 
 
+		/*if (objLayer.force_hover === true)
+			jQuery('#force_hover').attr('checked', true);
+		else
+			jQuery('#force_hover').attr('checked', false);*/
+
+		/*if (objLayer['deformation'].shadow_idle === true)
+			jQuery('#shadow_idle').attr('checked', true);
+		else
+			jQuery('#shadow_idle').attr('checked', false);
+
+		if (objLayer['deformation-hover'].shadow_hover === true)
+			jQuery('#shadow_hover').attr('checked', true);
+		else
+			jQuery('#shadow_hover').attr('checked', false);
+		*/
 
 		if(reset){
 			if(is_hover === 'true' || is_hover === true){
@@ -7172,16 +9189,37 @@ var UniteLayersRev = new function(){
 				jQuery('#idle-hover-swapper').hide();
 			}
 		}
+
 		RevSliderSettings.onoffStatus(jQuery('#hover_allow'));
 		RevSliderSettings.onoffStatus(jQuery('#toggle_allow'));
 		RevSliderSettings.onoffStatus(jQuery('#toggle_use_hover'));
+		RevSliderSettings.onoffStatus(jQuery('#toggle_inverse_content'));
+		//RevSliderSettings.onoffStatus(jQuery('#force_hover'));
+		//RevSliderSettings.onoffStatus(jQuery('#shadow_idle'));
+		//RevSliderSettings.onoffStatus(jQuery('#shadow_hover'));
 		
 		
 		jQuery('#css_layer_selectable option[value="'+objLayer['layer-selectable']+'"]').attr('selected', true);
 		
 		if(objLayer.deformation != undefined){
 			jQuery('#css_font-family').val(objLayer['deformation']['font-family']);
-			jQuery('input[name="css_padding[]"]').each(function(i){ jQuery(this).val(objLayer['deformation']['padding'][i]);});
+			
+			//jQuery('input[name="css_padding[]"]').each(function(i){ jQuery(this).val(objLayer['deformation']['padding'][i]);});
+			
+			var cur_pad = t.getVal(objLayer, 'padding');
+			if(cur_pad === undefined) cur_pad = objLayer['deformation']['padding'];
+			if(cur_pad === undefined) cur_pad = [0,0,0,0];
+			jQuery('input[name="css_padding[]"]').each(function(i){
+				jQuery(this).val(cur_pad[i]);
+			});
+
+			var cur_mar = t.getVal(objLayer, 'margin');
+			if(cur_mar === undefined) cur_mar = objLayer['deformation']['margin'];
+			if(cur_mar === undefined) cur_mar = [0,0,0,0];
+			jQuery('input[name="css_margin[]"]').each(function(i){
+				jQuery(this).val(cur_mar[i]);
+			});
+			
 			if(objLayer['deformation']['font-style'] == 'italic')
 				jQuery('#css_font-style').attr('checked', true); // checkbox
 			else
@@ -7196,16 +9234,25 @@ var UniteLayersRev = new function(){
 				jQuery('#css_layer_selectable').attr('checked', false); // checkbox
 			RevSliderSettings.onoffStatus(jQuery('#css_layer_selectable'));*/
 			
+			jQuery('#css_text-align option[value="'+t.getVal(objLayer, 'text-align')+'"]').attr('selected', true);
+			//jQuery('#css_text-align option[value="'+objLayer['deformation']['text-align']+'"]').attr('selected', true);
+			
+			
 			jQuery('#css_font-transparency').val(objLayer['deformation']['color-transparency']);
 			jQuery('#css_text-decoration option[value="'+objLayer['deformation']['text-decoration']+'"]').attr('selected', true);
-			jQuery('#css_text-align option[value="'+objLayer['deformation']['text-align']+'"]').attr('selected', true);
+			jQuery('#css_overflow option[value="'+objLayer['deformation']['overflow']+'"]').attr('selected', true);
+			jQuery('#column_break_at option[value="'+objLayer['column_break_at']+'"]').attr('selected', true);
+			
+			jQuery('#css_vertical-align option[value="'+objLayer['deformation']['vertical-align']+'"]').attr('selected', true);
+			
 			jQuery('#css_text-transform option[value="'+objLayer['deformation']['text-transform']+'"]').attr('selected', true);
 			jQuery('#css_background-color').val(objLayer['deformation']['background-color']);
 			jQuery('#css_background-transparency').val(objLayer['deformation']['background-transparency']);
 			jQuery('#css_border-color-show').val(objLayer['deformation']['border-color']);
 			jQuery('#css_border-transparency').val(objLayer['deformation']['border-transparency']);
 			jQuery('#css_border-style option[value="'+objLayer['deformation']['border-style']+'"]').attr('selected', true);
-			jQuery('#css_border-width').val(objLayer['deformation']['border-width']);
+			//jQuery('#css_border-width').val(objLayer['deformation']['border-width']);
+			jQuery('input[name="css_border-width[]"]').each(function(i){ jQuery(this).val(objLayer['deformation']['border-width'][i]);});
 			jQuery('input[name="css_border-radius[]"]').each(function(i){ jQuery(this).val(objLayer['deformation']['border-radius'][i]);});
 			jQuery('input[name="layer__x"]').val(objLayer['deformation']['x']);
 			jQuery('input[name="layer__y"]').val(objLayer['deformation']['y']);
@@ -7221,7 +9268,30 @@ var UniteLayersRev = new function(){
 			jQuery('#layer_2d_origin_x').val(objLayer['deformation']['2d_origin_x']);//
 			jQuery('#layer_2d_origin_y').val(objLayer['deformation']['2d_origin_y']);//
 			jQuery('#layer__pers').val(objLayer['deformation']['pers']);
+
+			//FILTERS
+			jQuery('#blurfilter_idle').val(objLayer['deformation']['blurfilter']);
+			jQuery('#grayscalefilter_idle').val(objLayer['deformation']['grayscalefilter']);
+			//jQuery('#ds_x_idle').val(objLayer['deformation']['ds_x']);
+			//jQuery('#ds_y_idle').val(objLayer['deformation']['ds_y']);
+			//jQuery('#ds_blur_idle').val(objLayer['deformation']['ds_blur']);			
+			//jQuery('#ds_color_idle').val(objLayer['deformation']['ds_color']);
+			//jQuery('#ds_opacity_idle').val(objLayer['deformation']['ds_opacity']);
+
+			//FILTERS
+			jQuery('#blurfilter_hover').val(objLayer['deformation-hover']['blurfilter']);
+			jQuery('#grayscalefilter_hover').val(objLayer['deformation-hover']['grayscalefilter']);
+			//jQuery('#ds_x_hover').val(objLayer['deformation-hover']['ds_x']);
+		//	jQuery('#ds_y_hover').val(objLayer['deformation-hover']['ds_y']);
+		//	jQuery('#ds_blur_hover').val(objLayer['deformation-hover']['ds_blur']);			
+		//	jQuery('#ds_color_hover').val(objLayer['deformation-hover']['ds_color']);
+		//	jQuery('#ds_opacity_hover').val(objLayer['deformation-hover']['ds_opacity']);
+
+
 			jQuery('#layer_cornerleft option[value="'+objLayer['deformation']['corner_left']+'"]').attr('selected', true);
+			jQuery('#layer_blend_mode option[value="'+objLayer['layer_blend_mode']+'"]').attr('selected', true);
+			
+
 			jQuery('#layer_cornerright option[value="'+objLayer['deformation']['corner_right']+'"]').attr('selected', true);
 			jQuery('#parallax_level option[value="'+objLayer['deformation']['parallax']+'"]').attr('selected', true);
 			
@@ -7252,9 +9322,17 @@ var UniteLayersRev = new function(){
 			if (nix(objLayer['deformation-hover']['border-style']) || reset)
 				objLayer['deformation-hover']['border-style'] = !nix(hover_styles['border-style']) ? hover_styles['border-style'] : 'none';
 			
-			if (nix(objLayer['deformation-hover']['border-width']) || reset)
-				objLayer['deformation-hover']['border-width'] = !nix(hover_styles['border-width']) ? hover_styles['border-width'] : '0';
-			
+			//if (nix(objLayer['deformation-hover']['border-width']) || reset)
+			//	objLayer['deformation-hover']['border-width'] = !nix(hover_styles['border-width']) ? hover_styles['border-width'] : '0';
+			if (nix(objLayer['deformation-hover']['border-width']) || (nix(objLayer['deformation-hover']['border-width'][0]) && nix(objLayer['deformation-hover']['border-width'][1]) && nix(objLayer['deformation-hover']['border-width'][2]) && nix(objLayer['deformation-hover']['border-width'][3])) || reset) {
+
+				var cor = !nix(hover_styles['border-width']) ? typeof(hover_styles['border-width']) !== 'object' ? hover_styles['border-width'].split(" ") : hover_styles['border-width'] : ["0px","0px","0px","0px"];
+				objLayer['deformation-hover']['border-width'] = ["0","0","0","0"];
+
+				jQuery(objLayer['deformation-hover']['border-width']).each(function(i){
+					objLayer['deformation-hover']['border-width'][i] = cor.length<2 ? cor[0] : cor.length<4 ? i==0 || i==2 ? cor[0] : cor[1] : cor[i];									
+				});
+			}
 			
 			if (nix(objLayer['deformation-hover']['border-radius']) || (nix(objLayer['deformation-hover']['border-radius'][0]) && nix(objLayer['deformation-hover']['border-radius'][1]) && nix(objLayer['deformation-hover']['border-radius'][2]) && nix(objLayer['deformation-hover']['border-radius'][3])) || reset) {
 
@@ -7284,6 +9362,18 @@ var UniteLayersRev = new function(){
 				objLayer['deformation-hover']['2d_rotation'] = !nix(hover_styles['2d_rotation']) ? hover_styles['2d_rotation'] : 0;
 			if (nix(objLayer['deformation-hover']['css_cursor']) || reset)
 				objLayer['deformation-hover']['css_cursor'] = !nix(hover_styles['css_cursor']) ? hover_styles['css_cursor'] : 'auto';
+
+			
+			//FILTERS 
+			if (nix(objLayer['deformation-hover']['blurfilter']) || reset) objLayer['deformation-hover']['blurfilter'] =  !nix(hover_styles['blurfilter']) ?  hover_styles['blurfilter'] : 0;
+			if (nix(objLayer['deformation-hover']['grayscalefilter']) || reset) objLayer['deformation-hover']['grayscalefilter'] =  !nix(hover_styles['grayscalefilter']) ?  hover_styles['grayscalefilter'] : 0;
+			//if (nix(objLayer['deformation-hover']['ds_x']) || reset) objLayer['deformation-hover']['ds_x'] =  !nix(styles['ds_x']) ?  styles['ds_x'] : 0;
+		//	if (nix(objLayer['deformation-hover']['ds_y']) || reset) objLayer['deformation-hover']['ds_y'] =  !nix(styles['ds_y']) ?  styles['ds_y'] : 0;
+			//if (nix(objLayer['deformation-hover']['ds_blur']) || reset) objLayer['deformation-hover']['ds_blur'] =  !nix(styles['ds_blur']) ?  styles['ds_blur'] : 0;			
+			//if (nix(objLayer['deformation-hover']['ds_color']) || reset) objLayer['deformation-hover']['ds_color'] =  !nix(styles['ds_color']) ?  styles['ds_color'] : 0;
+			//if (nix(objLayer['deformation-hover']['ds_opacity']) || reset) objLayer['deformation-hover']['ds_opacity'] =  !nix(styles['ds_opacity']) ?  styles['ds_opacity'] : 0;
+
+
 			
 			/* not included yet, missing values */
 			if (nix(objLayer['deformation-hover']['speed']) || reset)
@@ -7303,7 +9393,8 @@ var UniteLayersRev = new function(){
 				jQuery('#hover_css_border-color-show').val(objLayer['deformation-hover']['border-color']);
 				jQuery('#hover_css_border-transparency').val(objLayer['deformation-hover']['border-transparency']);
 				jQuery('#hover_css_border-style option[value="'+objLayer['deformation-hover']['border-style']+'"]').attr('selected', true);
-				jQuery('#hover_css_border-width').val(objLayer['deformation-hover']['border-width']);
+				//jQuery('#hover_css_border-width').val(objLayer['deformation-hover']['border-width']);
+				jQuery('input[name="hover_css_border-width[]"]').each(function(i){ jQuery(this).val(objLayer['deformation-hover']['border-width'][i]); });
 				jQuery('input[name="hover_css_border-radius[]"]').each(function(i){ jQuery(this).val(objLayer['deformation-hover']['border-radius'][i]); });
 				jQuery('#hover_layer__skewx').val(objLayer['deformation-hover']['skewx']);
 				jQuery('#hover_layer__skewy').val(objLayer['deformation-hover']['skewy']);
@@ -7316,6 +9407,7 @@ var UniteLayersRev = new function(){
 				jQuery('#css_cursor option[value="'+objLayer['deformation-hover']['css_cursor']+'"]').attr('selected', true);
 				
 				jQuery('#hover_speed').val(objLayer['deformation-hover']['speed']);
+				jQuery('#hover_zindex').val(objLayer['deformation-hover']['zindex']);
 				jQuery('#hover_easing option[value="'+objLayer['deformation-hover']['easing']+'"]').attr('selected', true);
 				
 			}
@@ -7336,7 +9428,7 @@ var UniteLayersRev = new function(){
 	/**
 	 * update layer parameters from the object
 	 */
-	var updateLayerFormFields = function(serial){
+	t.updateLayerFormFields = function(serial){
 		
 		var objLayer = t.arrLayers[serial];
 
@@ -7349,6 +9441,7 @@ var UniteLayersRev = new function(){
 				objLayer = callback(objLayer);
 			
 		});
+		
 		
 		if(typeof(objLayer) == 'undefined') return true;
 		
@@ -7384,6 +9477,22 @@ var UniteLayersRev = new function(){
 			jQuery('#idle-hover-swapper').hide();
 		}
 
+		/*if (objLayer['force_hover'] == 'true' || objLayer['force_hover'] == true) 
+			jQuery('#force_hover').prop("checked",true);
+		else
+			jQuery('#force_hover').prop("checked",false);*/
+
+		/*if (objLayer['deformation']['shadow_idle'] == 'true' || objLayer['deformation']['shadow_idle'] == true) 
+			jQuery('#shadow_idle').prop("checked",true);
+		else
+			jQuery('#shadow_idle').prop("checked",false);
+
+		if (objLayer['deformation-hover']['shadow_hover'] == 'true' || objLayer['deformation']['shadow_hover'] == true) 
+			jQuery('#shadow_hover').prop("checked",true);
+		else
+			jQuery('#shadow_hover').prop("checked",false);
+		*/
+
 		if(objLayer['toggle'] == 'true' || objLayer['toggle'] == true){
 			jQuery('#toggle_allow').prop("checked", true);			
 		}else{
@@ -7394,6 +9503,12 @@ var UniteLayersRev = new function(){
 			jQuery('#toggle_use_hover').prop("checked", true);			
 		}else{
 			jQuery('#toggle_use_hover').prop("checked", false);			
+		}
+
+		if(objLayer['toggle_inverse_content'] == 'true' || objLayer['toggle_inverse_content'] == true){
+			jQuery('#toggle_inverse_content').prop("checked", true);			
+		}else{
+			jQuery('#toggle_inverse_content').prop("checked", false);			
 		}
 
 
@@ -7425,26 +9540,32 @@ var UniteLayersRev = new function(){
 		
 		jQuery('#layer-lazy-loading option[value="'+objLayer['lazy-load']+'"]').attr('selected', 'selected');
 		jQuery('#layer-image-size option[value="'+objLayer['image-size']+'"]').attr('selected', 'selected');
+		jQuery('#layer-css-position option[value="'+objLayer['css-position']+'"]').attr('selected', 'selected');
 		
 		RevSliderSettings.onoffStatus(jQuery('#hover_allow'));
+		//RevSliderSettings.onoffStatus(jQuery('#force_hover'));
+		//RevSliderSettings.onoffStatus(jQuery('#shadow_idle'));
+		//RevSliderSettings.onoffStatus(jQuery('#shadow_hover'));
 		RevSliderSettings.onoffStatus(jQuery('#toggle_allow'));
 		RevSliderSettings.onoffStatus(jQuery('#toggle_use_hover'));
+		RevSliderSettings.onoffStatus(jQuery('#toggle_inverse_content'));
 		RevSliderSettings.onoffStatus(jQuery('#visible-desktop'));
 		RevSliderSettings.onoffStatus(jQuery('#visible-notebook'));
 		RevSliderSettings.onoffStatus(jQuery('#visible-tablet'));
 		RevSliderSettings.onoffStatus(jQuery('#visible-mobile'));
 		RevSliderSettings.onoffStatus(jQuery('#layer_on_slider_hover'));
 		
-		jQuery("#layer_scaleX").val(specOrVal(t.getVal(objLayer,'scaleX'),["auto"],"px"));
-		jQuery("#layer_scaleY").val(specOrVal(t.getVal(objLayer,'scaleY'),["auto"],"px"));
+		jQuery("#layer_scaleX").val(specOrVal(t.getVal(objLayer,'scaleX'),["auto",'#1/1#','#1/2#','#1/3#','#1/4#','#1/5#','#1/6#','#2/3#','#3/4#','#2/5#','#3/5#','#4/5#','#4/6#','#5/6#'],"px"));
+		jQuery("#layer_scaleY").val(specOrVal(t.getVal(objLayer,'scaleY'),["auto",'#1/1#','#1/2#','#1/3#','#1/4#','#1/5#','#1/6#','#2/3#','#3/4#','#2/5#','#3/5#','#4/5#','#4/6#','#5/6#'],"px"));
 		
 		jQuery('#layer_cover_mode option[value="'+objLayer['cover_mode']+'"]').attr('selected', 'selected');
 		
-		jQuery("#layer_max_height").val(specOrVal(t.getVal(objLayer,'max_height'),["auto"],"px"));
-		jQuery("#layer_max_width").val(specOrVal(t.getVal(objLayer,'max_width'),["auto"],"px"));
+		jQuery("#layer_max_height").val(specOrVal(t.getVal(objLayer,'max_height'),["auto",'#1/1#','#1/2#','#1/3#','#1/4#','#1/5#','#1/6#','#2/3#','#3/4#','#2/5#','#3/5#','#4/5#','#4/6#','#5/6#'],"px"));
+		jQuery("#layer_min_height").val(specOrVal(t.getVal(objLayer,'min_height'),["auto",'#1/1#','#1/2#','#1/3#','#1/4#','#1/5#','#1/6#','#2/3#','#3/4#','#2/5#','#3/5#','#4/5#','#4/6#','#5/6#'],"px"));
+		jQuery("#layer_max_width").val(specOrVal(t.getVal(objLayer,'max_width'),["auto",'#1/1#','#1/2#','#1/3#','#1/4#','#1/5#','#1/6#','#2/3#','#3/4#','#2/5#','#3/5#','#4/5#','#4/6#','#5/6#'],"px"));
 		
-		jQuery("#layer_video_height").val(t.getVal(objLayer,'video_height'),["auto"],"px");
-		jQuery("#layer_video_width").val(t.getVal(objLayer,'video_width'),["auto"],"px");
+		jQuery("#layer_video_height").val(specOrVal(t.getVal(objLayer,'video_height'),["auto",'#1/1#','#1/2#','#1/3#','#1/4#','#1/5#','#1/6#','#2/3#','#3/4#','#2/5#','#3/5#','#4/5#','#4/6#','#5/6#'],"px"));
+		jQuery("#layer_video_width").val(specOrVal(t.getVal(objLayer,'video_width'),["auto",'#1/1#','#1/2#','#1/3#','#1/4#','#1/5#','#1/6#','#2/3#','#3/4#','#2/5#','#3/5#','#4/5#','#4/6#','#5/6#'],"px"));
 		
 		jQuery("#layer_2d_rotation").val(objLayer['2d_rotation']);
 		jQuery("#layer_2d_origin_x").val(objLayer['2d_origin_x']);
@@ -7455,6 +9576,9 @@ var UniteLayersRev = new function(){
 		jQuery("#layer_static_end option[value='"+objLayer.static_end+"']").attr('selected', 'selected');
 
 		jQuery("#layer_whitespace option[value='"+t.getVal(objLayer, 'whitespace')+"']").attr('selected', 'selected');
+
+		jQuery("#layer_display option[value='"+t.getVal(objLayer, 'display')+"']").attr('selected', 'selected');
+
 
 		if(objLayer.scaleProportional == "true" || objLayer.scaleProportional == true){
 			jQuery('.rs-proportion-check').removeClass('notselected');
@@ -7472,12 +9596,26 @@ var UniteLayersRev = new function(){
 			jQuery('.rs-linebreak-check').addClass("notselected");
 			jQuery('#layer_auto_line_break').prop("checked",false);
 		}
+
+		if (t.getVal(objLayer, 'display') ==="block") {
+			jQuery('#layer-displaymode-wrapper').removeClass("notselected");
+			jQuery('#layer_displaymode').prop("checked",true);
+		} else {
+			jQuery('#layer-displaymode-wrapper').addClass("notselected");
+			jQuery('#layer_displaymode').prop("checked",false);
+		}
+
 		
 		RevSliderSettings.onoffStatus(jQuery('.rs-proportion-check'));
 		RevSliderSettings.onoffStatus(jQuery('.rs-linebreak-check'));
 		
 		jQuery("#layer_top").val(parseInt(t.getVal(objLayer, 'top'),0)+"px");
 		jQuery("#layer_left").val(parseInt(t.getVal(objLayer, 'left'),0)+"px");
+		
+		jQuery("#layer_bg_position option[value='"+objLayer.layer_bg_position+"']").attr('selected', 'selected');
+		jQuery("#layer_bg_size option[value='"+objLayer.layer_bg_size+"']").attr('selected', 'selected');
+		jQuery("#layer_bg_repeat option[value='"+objLayer.layer_bg_repeat+"']").attr('selected', 'selected');
+		
 		
 		//set Loop Animations
 		jQuery("#layer_loop_animation option[value='"+objLayer.loop_animation+"']").attr('selected', 'selected');
@@ -7517,7 +9655,7 @@ var UniteLayersRev = new function(){
 			jQuery('.mask-start-settings').show();						 	
 		}
 		else {
-			jQuery('#masking-start').removeAttr("checked");
+			jQuery('#masking-start').prop("checked",false);
 			jQuery('.mask-start-settings').hide();
 		}
 
@@ -7526,7 +9664,7 @@ var UniteLayersRev = new function(){
 			jQuery('.mask-end-settings').show();
 		}
 		else {
-			jQuery('#masking-end').removeAttr("checked");
+			jQuery('#masking-end').prop("checked",false);
 			jQuery('.mask-end-settings').hide();
 		}
 	
@@ -7543,17 +9681,17 @@ var UniteLayersRev = new function(){
 		//jQuery("#mask_speed_end").val(objLayer.mask_speed_end);
 		//jQuery("#mask_easing_end").val(objLayer.mask_ease_end);
 		
-		jQuery("#layer_animation option[value='"+objLayer.animation+"']").attr('selected', 'selected');
+		jQuery("#layer_animation option[value='"+objLayer.frames["frame_0"].animation+"']").attr('selected', 'selected');
 
-		jQuery("#layer_easing").val(objLayer.easing);
+		jQuery("#layer_easing").val(objLayer.frames["frame_0"].easing);
 
-		jQuery("#layer_split").val(objLayer.split);
-		jQuery("#layer_endsplit").val(objLayer.endsplit);
-		jQuery("#layer_splitdelay").val(objLayer.splitdelay);
-		jQuery("#layer_endsplitdelay").val(objLayer.endsplitdelay);
+		jQuery("#layer_split").val(objLayer.frames["frame_0"].split);
+		jQuery("#layer_endsplit").val(objLayer.frames["frame_999"].split);
+		jQuery("#layer_splitdelay").val(objLayer.frames["frame_0"].splitdelay);
+		jQuery("#layer_endsplitdelay").val(objLayer.frames["frame_999"].splitdelay);
 
 		
-		jQuery("#layer_speed").val(objLayer.speed);
+		jQuery("#layer_speed").val(objLayer.frames["frame_0"].speed);
 
 		jQuery("#layer_align_hor").val(t.getVal(objLayer,'align_hor'));
 		jQuery("#layer_align_vert").val(t.getVal(objLayer,'align_vert'));
@@ -7573,8 +9711,13 @@ var UniteLayersRev = new function(){
 		else
 			jQuery("#layer-seo-optimized").prop("checked",false);
 		
-		if(objLayer['resize-full'] == "true" || objLayer['resize-full'] == true){
+		if((objLayer['resize-full'] == "true" || objLayer['resize-full'] == true) && (objLayer.type!=="row" && objLayer.type!=="column")){
 			jQuery("#layer_resize-full").prop("checked",true);
+			if (objLayer.type==="group") {
+				jQuery("#layer_resizeme").prop("checked",false);
+				objLayer.resizeme = false; //remove checked state!
+			}
+
 		}else{
 			jQuery("#layer_resize-full").prop("checked",false);
 			jQuery("#layer_resizeme").prop("checked",false);
@@ -7603,9 +9746,12 @@ var UniteLayersRev = new function(){
 
 		jQuery('#layer_auto_line_break').val(objLayer.autolinebreak);
 
-		jQuery("#layer_endanimation").val(objLayer.endanimation);
-		jQuery("#layer_endeasing").val(objLayer.endeasing);
-		jQuery("#layer_endspeed").val(objLayer.endspeed);
+		jQuery('#layer_displaymode').val(objLayer.displaymode);
+
+
+		jQuery("#layer_endanimation").val(objLayer.frames["frame_999"].animation);
+		jQuery("#layer_endeasing").val(objLayer.frames["frame_999"].easing);
+		jQuery("#layer_endspeed").val(objLayer.frames["frame_999"].speed);
 
 		jQuery("#layer_anim_xstart").val(objLayer.x_start);
 		jQuery("#layer_anim_ystart").val(objLayer.y_start);
@@ -7615,6 +9761,10 @@ var UniteLayersRev = new function(){
 		jQuery("#layer_anim_zend").val(objLayer.z_end);
 		jQuery("#layer_opacity_start").val(objLayer.opacity_start);
 		jQuery("#layer_opacity_end").val(objLayer.opacity_end);
+		jQuery("#blurfilter_start").val(objLayer.blurfilter_start);
+		jQuery("#blurfilter_end").val(objLayer.blurfilter_end);
+		jQuery("#grayscalefilter_start").val(objLayer.grayscalefilter_start);
+		jQuery("#grayscalefilter_end").val(objLayer.grayscalefilter_end);
 		jQuery("#layer_anim_xrotate").val(objLayer.x_rotate_start);
 		jQuery("#layer_anim_yrotate").val(objLayer.y_rotate_start);
 		jQuery("#layer_anim_zrotate").val(objLayer.z_rotate_start);
@@ -7632,6 +9782,11 @@ var UniteLayersRev = new function(){
 		
 		jQuery("#layer_pers_start").val(objLayer.pers_start);
 		jQuery("#layer_pers_end").val(objLayer.pers_end);
+
+		jQuery("#blurfilter_start").val(objLayer.blurfilter_start);
+		jQuery("#blurfilter_end").val(objLayer.blurfilter_end);
+		jQuery("#grayscalefilter_start").val(objLayer.grayscalefilter_start);
+		jQuery("#grayscalefilter_end").val(objLayer.grayscalefilter_end);
 		
 		if(typeof(objLayer['layer-selectable']) !== 'undefined'){
 			jQuery('#css_layer_selectable option[value="'+objLayer['layer-selectable']+'"]').attr('selected', true);
@@ -7639,39 +9794,32 @@ var UniteLayersRev = new function(){
 			jQuery('#css_layer_selectable option[value="default"]').attr('selected', true);
 		}
 		
-		if(typeof(objLayer.x_start_reverse) !== 'undefined' && (objLayer.x_start_reverse == "true" || objLayer.x_start_reverse == true)) { jQuery('#layer_anim_xstart_reverse').attr('checked',true); }else{ jQuery('#layer_anim_xstart_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.y_start_reverse) !== 'undefined' && (objLayer.y_start_reverse == "true" || objLayer.y_start_reverse == true)) { jQuery('#layer_anim_ystart_reverse').attr('checked',true); }else{ jQuery('#layer_anim_ystart_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.x_end_reverse) !== 'undefined' && (objLayer.x_end_reverse == "true" || objLayer.x_end_reverse == true)) { jQuery('#layer_anim_xend_reverse').attr('checked',true); }else{ jQuery('#layer_anim_xend_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.y_end_reverse) !== 'undefined' && (objLayer.y_end_reverse == "true" || objLayer.y_end_reverse == true)) { jQuery('#layer_anim_yend_reverse').attr('checked',true); }else{ jQuery('#layer_anim_yend_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.x_rotate_start_reverse) !== 'undefined' && (objLayer.x_rotate_start_reverse == "true" || objLayer.x_rotate_start_reverse == true)) { jQuery('#layer_anim_xrotate_reverse').attr('checked',true); }else{ jQuery('#layer_anim_xrotate_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.y_rotate_start_reverse) !== 'undefined' && (objLayer.y_rotate_start_reverse == "true" || objLayer.y_rotate_start_reverse == true)) { jQuery('#layer_anim_yrotate_reverse').attr('checked',true); }else{ jQuery('#layer_anim_yrotate_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.z_rotate_start_reverse) !== 'undefined' && (objLayer.z_rotate_start_reverse == "true" || objLayer.z_rotate_start_reverse == true)) { jQuery('#layer_anim_zrotate_reverse').attr('checked',true); }else{ jQuery('#layer_anim_zrotate_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.x_rotate_end_reverse) !== 'undefined' && (objLayer.x_rotate_end_reverse == "true" || objLayer.x_rotate_end_reverse == true)) { jQuery('#layer_anim_xrotate_end_reverse').attr('checked',true); }else{ jQuery('#layer_anim_xrotate_end_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.y_rotate_end_reverse) !== 'undefined' && (objLayer.y_rotate_end_reverse == "true" || objLayer.y_rotate_end_reverse == true)) { jQuery('#layer_anim_yrotate_end_reverse').attr('checked',true); }else{ jQuery('#layer_anim_yrotate_end_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.z_rotate_end_reverse) !== 'undefined' && (objLayer.z_rotate_end_reverse == "true" || objLayer.z_rotate_end_reverse == true)) { jQuery('#layer_anim_zrotate_end_reverse').attr('checked',true); }else{ jQuery('#layer_anim_zrotate_end_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.scale_x_start_reverse) !== 'undefined' && (objLayer.scale_x_start_reverse == "true" || objLayer.scale_x_start_reverse == true)) { jQuery('#layer_scale_xstart_reverse').attr('checked',true); }else{ jQuery('#layer_scale_xstart_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.scale_y_start_reverse) !== 'undefined' && (objLayer.scale_y_start_reverse == "true" || objLayer.scale_y_start_reverse == true)) { jQuery('#layer_scale_ystart_reverse').attr('checked',true); }else{ jQuery('#layer_scale_ystart_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.scale_x_end_reverse) !== 'undefined' && (objLayer.scale_x_end_reverse == "true" || objLayer.scale_x_end_reverse == true)) { jQuery('#layer_scale_xend_reverse').attr('checked',true); }else{ jQuery('#layer_scale_xend_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.scale_y_end_reverse) !== 'undefined' && (objLayer.scale_y_end_reverse == "true" || objLayer.scale_y_end_reverse == true)) { jQuery('#layer_scale_yend_reverse').attr('checked',true); }else{ jQuery('#layer_scale_yend_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.skew_x_start_reverse) !== 'undefined' && (objLayer.skew_x_start_reverse == "true" || objLayer.skew_x_start_reverse == true)) { jQuery('#layer_skew_xstart_reverse').attr('checked',true); }else{ jQuery('#layer_skew_xstart_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.skew_y_start_reverse) !== 'undefined' && (objLayer.skew_y_start_reverse == "true" || objLayer.skew_y_start_reverse == true)) { jQuery('#layer_skew_ystart_reverse').attr('checked',true); }else{ jQuery('#layer_skew_ystart_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.skew_x_end_reverse) !== 'undefined' && (objLayer.skew_x_end_reverse == "true" || objLayer.skew_x_end_reverse == true)) { jQuery('#layer_skew_xend_reverse').attr('checked',true); }else{ jQuery('#layer_skew_xend_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.skew_y_end_reverse) !== 'undefined' && (objLayer.skew_y_end_reverse == "true" || objLayer.skew_y_end_reverse == true)) { jQuery('#layer_skew_yend_reverse').attr('checked',true); }else{ jQuery('#layer_skew_yend_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.mask_x_start_reverse) !== 'undefined' && (objLayer.mask_x_start_reverse == "true" || objLayer.mask_x_start_reverse == true)) { jQuery('#mask_anim_xstart_reverse').attr('checked',true); }else{ jQuery('#mask_anim_xstart_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.mask_y_start_reverse) !== 'undefined' && (objLayer.mask_y_start_reverse == "true" || objLayer.mask_y_start_reverse == true)) { jQuery('#mask_anim_ystart_reverse').attr('checked',true); }else{ jQuery('#mask_anim_ystart_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.mask_x_end_reverse) !== 'undefined' && (objLayer.mask_x_end_reverse == "true" || objLayer.mask_x_end_reverse == true)) { jQuery('#mask_anim_xend_reverse').attr('checked',true); }else{ jQuery('#mask_anim_xend_reverse').removeAttr('checked'); }
-		if(typeof(objLayer.mask_y_end_reverse) !== 'undefined' && (objLayer.mask_y_end_reverse == "true" || objLayer.mask_y_end_reverse == true)) { jQuery('#mask_anim_yend_reverse').attr('checked',true); }else{ jQuery('#mask_anim_yend_reverse').removeAttr('checked'); }
+		if(typeof(objLayer.x_start_reverse) !== 'undefined' && (objLayer.x_start_reverse == "true" || objLayer.x_start_reverse == true)) { jQuery('#layer_anim_xstart_reverse').attr('checked',true); }else{ jQuery('#layer_anim_xstart_reverse').prop("checked",false); }
+		if(typeof(objLayer.y_start_reverse) !== 'undefined' && (objLayer.y_start_reverse == "true" || objLayer.y_start_reverse == true)) { jQuery('#layer_anim_ystart_reverse').attr('checked',true); }else{ jQuery('#layer_anim_ystart_reverse').prop("checked",false); }
+		if(typeof(objLayer.x_end_reverse) !== 'undefined' && (objLayer.x_end_reverse == "true" || objLayer.x_end_reverse == true)) { jQuery('#layer_anim_xend_reverse').attr('checked',true); }else{ jQuery('#layer_anim_xend_reverse').prop("checked",false); }
+		if(typeof(objLayer.y_end_reverse) !== 'undefined' && (objLayer.y_end_reverse == "true" || objLayer.y_end_reverse == true)) { jQuery('#layer_anim_yend_reverse').attr('checked',true); }else{ jQuery('#layer_anim_yend_reverse').prop("checked",false); }
+		if(typeof(objLayer.x_rotate_start_reverse) !== 'undefined' && (objLayer.x_rotate_start_reverse == "true" || objLayer.x_rotate_start_reverse == true)) { jQuery('#layer_anim_xrotate_reverse').attr('checked',true); }else{ jQuery('#layer_anim_xrotate_reverse').prop("checked",false); }
+		if(typeof(objLayer.y_rotate_start_reverse) !== 'undefined' && (objLayer.y_rotate_start_reverse == "true" || objLayer.y_rotate_start_reverse == true)) { jQuery('#layer_anim_yrotate_reverse').attr('checked',true); }else{ jQuery('#layer_anim_yrotate_reverse').prop("checked",false); }
+		if(typeof(objLayer.z_rotate_start_reverse) !== 'undefined' && (objLayer.z_rotate_start_reverse == "true" || objLayer.z_rotate_start_reverse == true)) { jQuery('#layer_anim_zrotate_reverse').attr('checked',true); }else{ jQuery('#layer_anim_zrotate_reverse').prop("checked",false); }
+		if(typeof(objLayer.x_rotate_end_reverse) !== 'undefined' && (objLayer.x_rotate_end_reverse == "true" || objLayer.x_rotate_end_reverse == true)) { jQuery('#layer_anim_xrotate_end_reverse').attr('checked',true); }else{ jQuery('#layer_anim_xrotate_end_reverse').prop("checked",false); }
+		if(typeof(objLayer.y_rotate_end_reverse) !== 'undefined' && (objLayer.y_rotate_end_reverse == "true" || objLayer.y_rotate_end_reverse == true)) { jQuery('#layer_anim_yrotate_end_reverse').attr('checked',true); }else{ jQuery('#layer_anim_yrotate_end_reverse').prop("checked",false); }
+		if(typeof(objLayer.z_rotate_end_reverse) !== 'undefined' && (objLayer.z_rotate_end_reverse == "true" || objLayer.z_rotate_end_reverse == true)) { jQuery('#layer_anim_zrotate_end_reverse').attr('checked',true); }else{ jQuery('#layer_anim_zrotate_end_reverse').prop("checked",false); }
+		if(typeof(objLayer.scale_x_start_reverse) !== 'undefined' && (objLayer.scale_x_start_reverse == "true" || objLayer.scale_x_start_reverse == true)) { jQuery('#layer_scale_xstart_reverse').attr('checked',true); }else{ jQuery('#layer_scale_xstart_reverse').prop("checked",false); }
+		if(typeof(objLayer.scale_y_start_reverse) !== 'undefined' && (objLayer.scale_y_start_reverse == "true" || objLayer.scale_y_start_reverse == true)) { jQuery('#layer_scale_ystart_reverse').attr('checked',true); }else{ jQuery('#layer_scale_ystart_reverse').prop("checked",false); }
+		if(typeof(objLayer.scale_x_end_reverse) !== 'undefined' && (objLayer.scale_x_end_reverse == "true" || objLayer.scale_x_end_reverse == true)) { jQuery('#layer_scale_xend_reverse').attr('checked',true); }else{ jQuery('#layer_scale_xend_reverse').prop("checked",false); }
+		if(typeof(objLayer.scale_y_end_reverse) !== 'undefined' && (objLayer.scale_y_end_reverse == "true" || objLayer.scale_y_end_reverse == true)) { jQuery('#layer_scale_yend_reverse').attr('checked',true); }else{ jQuery('#layer_scale_yend_reverse').prop("checked",false); }
+		if(typeof(objLayer.skew_x_start_reverse) !== 'undefined' && (objLayer.skew_x_start_reverse == "true" || objLayer.skew_x_start_reverse == true)) { jQuery('#layer_skew_xstart_reverse').attr('checked',true); }else{ jQuery('#layer_skew_xstart_reverse').prop("checked",false); }
+		if(typeof(objLayer.skew_y_start_reverse) !== 'undefined' && (objLayer.skew_y_start_reverse == "true" || objLayer.skew_y_start_reverse == true)) { jQuery('#layer_skew_ystart_reverse').attr('checked',true); }else{ jQuery('#layer_skew_ystart_reverse').prop("checked",false); }
+		if(typeof(objLayer.skew_x_end_reverse) !== 'undefined' && (objLayer.skew_x_end_reverse == "true" || objLayer.skew_x_end_reverse == true)) { jQuery('#layer_skew_xend_reverse').attr('checked',true); }else{ jQuery('#layer_skew_xend_reverse').prop("checked",false); }
+		if(typeof(objLayer.skew_y_end_reverse) !== 'undefined' && (objLayer.skew_y_end_reverse == "true" || objLayer.skew_y_end_reverse == true)) { jQuery('#layer_skew_yend_reverse').attr('checked',true); }else{ jQuery('#layer_skew_yend_reverse').prop("checked",false); }
+		if(typeof(objLayer.mask_x_start_reverse) !== 'undefined' && (objLayer.mask_x_start_reverse == "true" || objLayer.mask_x_start_reverse == true)) { jQuery('#mask_anim_xstart_reverse').attr('checked',true); }else{ jQuery('#mask_anim_xstart_reverse').prop("checked",false); }
+		if(typeof(objLayer.mask_y_start_reverse) !== 'undefined' && (objLayer.mask_y_start_reverse == "true" || objLayer.mask_y_start_reverse == true)) { jQuery('#mask_anim_ystart_reverse').attr('checked',true); }else{ jQuery('#mask_anim_ystart_reverse').prop("checked",false); }
+		if(typeof(objLayer.mask_x_end_reverse) !== 'undefined' && (objLayer.mask_x_end_reverse == "true" || objLayer.mask_x_end_reverse == true)) { jQuery('#mask_anim_xend_reverse').attr('checked',true); }else{ jQuery('#mask_anim_xend_reverse').prop("checked",false); }
+		if(typeof(objLayer.mask_y_end_reverse) !== 'undefined' && (objLayer.mask_y_end_reverse == "true" || objLayer.mask_y_end_reverse == true)) { jQuery('#mask_anim_yend_reverse').attr('checked',true); }else{ jQuery('#mask_anim_yend_reverse').prop("checked",false); }
 		
 		t.updateReverseList();
 
 
-		//set advanced params
-
-		// SET CURRENT TIMING HELPERS
-		jQuery('#clayer_start_time').val(objLayer.time);
-		jQuery('#clayer_end_time').val(objLayer.endtime);
-		jQuery('#clayer_start_speed').val(objLayer.speed);
-		jQuery('#clayer_end_speed').val(objLayer.endspeed);
 
 
 		if(objLayer['static_styles'] != undefined){
@@ -7719,12 +9867,16 @@ var UniteLayersRev = new function(){
 		jQuery("#rs-align-wrapper-ver a[data-ver='"+vaVer+"']").addClass("selected");
 
 		jQuery("#layer_id").val(objLayer.attrID);
+		jQuery("#layer_wrapper_id").val(objLayer.attrWrapperID);
 		jQuery("#layer_classes").val(objLayer.attrClasses);
+		jQuery("#layer_wrapper_classes").val(objLayer.attrWrapperClasses);
+		
 		jQuery("#layer_title").val(objLayer.attrTitle);
+		jQuery("#layer_tabindex").val(objLayer.attrTabindex);
 		jQuery("#layer_rel").val(objLayer.attrRel);
 
 		//show / hide go under slider offset row
-		jQuery('select[name="layer_action[]"], select[name="no_layer_action[]"]').each(function() {
+		jQuery('select[name="layer_action[]"], select[name="no_layer_action[]"]').each(function() {			
 			showHideLinkActions(jQuery(this));
 		});
 		showHideToolTip();
@@ -7739,6 +9891,7 @@ var UniteLayersRev = new function(){
 				objLayer = callback(objLayer);
 			
 		});
+		
 	}
 
 
@@ -7746,6 +9899,7 @@ var UniteLayersRev = new function(){
 	 * unselect all html layers
 	 */
 	var unselectHtmlLayers = function(){
+		
 		
 		// HOOK FOR EXTERNAL ADDONS
 		jQuery.each(t.addon_callbacks, function(i,callback_element) {
@@ -7756,16 +9910,28 @@ var UniteLayersRev = new function(){
 				callback();			
 		});
 
-		jQuery(containerID + " .slide_layer.layer_selected").each(function() {
-			try {
-				jQuery(this).resizable("destroy");
-				jQuery(this).find('.innerslide_layer').rotatable("destroy");
-			} catch(e) {}
-		});
+		var jcont = document.getElementById('divLayers');
+			resizables = jcont.getElementsByClassName('ui-resizable'),
+			rotatables = jcont.getElementsByClassName('ui-rotatable-handle');
 
+		for (var a = 0; a<resizables.length-1;a++) {
+			try{
+				jQuery(resizables[a]).resizable("destroy");
+			} catch(e) {
+				
+			}
+		}
+		for (var a = 0; a<rotatables.length-1;a++) {
+			try{
+				jQuery(rotatables[a]).rotatable("destroy");
+			} catch(e) {}
+		}
+				
 		jQuery(containerID + " .slide_layer").removeClass("layer_selected");
+		jQuery('.layerrow_selected').removeClass("layerrow_selected");
+		jQuery('.layerchild_selected').removeClass('layerchild_selected');		
+		document.getElementById('id-esw').className="";
 		
-		jQuery('.edit_slide_wrapper').attr('class', '').addClass('edit_slide_wrapper');
 
 		// HOOK FOR EXTERNAL ADDONS
 		jQuery.each(t.addon_callbacks, function(i,callback_element) {
@@ -7778,43 +9944,39 @@ var UniteLayersRev = new function(){
 		
 	}
 
+	t.hideRowLayoutComposer = function() {
+		jQuery('#rs-layout-row-composer').hide(); //.appendTo(jQuery('#divLayers'));
+		var rowopeners = document.getElementsByClassName('row_editor open_re');		
+		for (var i=0;i<rowopeners.length;i++) {			
+			rowopeners[i].className="row_editor";
+		}
+	}
 
 	/**
 	 * set all layers unselected
 	 */
 	var unselectLayers = function(){
 		
-
+		t.hideRowLayoutComposer();
 		unselectHtmlLayers();
+		jQuery('#timline-manual-dialog').appendTo(jQuery('#thelayer-editor-wrapper')).hide();
+		var lslist = document.getElementsByClassName('layerchild_selected');
+		for (var i=0;i<lslist.length-1;i++) {
+			jQuery(lslist[i]).removeClass("layerchild_selected");
+		}
 		jQuery('.quicksortlayer.selected').removeClass("selected");
+		jQuery('.layerrow_selected').removeClass("layerrow_selected");
 		u.unselectSortboxItems();
-		selectedLayerSerial = -1;
+		t.selectedLayerSerial = -1;
 		disableFormFields();
 				
 		//reset elements
-		jQuery("#layer_alt_row").hide();
-		jQuery("#layer_scale_title_row").hide();
-		jQuery("#layer_max_width").show();
-		jQuery("#layer_max_height").show();
-		jQuery("#layer_whitespace_row").hide();
-		jQuery("#layer_scaleX").hide();
-		jQuery("#layer_scaleY").hide();
-		jQuery("#layer_proportional_scale").parent().css('visibility', 'hidden');
-		jQuery("#reset-scale").css('visibility', 'hidden');
-
-		jQuery("#layer_image_link_row").hide();
-		jQuery("#layer_link_id_row").hide();
-		jQuery("#layer_link_class_row").hide();
-		jQuery("#layer_link_title_row").hide();
-		jQuery("#layer_link_rel_row").hide();
-		jQuery("#layer_link_open_in_row").hide();
-
 		
 		t.showHideContentEditor(false);
 		
 		jQuery('.form_layers').addClass('notselected');
 		
-		//jQuery('#toggle-idle-hover .icon-styleidle').trigger("click");
+	
 		u.resetIdleSelector();
 		
 		jQuery('#idle-hover-swapper').hide();
@@ -7823,6 +9985,7 @@ var UniteLayersRev = new function(){
 
 		jQuery('#the_current-editing-layer-title').addClass("nolayerselectednow").val("No Layers Selected").attr("disabled","disabled");
 		jQuery('#layer-short-toolbar').data('serial',"");
+		
 		
 	}
 
@@ -7955,10 +10118,53 @@ var UniteLayersRev = new function(){
 		if(confirm(rev_lang.remove_this_action)){
 			o.closest('li').remove();
 			t.updateLayerFromFields();
+			
+			u.updateAllLayerTimeline();
 		}
+	}
+
+	t.checkLayerTriggered = function(objLayer) {
+		var clayers = t.getSimpleLayers(),
+			has_trigger = {in:false,out:false};	
+		for(var key in clayers){
+				if(clayers[key]['layer_action'] !== undefined){
+					
+					for(var a in clayers[key]['layer_action']['action']){
+						switch(clayers[key]['layer_action']['action'][a]){
+							case 'start_in':
+							case 'start_out':
+							case 'start_video':
+							case 'stop_video':
+							case 'toggle_layer':
+							case 'toggle_video':
+							case 'simulate_click':
+							case 'toggle_class':
+								var target_layer = clayers[key]['layer_action']['layer_target'][a];
+								if(objLayer.unique_id == target_layer){
+									switch(clayers[key]['layer_action']['action'][a]){
+										case 'start_in':
+											has_trigger.in=true;
+										break;
+										case 'start_out':
+											has_trigger.out=true;
+										break;
+										case 'toggle_layer':
+											has_trigger.in=true;
+											has_trigger.out=true;
+										break;
+									}																	
+								}
+							break;
+						}
+					}					
+				}
+		}
+		return has_trigger;
 	}
 	
 	t.add_layer_actions = function(obj){
+
+		
 		var clayers = t.getSimpleLayers();
 		
 		if(obj === undefined){
@@ -7993,30 +10199,7 @@ var UniteLayersRev = new function(){
 										case 'toggle_layer':
 											has_trigger = true;
 										break;
-									}
-									
-									//if(clayers[key]['layer_action']['action'][a] == 'simulate_click') has_trigger = false;
-									
-									/*
-									var data = {};
-									data.edit = false;
-									data.tooltip_event = (clayers[key]['layer_action'].tooltip_event !== undefined && clayers[key]['layer_action'].tooltip_event[a] !== undefined) ? clayers[key]['layer_action'].tooltip_event[a] : 'click';
-									data.action = (clayers[key]['layer_action'].action !== undefined && clayers[key]['layer_action'].action[a] !== undefined) ? clayers[key]['layer_action'].action[a] : 'none';
-									data.image_link = (clayers[key]['layer_action'].image_link !== undefined && clayers[key]['layer_action'].image_link[a] !== undefined) ? clayers[key]['layer_action'].image_link[a] : '';
-									data.link_open_in = (clayers[key]['layer_action'].link_open_in !== undefined && clayers[key]['layer_action'].link_open_in[a] !== undefined) ? clayers[key]['layer_action'].link_open_in[a] : 'same';
-									data.jump_to_slide = (clayers[key]['layer_action'].jump_to_slide !== undefined && clayers[key]['layer_action'].jump_to_slide[a] !== undefined) ? clayers[key]['layer_action'].jump_to_slide[a] : '';
-									data.scrolloffset = (clayers[key]['layer_action'].scrollunder_offset !== undefined && clayers[key]['layer_action'].scrollunder_offset[a] !== undefined) ? clayers[key]['layer_action'].scrollunder_offset[a] : '';
-									data.actioncallback = (clayers[key]['layer_action'].actioncallback !== undefined && clayers[key]['layer_action'].actioncallback[a] !== undefined) ? clayers[key]['layer_action'].actioncallback[a] : '';
-									data.layer_target = (clayers[key]['layer_action'].layer_target !== undefined && clayers[key]['layer_action'].layer_target[a] !== undefined) ? clayers[key]['layer_action'].layer_target[a] : '';
-									data.action_delay = (clayers[key]['layer_action'].action_delay !== undefined && clayers[key]['layer_action'].action_delay[a] !== undefined) ? clayers[key]['layer_action'].action_delay[a] : '';
-									data.link_type = (clayers[key]['layer_action'].link_type !== undefined && clayers[key]['layer_action'].link_type[a] !== undefined) ? clayers[key]['layer_action'].link_type[a] : 'jquery';
-									data.toggle_layer_type = (clayers[key]['layer_action'].toggle_layer_type !== undefined && clayers[key]['layer_action'].toggle_layer_type[a] !== undefined) ? clayers[key]['layer_action'].toggle_layer_type[a] : 'visible';
-									data.toggle_class = (clayers[key]['layer_action'].toggle_class !== undefined && clayers[key]['layer_action'].toggle_class[a] !== undefined) ? clayers[key]['layer_action'].toggle_class[a] : '';
-									
-									var content = global_action_template(data);
-									
-									jQuery('.layer_action_add_template').before(content);
-									*/
+									}																	
 									var act = '';
 									switch(clayers[key]['layer_action']['action'][a]){
 										case 'start_in':
@@ -8060,6 +10243,7 @@ var UniteLayersRev = new function(){
 			jQuery('.rs_disabled_field').each(function(){
 				jQuery(this).attr('disabled', 'disabled'); //Disable
 			});
+
 		}
 
 
@@ -8080,6 +10264,21 @@ var UniteLayersRev = new function(){
 				data.link_type = (obj['layer_action'].link_type !== undefined && obj['layer_action'].link_type[key] !== undefined) ? obj['layer_action'].link_type[key] : 'jquery';
 				data.toggle_layer_type = (obj['layer_action'].toggle_layer_type !== undefined && obj['layer_action'].toggle_layer_type[key] !== undefined) ? obj['layer_action'].toggle_layer_type[key] : 'visible';
 				data.toggle_class = (obj['layer_action'].toggle_class !== undefined && obj['layer_action'].toggle_class[key] !== undefined) ? obj['layer_action'].toggle_class[key] : '';
+
+				// HOOK FOR EXTERNAL ADDONS
+				jQuery.each(t.addon_callbacks, function(i,callback_element) {
+					
+					var callback = callback_element["callback"],				
+						env = callback_element["environment"],
+						env_sub = callback_element["function_position"];
+
+					if (env === "add_layer_actions" && env_sub=="data_definition") 				
+						data = callback(data,obj,key);
+					
+				});
+
+
+
 				
 				var content = global_action_template(data);
 			
@@ -8110,7 +10309,8 @@ var UniteLayersRev = new function(){
 			jQuery(this).append(jQuery('<option data-mytype="video-special"></option>').val('firstvideo').text(rev_lang.active_video));
 			
 			for(var key in clayers){
-				jQuery(this).append(jQuery('<option data-mytype="'+clayers[key].type+'"></option>').val(clayers[key]['unique_id']).text(clayers[key].alias));
+				if (clayers[key].deleted!==true)
+					jQuery(this).append(jQuery('<option data-mytype="'+clayers[key].type+'"></option>').val(clayers[key]['unique_id']).text(clayers[key].alias));
 			}
 			
 			if(initStaticLayers !== null && initStaticLayers.length > 0){
@@ -8155,48 +10355,267 @@ var UniteLayersRev = new function(){
 		
 	}
 	
+	/**
+	 * SET THE LAYER RESIZABLE
+	**/
+	t.setLayerResizable = function(objLayer) {
+		var aspectratio = false,
+			layer = objLayer.references.htmlLayer;
+		if(jQuery("#layer_proportional_scale")[0].checked || objLayer.type==="svg") aspectratio = true;		
+		
+		try{  layer.resizable("destroy"); } catch(e) { }
+				
+		layer.resizable({
+			aspectRatio:aspectratio,
+			handles:"all",
+			start:function(event,ui) {				
+				switch (objLayer.type) {
+					case "img":
+					case "audio":
+					case "video":
+						var th = aspectratio ? "auto" : "100%";					
+						punchgs.TweenLite.set(ui.element,{width:ui.originalSize.width,height:ui.originalSize.height})
+						punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:th})
+						punchgs.TweenLite.set(ui.element.find('.innerslide_layer').first(),{width:"100%",height:th})					
+					break;
+					
+					default:												
+						if (objLayer==="svg") 
+							layer.find('.innerslide_layer.tp-caption').first().css({maxHeight:"none",minHeight:0,maxWidth:"none"});
+						else {
+							var mw = layer.outerWidth(),
+								mh = objLayer.type==="shape" ? "none" : layer.outerHeight();
+							if (objLayer.type!=="shape") layer.css({height:"auto"});
+							punchgs.TweenLite.set(ui.element[0].getElementsByClassName('innerslide_layer')[0],{height:"auto",maxHeight:"none",minHeight:mh,maxWidth:mw});
+						}						
+					break;
+				}
+				
+			},					
+			resize:function(event,ui) {	
+				switch (objLayer.type) {
+					case "audio":
+					case "video":
+						jQuery('#layer_video_width').val(Math.round(ui.size.width)+"px");
+						jQuery('#layer_video_height').val(Math.round(ui.size.height)+"px");
+						var th = aspectratio ? "auto" : "100%";		
+
+						if (ui.element[0].getElementsByTagName("img").length>0) punchgs.TweenLite.set(ui.element[0].getElementsByTagName("img")[0],{width:"100%",height:th})
+						punchgs.TweenLite.set(ui.element[0].getElementsByClassName("innerslide_layer")[0],{maxWidth:"none",maxHeight:"none",width:"100%",height:"100%"});													
+						punchgs.TweenLite.set(ui.element[0].getElementsByClassName("slide_layer_video")[0],{width:"100%",height:"100%"});
+					break;
+					case "image":					
+						jQuery('#layer_scaleX').val(Math.round(ui.size.width)+"px");
+						jQuery('#layer_scaleY').val(Math.round(ui.size.height)+"px");
+						var th = aspectratio ? "auto" : "100%";																
+						punchgs.TweenLite.set(ui.element,{width:Math.round(ui.size.width),height:Math.round(ui.size.height)})
+						punchgs.TweenLite.set(ui.element[0].getElementsByTagName("img")[0],{width:"100%",height:th})
+						punchgs.TweenLite.set(ui.element[0].getElementsByClassName("innerslide_layer")[0],{maxWidth:"100%", maxHeight:"100%",width:"100%",height:th})						
+					break;					
+										
+					default:
+						var il = ui.element[0].getElementsByClassName('innerslide_layer')[0],
+							ilj = jQuery(il),
+							minheight = ilj.outerHeight(),
+							ilwidth = ilj.outerWidth(),
+							maxheight = Math.round(ui.size.height)+1,
+							maxwidth = Math.round(ui.size.width)+1;
+
+						if (objLayer.type!=="shape" && objLayer.type!=="group") {
+							maxheight = minheight>=maxheight ? "auto" : maxheight+"px";
+							punchgs.TweenLite.set(il,{maxWidth:maxwidth});	
+						} else {							
+							punchgs.TweenLite.set(ilj,{maxWidth:maxwidth,maxHeight:maxheight,minHeight:"none",overwrite:"auto",height:"100%"});
+						}
+										
+						
+						jQuery('#layer_max_width').val(maxwidth+"px");
+						jQuery('#layer_max_height').val(maxheight);
+					break;
+				}
+
+				if (objLayer.type==="group") {
+					jQuery.each(t.getLayersInGroup(objLayer.unique_id).layers,function(i,layer) {
+						t.updateHtmlLayerPosition(false,layer,t.getVal(layer, 'top'),t.getVal(layer, 'left'),t.getVal(layer,'align_hor'),t.getVal(layer,'align_vert'));
+					});					
+				}
+			},
+			stop:function(event,ui) {
+				layerresized = true;
+				setTimeout(function() {
+					layerresized = false;							
+				},200);
+				t.updateLayerFromFields();						
+			}
+		});
+
+	}
+
+	/* Set Style Layout based on Layer Style */
+	t.resetLayerSelected = function(objLayer) {
+		var layer = objLayer.references.htmlLayer;
+			
+
+		jQuery("#layer_cornerleft_row").hide();
+		jQuery("#layer_cornerright_row").hide();
+		jQuery("#layer_resizeme_row").hide();		
+		jQuery("#layer_alt_row").hide();	
+		jQuery("#layer_max_widthheight_wrapper").hide();
+		jQuery("#layer_video_widthheight_wrapper").hide();
+		jQuery("#layer_scaleXY_wrapper").hide();
+		jQuery("#layer_minwidthheight_wrapper").hide();	
+	
+		var idesw = document.getElementById('id-esw'),
+			incolumn = t.getObjLayerType(objLayer.p_uid)==="column";
+		
+		idesw.className = 'slt-'+objLayer.type+'-w';	
+						
+		if (incolumn) idesw.className +=' sltic';
+
+		
+
+		//do specific operations depends on type
+		switch(objLayer.type){
+			case 'audio':
+			case 'video':	//show edit video button				
+				jQuery("#linkInsertTemplate").addClass("disabled");
+				jQuery("#layer_video_widthheight_wrapper").show();					
+				t.showHideContentEditor(false);												
+				
+				if (layer.width()>=jQuery('#divLayers').width() && layer.height()>=jQuery('#divLayers').height())
+					layer.addClass("fullscreen-video-layer");
+				else
+					layer.removeClass("fullscreen-video-layer");
+			break;
+			case 'image':
+				//disable the insert button
+				jQuery("#layer_scaleXY_wrapper").show();
+				jQuery("#linkInsertTemplate").addClass("disabled");
+
+				//show / hide some elements
+				jQuery("#layer_alt_row").show();				
+				
+				
+				jQuery('.rs-lazy-load-images-wrap').show();						
+				if(jQuery('#layer_alt_option option:selected').val() == 'custom'){
+					jQuery('#layer_alt').show();
+				}else{
+					jQuery('#layer_alt').hide();
+				}									
+			break;
+			case 'svg':								
+				jQuery("#layer_max_widthheight_wrapper").show();							
+			break; 
+			case 'shape':
+				jQuery("#layer-covermode-wrapper").show();												
+				jQuery('#layer_text_wrapper').removeClass('currently_editing_txt');	
+				jQuery("#layer_max_widthheight_wrapper").show();						
+			break;
+			case 'group':
+				jQuery("#layer_max_widthheight_wrapper").show();
+			break;
+			case 'row':
+				jQuery("#layer_max_widthheight_wrapper").show();
+			break;
+			case 'column':				
+				jQuery("#layer_minwidthheight_wrapper").show();	
+			break;
+			case 'text':
+			case 'button':
+			default:  //set layer text to default height								
+				jQuery('#layer_text_wrapper').addClass('currently_editing_txt');								
+				jQuery("#layer_cornerleft_row").show();
+				jQuery("#layer_cornerright_row").show();
+				jQuery("#layer_resizeme_row").show();								
+				jQuery("#layer_max_widthheight_wrapper").show();													
+			break;
+		}
+
+
+		if (objLayer.type!=="row" && objLayer.type!=="column") {
+			t.setLayerResizable(objLayer);
+			t.makeCurrentLayerRotatable();
+		}
+
+		if(jQuery('#hover_allow')[0].checked){
+			jQuery('#idle-hover-swapper').show();
+		}else{
+			jQuery('#idle-hover-swapper').hide();
+		}
+
+		//RevSliderSettings.onoffStatus(jQuery('#force_hover'));
+		//RevSliderSettings.onoffStatus(jQuery('#shadow_idle'));
+		//RevSliderSettings.onoffStatus(jQuery('#shadow_hover'));
+		RevSliderSettings.onoffStatus(jQuery('#hover_allow'));
+		RevSliderSettings.onoffStatus(jQuery('#toggle_allow'));
+		RevSliderSettings.onoffStatus(jQuery('#toggle_use_hover'));
+		RevSliderSettings.onoffStatus(jQuery('#toggle_inverse_content'));
+
+		//hide autocomplete
+		jQuery("#layer_caption").catcomplete("close");
+		
+		
+
+		//reset all color picker fields to the corresponding colors
+		jQuery('.wp-color-result').each(function(){
+			jQuery(this).css('backgroundColor', jQuery(this).parent().find('.my-color-field').val());
+		});
+		
+		u.rebuildLayerIdleProgress(layer);
+	}
 	
 	/*! SET LAYER SELECTED */
 	/**
 	 * set layer selected representation
 	 */
-	t.setLayerSelected = function(serial,videoRefresh){
+	t.setLayerSelected = function(serial,videoRefresh,infocus){
 
 		
-		if(selectedLayerSerial == serial && !videoRefresh)
+		if(t.selectedLayerSerial == serial && !videoRefresh)
 			return(false);
+
 		
+		jQuery('#timline-manual-dialog').appendTo(jQuery('#thelayer-editor-wrapper')).hide();
+		
+		t.hideRowLayoutComposer();
 		u.resetIdleSelector();
 
 		jQuery('.quicksortlayer.selected').removeClass("selected");
 		jQuery('#layer_quicksort_'+serial).addClass("selected");
 		
-		jQuery('.timer-layer-text:focus').blur();
+		
+		if (!infocus) jQuery('.timer-layer-text:focus').blur();
 
 		t.remove_layer_actions();
 		
-		objLayer = t.getLayer(serial);
 		
+		var objLayer = t.getLayer(serial);
+
+		
+				
 		//add the correct bolds into the selectfield
-		if(typeof(objLayer['deformation']) !== 'undefined' && typeof(objLayer['deformation']['font-family']) !== 'undefined'){
-			t.check_the_font_bold(objLayer['deformation']['font-family']);
-		}else{
-			t.check_the_font_bold('');
-		}
-		
-		
+		if ((objLayer.type==="text" || objLayer.type==="button"))
+			if(typeof(objLayer['deformation']) !== 'undefined' && typeof(objLayer['deformation']['font-family']) !== 'undefined'){
+				t.check_the_font_bold(objLayer['deformation']['font-family']);
+			}else{
+				t.check_the_font_bold('');
+			}
+				
 		t.showHideContentEditor(false);
 		t.toolbarInPos(objLayer);
 
+		//unselect all other layers
+		unselectHtmlLayers();
+
 		// SOME TOOLBAR ACTION FOR SELECTED LAYER
-		var layer = t.getHtmlLayerFromSerial(serial),
-			tbar = jQuery('#layer-short-toolbar');
-
+		var	layer = objLayer.references.htmlLayer,
+			tbar = jQuery('#layer-short-toolbar'),
+			tcelt = jQuery('#the_current-editing-layer-title');
 				
-		jQuery('#the_current-editing-layer-title').val(objLayer.alias).removeAttr('disabled');		
-		jQuery('#layer-short-toolbar').data('serial',serial);
+		tcelt.val(objLayer.alias).prop("disabled",false).removeClass("nolayerselectednow");			
+		tbar.data('serial',serial);
 
-		if(u.isLayerLocked(serial)) {
+		if(u.isLayerLocked(layer)) {
 			var b=tbar.find('.quick-layer-lock'),
 				i=b.find('i');
 			b.addClass("in-off").removeClass("in-on");
@@ -8208,7 +10627,7 @@ var UniteLayersRev = new function(){
 			i.removeClass("eg-icon-lock").addClass("eg-icon-lock-open");							
 		}
 
-		if(u.isLayerVisible(serial)){
+		if(u.isLayerVisible(layer)){
 			var b=tbar.find('.quick-layer-view'),
 				i=b.find('i');
 			b.addClass("in-on").removeClass("in-off");				
@@ -8220,33 +10639,26 @@ var UniteLayersRev = new function(){
 			i.removeClass("eg-icon-eye").addClass("eg-icon-eye-off");					
 		}
 
-		jQuery('#the_current-editing-layer-title').removeClass("nolayerselectednow");
-
-		/*if(objLayer.type == 'no_edit'){
-			
-		}*/
-		
-		//jQuery('#layer-short-toolbar').appendTo(layer);
-
-		//unselect all other layers
-		unselectHtmlLayers();
-
-		
+		if (t.getVal(objLayer,"display")==="block") 			
+			jQuery('#layer-displaymode-wrapper').removeClass("notselected");
+		else
+			jQuery('#layer-displaymode-wrapper').addClass("notselected");
 
 		//set selected class
 		layer.addClass("layer_selected");		
+		layer.closest('.slide_layer_type_row').addClass('layerchild_selected');
+		layer.closest('.row-zone-container').addClass('layerrow_selected');
+		layer.closest('.slide_layer_type_column').addClass('layerchild_selected');
 
 		u.setSortboxItemSelected(serial);
 
 		//update selected serial var
-		selectedLayerSerial = serial;
+		t.selectedLayerSerial = serial;
 		//update bottom fields
-		updateLayerFormFields(serial);
+		t.updateLayerFormFields(serial);
 
 		//enable form fields
 		enableFormFields();
-
-
 		
 		// HOOK FOR EXTERNAL ADDONS
 		jQuery.each(t.addon_callbacks, function(i,callback_element) {
@@ -8263,415 +10675,22 @@ var UniteLayersRev = new function(){
 		
 		jQuery('.rs-lazy-load-images-wrap').hide();
 		
-		jQuery("#layer_video_width").hide();
-		jQuery("#layer_video_height").hide();
-		
-		jQuery("#layer_proportional_scale").parent().css('visibility', 'hidden');
-		jQuery("#reset-scale").css('visibility', 'hidden');
-		jQuery('#layer-linebreak-wrapper').hide();
-		
-		
-		jQuery("#layer_cornerleft_row").hide();
-		jQuery("#layer_cornerright_row").hide();
-		jQuery("#layer_resizeme_row").hide();
-		jQuery("#layer_max_width").hide();
-		jQuery("#layer_max_height").hide();
-		jQuery("#layer_whitespace_row").hide();
-		
-		jQuery("#layer-covermode-wrapper").hide();
-		
-		jQuery('.edit_slide_wrapper').attr('class', '').addClass('edit_slide_wrapper');
-		
-		switch(objLayer.type){
-			case "text":
-				jQuery('.edit_slide_wrapper').addClass('main-textlayer-wrapper');
-			break;
-			case "image":
-				jQuery('.edit_slide_wrapper').addClass('main-imagelayer-wrapper');
-			break;
-			case "shape":
-				jQuery('.edit_slide_wrapper').addClass('main-shapelayer-wrapper');
-			break;
-			case "video":
-				jQuery('.edit_slide_wrapper').addClass('main-videolayer-wrapper');
-			break;
-			case "button":
-				jQuery('.edit_slide_wrapper').addClass('main-buttonlayer-wrapper');
-			break;
-		}
-		
+		t.resetLayerSelected(objLayer);
 
-		//do specific operations depends on type
-		switch(objLayer.type){
-			case 'audio':
-			case 'video':	//show edit video button
-				
-				jQuery("#linkInsertTemplate").addClass("disabled");
-				jQuery("#layer_2d_rotation_row").hide();
-				jQuery("#layer_2d_origin_x_row").hide();
-				jQuery("#layer_2d_origin_y_row").hide();
-				jQuery("#layer_2d_title_row").hide();
-				
-				t.showHideContentEditor(false);
-				
-				layer.resizable({
-					aspectRatio:aspectratio,
-					handles:"all",
-					start:function(event,ui) {
-						
-						if(jQuery("#layer_proportional_scale")[0].checked) {
-							punchgs.TweenLite.set(ui.element,{width:ui.originalSize.width,height:ui.originalSize.height})
-							punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"auto"})
-							punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{width:"100%",height:"auto"})
-						} else {
-							punchgs.TweenLite.set(ui.element,{width:ui.originalSize.width,height:ui.originalSize.height})
-							punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"100%"})
-							punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{width:"100%",height:"100%"})						
-						}
-					},					
-					resize:function(event,ui) {						
-						jQuery('#layer_video_width').val(ui.size.width);
-						jQuery('#layer_video_height').val(ui.size.height);
-						if(jQuery("#layer_proportional_scale")[0].checked) {
-							punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"auto"})
-							punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{maxWidth:"none",maxHeight:"none",width:"100%",height:"auto"});							
-						} else {
-							punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"100%"})
-							punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{maxWidth:"none",maxHeight:"none",width:"100%",height:"100%"})						
-						}					
-
-						punchgs.TweenLite.set(ui.element.find('.slide_layer_video'),{width:"100%",height:"100%"});
-					},
-					stop:function(event,ui) {
-						layerresized = true;
-						setTimeout(function() {
-							layerresized = false;							
-						},200);
-						t.updateLayerFromFields();						
-					}
-				});
-				
-				jQuery("#layer_video_width").show();
-				jQuery("#layer_video_height").show();				
-				if (layer.width()>=jQuery('#divLayers').width() && layer.height()>=jQuery('#divLayers').height())
-					layer.addClass("fullscreen-video-layer");
-				else
-					layer.removeClass("fullscreen-video-layer");
-				
-				t.makeCurrentLayerRotatable();
-				
-			break;
-			case 'image':
-				//disable the insert button
-				
-				jQuery("#linkInsertTemplate").addClass("disabled");
-
-				//show / hide some elements
-				jQuery("#layer_alt_row").show();
-				jQuery("#layer_scale_title_row").show();
-				jQuery("#layer_scaleX").show();
-				jQuery("#layer_scaleY").show();
-				//initScaleImage();
-				jQuery("#layer_proportional_scale").parent().css('visibility', 'visible');
-				jQuery("#reset-scale").css('visibility', 'visible');
-				jQuery("#layer_image_link_row").show();
-				jQuery("#layer_link_open_in_row").show();
-				jQuery("#layer_link_id_row").show();
-				jQuery("#layer_link_class_row").show();
-				jQuery("#layer_link_title_row").show();
-				jQuery("#layer_link_rel_row").show();
-				jQuery("#layer_2d_rotation_row").show();
-				jQuery("#layer_2d_origin_x_row").show();
-				jQuery("#layer_2d_origin_y_row").show();
-				jQuery("#layer-prop-wrapper").show();
-				
-				jQuery("#layer-covermode-wrapper").show();
-				
-				jQuery('.rs-lazy-load-images-wrap').show();
-
-				if(jQuery("#layer_proportional_scale")[0].checked)
-					var aspectratio = true;
-				else
-					var aspectratio = false;
-
-				layer.resizable({
-					aspectRatio:aspectratio,
-					handles:"all",
-					start:function(event,ui) {
-						
-						// IF IMAGE IS IN ASPECT RATIO MODE
-						if(jQuery("#layer_proportional_scale")[0].checked) {
-							punchgs.TweenLite.set(ui.element,{width:ui.originalSize.width,height:ui.originalSize.height})
-							punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"auto"})
-							punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{width:"100%",height:"auto"})
-						} else {
-							punchgs.TweenLite.set(ui.element,{width:ui.originalSize.width,height:ui.originalSize.height})
-							punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"100%"})
-							punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{width:"100%",height:"100%"})						
-						}
-					},					
-					resize:function(event,ui) {
-						jQuery('#layer_scaleX').val(ui.size.width);
-						jQuery('#layer_scaleY').val(ui.size.height);
-						if(jQuery("#layer_proportional_scale")[0].checked) {
-							punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"auto"})
-							punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{width:"100%",height:"auto"})
-						} else {
-							punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"100%"})
-							punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{width:"100%",height:"100%"})						
-						}					
-					},
-					stop:function(event,ui) {
-						layerresized = true;
-						setTimeout(function() {
-							layerresized = false;							
-						},200);
-						t.updateLayerFromFields();
-						
-					}
-				});
-
-
-				t.makeCurrentLayerRotatable();
-
-			break;
-			case 'svg':
-				//show things for svg specific if svg layer is selected
-				jQuery('#layer-covermode-wrapper').hide();
-				jQuery('#layer-prop-wrapper').hide();
-				jQuery('#reset-scale').hide();
-				jQuery('#layer-linebreak-wrapper').hide();
-				jQuery("#layer_max_width").show();
-				jQuery("#layer_max_height").show();
-				jQuery("#layer_2d_rotation_row").show();
-				jQuery("#layer_2d_origin_x_row").show();
-				jQuery("#layer_2d_origin_y_row").show();
-				layer.resizable({
-					handles:"all",
-					aspectRatio:true,
-					start:function() {						
-						jQuery('.rs-linebreak-check').removeClass('notselected');					
-						jQuery("#layer_whitespace option[value='normal']").attr('selected', 'selected');												
-						layer.find('.innerslide_layer.tp-caption').css({maxHeight:"none",minHeight:0,maxWidth:"none"});						
-					},
-					resize:function(event,ui) {								
-						jQuery('#layer_max_width').val(ui.size.width+"px");
-						jQuery('#layer_max_height').val(ui.size.height+"px");
-					},
-					stop:function(event,ui) {
-
-						layerresized = true;
-						setTimeout(function() {
-							layerresized = false;							
-						},200);
-						t.updateLayerFromFields();
-					}
-				});
-				t.makeCurrentLayerRotatable();
-			break; 
-			case 'shape':
-				jQuery("#layer-covermode-wrapper").show();
-				jQuery("#layer_max_width").show();
-				jQuery("#layer_max_height").show();
-				jQuery("#layer_whitespace_row").show();
-				jQuery("#layer_2d_rotation_row").show();
-				jQuery("#layer_2d_origin_x_row").show();
-				jQuery("#layer_2d_origin_y_row").show();
-				jQuery('#layer_text_wrapper').addClass('currently_editing_txt');
-				jQuery('#layer-linebreak-wrapper').show();
-				
-				if(objLayer.type == 'shape'){
-					jQuery('#layer-linebreak-wrapper').hide();
-					jQuery('#layer_text_wrapper').removeClass('currently_editing_txt');
-				}
-				
-				if(objLayer.type == 'typeB'){}
-				//if(objLayer.type == 'no_edit'){}
-					
-				layer.resizable({
-					handles:"all",
-					start:function() {
-						
-						jQuery('.rs-linebreak-check').removeClass('notselected');					
-						jQuery("#layer_whitespace option[value='normal']").attr('selected', 'selected');
-						
-						var mw = layer.outerWidth(),
-							mh = layer.outerHeight();
-						layer.css({height:"auto"});
-						
-						//if(objLayer.type == 'shape')
-							
-						layer.find('.innerslide_layer.tp-caption').css({height:"auto",maxHeight:"none",minHeight:mh,maxWidth:mw});
-						
-					},
-					resize:function(event,ui) {
-						var il = ui.element.find('.innerslide_layer'),
-							minheight = il.outerHeight(),
-							ilwidth = il.outerWidth(),
-							maxheight = ui.size.height+1,
-							maxwidth = ui.size.width+1;
-							
-						il.css({"maxWidth":maxwidth});
-
-						//maxheight = minheight>=maxheight ? "auto" : maxheight+"px";
-						jQuery('#layer_max_width').val(maxwidth+"px");
-						jQuery('#layer_max_height').val(maxheight);
-					},
-					stop:function(event,ui) {
-						layerresized = true;
-						setTimeout(function() {
-							layerresized = false;							
-						},200);
-						t.updateLayerFromFields();
-					}
-				});
-
-				t.makeCurrentLayerRotatable();
-			break;
-			//case 'no_edit':
-			case 'button':
-			default:  //set layer text to default height
-				jQuery("#layer_max_width").show();
-				jQuery("#layer_max_height").show();
-				jQuery("#layer_whitespace_row").show();
-				jQuery("#layer_2d_rotation_row").show();
-				jQuery("#layer_2d_origin_x_row").show();
-				jQuery("#layer_2d_origin_y_row").show();
-				jQuery('#layer_text_wrapper').addClass('currently_editing_txt');
-				jQuery('#layer-linebreak-wrapper').show();
-				
-				if(objLayer.type == 'shape'){
-					jQuery('#layer-linebreak-wrapper').hide();
-					jQuery('#layer_text_wrapper').removeClass('currently_editing_txt');
-				}
-				
-				if(objLayer.type == 'typeB'){}
-				//if(objLayer.type == 'no_edit'){}
-					
-				layer.resizable({
-					handles:"all",
-					start:function() {
-						
-						jQuery('.rs-linebreak-check').removeClass('notselected');					
-						jQuery("#layer_whitespace option[value='normal']").attr('selected', 'selected');
-						
-						var mw = layer.outerWidth(),
-							mh = layer.outerHeight();
-						layer.css({height:"auto"});
-						
-						//if(objLayer.type == 'shape')
-							
-						layer.find('.innerslide_layer.tp-caption').css({height:"auto",maxHeight:"none",minHeight:mh,maxWidth:mw});
-						
-					},
-					resize:function(event,ui) {
-						var il = ui.element.find('.innerslide_layer'),
-							minheight = il.outerHeight(),
-							ilwidth = il.outerWidth(),
-							maxheight = ui.size.height+1,
-							maxwidth = ui.size.width+1;
-							
-						il.css({"maxWidth":maxwidth});
-
-						maxheight = minheight>=maxheight ? "auto" : maxheight+"px";
-						jQuery('#layer_max_width').val(maxwidth+"px");
-						jQuery('#layer_max_height').val(maxheight);
-					},
-					stop:function(event,ui) {
-						layerresized = true;
-						setTimeout(function() {
-							layerresized = false;							
-						},200);
-						t.updateLayerFromFields();
-					}
-				});
-
-				t.makeCurrentLayerRotatable();
-			break;
-		}
-		
-		
-		if(jQuery('#layer_alt_option option:selected').val() == 'custom'){
-			jQuery('#layer_alt').show();
-		}else{
-			jQuery('#layer_alt').hide();
-		}
-		
-		//hide image layer related fields
-		if(objLayer.type != "image"){
-			//if(objLayer.type == "no_edit"){}
-			
-			jQuery("#layer_alt_row").hide();
-			jQuery("#layer_scale_title_row").hide();
-			jQuery("#layer_scaleX").hide();
-			jQuery("#layer_scaleY").hide();
-			
-			jQuery("#layer_image_link_row").hide();
-			jQuery("#layer_link_open_in_row").hide();
-			jQuery('#layer_alt_option').parent().hide();
-		}else{
-			jQuery('#layer_alt_option').parent().show();
-			
-			if(jQuery('#layer_alt_option option:selected').val() == 'custom'){
-				jQuery('#layer_alt').show();
-			}else{
-				jQuery('#layer_alt').hide();
-			}
-		}
-
-		//show/hide text related layers
-		if(objLayer.type == "text" || objLayer.type == "button"){
-			jQuery("#layer_cornerleft_row").show();
-			jQuery("#layer_cornerright_row").show();
-			jQuery("#layer_resizeme_row").show();
-			jQuery("#layer_max_width").show();
-			jQuery("#layer_max_height").show();
-			jQuery("#layer_whitespace_row").show();
-			jQuery("#reset-scale").show();			
-		}
-		
-		if(jQuery('#hover_allow')[0].checked){
-			jQuery('#idle-hover-swapper').show();
-		}else{
-			jQuery('#idle-hover-swapper').hide();
-		}
-		RevSliderSettings.onoffStatus(jQuery('#hover_allow'));
-		RevSliderSettings.onoffStatus(jQuery('#toggle_allow'));
-		RevSliderSettings.onoffStatus(jQuery('#toggle_use_hover'));
-
-		//hide autocomplete
-		jQuery("#layer_caption").catcomplete("close");
-
-
-		//update timeline of the layer
-		//u.updateCurrentLayerTimeline();
-
-		
+		checkMaskingAvailabity();			
+		u.rebuildLayerIdle(layer);	
 		reAlignAndrePosition();
-
-		//reset all color picker fields to the corresponding colors
-		jQuery('.wp-color-result').each(function(){
-			jQuery(this).css('backgroundColor', jQuery(this).parent().find('.my-color-field').val());
-		});
-		//set focus to text editor
-		var objHtmlLayer = t.getHtmlLayerFromSerial(serial);
-		
-		checkMaskingAvailabity();
-		
-		
-		u.rebuildLayerIdle(objHtmlLayer);
 		
 		jQuery('.form_layers').removeClass('notselected');
-
 		t.set_cover_mode();
 		
 		//change the style classes available depending on .type
 		
 		UniteCssEditorRev.updateCaptionsInput(initArrCaptionClasses);
-
-		t.updateReverseList();
-		
+		t.updateReverseList();		
 		jQuery('#parallax_level').change();
+
+		
 
 		// HOOK FOR EXTERNAL ADDONS
 		jQuery.each(t.addon_callbacks, function(i,callback_element) {
@@ -8680,8 +10699,7 @@ var UniteLayersRev = new function(){
 				env_sub = callback_element["envifunction_position"];			
 			if (env === "setLayerSelected" && env_sub=="end") 							
 				callback(serial);									
-		});
-		
+		});		
 	}
 
 
@@ -8704,7 +10722,7 @@ var UniteLayersRev = new function(){
 	 * return if the layer is selected or not
 	 */
 	var isLayerSelected = function(serial){
-		return(serial == selectedLayerSerial);
+		return(serial == t.selectedLayerSerial);
 	}
 
 
@@ -8756,18 +10774,26 @@ var UniteLayersRev = new function(){
 //======================================================
 //				HTML LAYER POSITION UPDATE
 //======================================================
-	t.updateHtmlLayerPosition = function(isInit,htmlLayer,objLayer,top,left,align_hor,align_vert){
-		
-
-
+	t.updateHtmlLayerPosition = function(isInit,objLayer,top,left,align_hor,align_vert){
+				
+		if (objLayer===undefined || objLayer===false) return;
 		//update positions by align
-		var width = htmlLayer.outerWidth(),
-			height = htmlLayer.outerHeight();
+		var width = objLayer.references.htmlLayer.outerWidth(),
+			height = objLayer.references.htmlLayer.outerHeight();
 
 
 		totalWidth = container.width();		
 		totalHeight = container.height();
 
+		var _tw = totalWidth,
+			_th = totalHeight;
+
+
+		if (objLayer.p_uid!==-1 && t.getObjLayerType(objLayer.p_uid)==="group") {
+			_tw = t.getLayerByUniqueId(objLayer.p_uid).references.htmlLayer.width();
+			_th = t.getLayerByUniqueId(objLayer.p_uid).references.htmlLayer.height();
+			
+		}
 
 		//get sizes from saved if on get
 		if(isInit == true && objLayer.type == "image"){
@@ -8780,22 +10806,39 @@ var UniteLayersRev = new function(){
 		
 		var objCss = {};
 
+		switch (objLayer.type) {
+			case "row":				
+				left = 0;
+				top = 0;				
+			break;
+			case "column":
+				left = 0;
+				top = 0;
+			break;
+		}
+
+		var _makrerelative = objLayer.p_uid!==-1 && t.getObjLayerType(objLayer.p_uid)==="column";
+
+		
+		objCss["position"] = _makrerelative || objLayer.type==="row" ? "relative" : "absolute";
+
+
 		
 		//handle horizontal
 		switch(align_hor){
 			default:
 			case "left":
 				objCss["right"] = "auto";
-				objCss["left"] = left+"px";
+				objCss["left"] = _makrerelative ? "auto" : left+"px";
 			break;
 			case "right":
 				objCss["left"] = "auto";
-				objCss["right"] = left+"px";
+				objCss["right"] = _makrerelative ? "auto" :  left+"px";
 			break;
 			case "center":				
-				var realLeft = (totalWidth - width)/2;
+				var realLeft = (_tw - width)/2;				
 				realLeft = Math.round(realLeft) + left;
-				objCss["left"] = realLeft + "px";
+				objCss["left"] = _makrerelative ? "auto" : realLeft + "px";
 				objCss["right"] = "auto";
 			break;
 		}
@@ -8805,21 +10848,28 @@ var UniteLayersRev = new function(){
 			default:
 			case "top":
 				objCss["bottom"] = "auto";
-				objCss["top"] = top+"px";
+				objCss["top"] = _makrerelative ? "auto" :  top+"px";
 			break;
 			case "middle":
-				var realTop = (totalHeight - height)/2;
-				realTop = Math.round(realTop)+top;
-				objCss["top"] = realTop + "px";
+				var realTop = (_th - height)/2;
+				realTop = objLayer.type==="row" ? 0 : Math.round(realTop)+top;
+				objCss["top"] = _makrerelative ? "auto" :  realTop + "px";
 				objCss["bottom"] = "auto";
 			break;
 			case "bottom":
 				objCss["top"] = "auto";
-				objCss["bottom"] = top+"px";
+				objCss["bottom"] = _makrerelative ? "auto" :  top+"px";
 			break;
 		}
 		
-		punchgs.TweenLite.set(htmlLayer,objCss);
+		
+		punchgs.TweenLite.set(objLayer.references.htmlLayer,objCss);
+		// REFRESH POSITIONS OF CHILD NOW
+		if (objLayer.type==="group") {			
+			jQuery.each(t.getLayersInGroup(objLayer.unique_id).layers,function(i,layer) {				
+				t.updateHtmlLayerPosition(false,layer,t.getVal(layer, 'top'),t.getVal(layer, 'left'),t.getVal(layer,'align_hor'),t.getVal(layer,'align_vert'));
+			});					
+		}
 		
 	}
 
@@ -8835,30 +10885,122 @@ var UniteLayersRev = new function(){
 	 * on layer drag event - update layer position
 	 */
 	var onLayerDragStart = function() {
+		
+		t.justDropped = false;
 		t.showHideContentEditor(false);
+
+		jQuery('#divLayers').addClass("onelayerinmove");
+
 		
 		var layerSerial = t.getSerialFromID(this.id),
 			htmlLayer = jQuery(this),
 			objLayer = t.getLayer(layerSerial);
 		
+		if (jQuery.inArray(objLayer.unique_id,t.selectedLayers)==-1) u.checkMultipleSelectedItems(true);
+			
+		htmlLayer.closest('.slide_layer_type_group').addClass("dragfromgroup");
+		htmlLayer.data('originalPosition',htmlLayer.position());
+		htmlLayer.addClass("draggable_toponall")				
 		selectedLayerWidth = htmlLayer.outerWidth();
+		selectedlayerHeight = htmlLayer.outerHeight();		
 		totalWidth = container.width();
-		selectedlayerHeight = htmlLayer.outerHeight();
 		totalHeight = container.height();
-		
+		htmlLayer.closest('.slide_layer_type_column').addClass("column_from_draggable");
+		htmlLayer.closest('.slide_layer_type_row').css({zIndex:190});
 		jQuery('#layer_text_wrapper').removeClass("currently_editing_txt");
 		t.setLayerSelected(layerSerial);
+		t.groupMove.x = 0;
+		t.groupMove.y = 0;
+		t.groupMove.sameGroup = t.getSameLinkedElements(objLayer);	
+		//htmlLayer.css({width:(selectedLayerWidth+1)+"px"})
+		
 	}
 
-	var onLayerDragEnd = function() {
+	t.getSameLinkedElements = function(objLayer) {
+		var list = [];			
+		for (var i in t.selectedLayers) {
+			var layer = t.getLayerByUniqueId(t.selectedLayers[i]);
+			if (layer.unique_id !== objLayer.unique_id && layer.p_uid === objLayer.p_uid) {
+				layer.positionCache = layer.references.htmlLayer.position();
+				list.push(layer);			
+			}
+		}		
+		return list;
+	}
+
+	t.getCurLinkedElements = function() {
+		var list = [];			
+		for (var i in t.selectedLayers) {
+			var layer = t.getLayerByUniqueId(t.selectedLayers[i]);				
+			list.push(layer);			
+			
+		}		
+		if (list.length===0) {
+			var layer = t.getLayer(t.selectedLayerSerial);			
+			list.push(layer);
+		}
+		return list;
+	}
+
+	var onLayerDragEnd = function(event,ui) {
+		
 		var layerSerial = t.getSerialFromID(this.id),
 			htmlLayer = jQuery(this);
-		t.onLayerDrag("ende",layerSerial,htmlLayer)
+		htmlLayer.removeClass("draggable_toponall")
+		jQuery('.row-zone-container').removeClass("nowyouseeme");
+		jQuery('.row-zone-container').removeClass('layerrow_selected');		
+		jQuery('.column_from_draggable').removeClass("column_from_draggable");
+		t.droppedContainerCheck(t.getLayer(layerSerial));		
+		if (t.groupMove && t.groupMove.sameGroup && t.groupMove.sameGroup.length>0) {			
+			for (var k=0;k<t.groupMove.sameGroup.length;k++) {
+				var sgl = t.groupMove.sameGroup[k];
+				selectedLayerWidth = sgl.references.htmlLayer.outerWidth();
+				selectedlayerHeight = sgl.references.htmlLayer.outerHeight();
+				t.onLayerDrag("ende",sgl.serial, sgl.references.htmlLayer);
+			}
+		} 
+		selectedLayerWidth = htmlLayer.outerWidth();
+		selectedlayerHeight = htmlLayer.outerHeight();		
+		t.onLayerDrag("ende",layerSerial,htmlLayer);
+
+		jQuery('.layer_selected').each(function() {
+			var __ = jQuery(this),
+				cs = __.data('serial');							
+			if (cs!=layerSerial && layerSerial!==undefined) 		
+				__.removeClass("layer_selected");
+			
+		});
+
+		t.setLayerSelected(layerSerial);
+		jQuery('#divLayers').removeClass("onelayerinmove");
+		jQuery('.dragfromgroup').removeClass("dragfromgroup");
 	}
 
+	t.updateMovedLayers = function(forced) {				
+		jQuery.each(t.keyboardmovedlayers,function(i,layer){
+			if (layer.references!==undefined) {
+				selectedLayerWidth = layer.references.htmlLayer.outerWidth();
+				selectedlayerHeight = layer.references.htmlLayer.outerHeight();				
+				t.onLayerDrag("ende",layer.serial, layer.references.htmlLayer,true);			
+			}
+		})
+	}
 
+	t.adjustSelectedLayerPositions = function(dir,dist) {
+		t.keyboardmovedlayers = t.getCurLinkedElements();
+		jQuery.each(t.keyboardmovedlayers,function(i,layer){
+			if (layer.references!==undefined)
+				if (dir=="top")
+					punchgs.TweenLite.set(layer.references.htmlLayer,{top:Math.round(layer.references.htmlLayer.position().top)+dist});
+				else
+					punchgs.TweenLite.set(layer.references.htmlLayer,{left:Math.round(layer.references.htmlLayer.position().left)+dist});
+		});
+		
+		
+	}
 
-	t.onLayerDrag = function(end,layerSerial,htmlLayer){
+	t.onLayerDrag = function(ui,event,htmlLayer,ignoreorig){
+		
 		htmlLayer = htmlLayer || jQuery(this);
 		
 		var position = htmlLayer.position(),
@@ -8866,19 +11008,53 @@ var UniteLayersRev = new function(){
 			posLeft = Math.round(position.left),
 			updateY = 0,
 			updateX = 0,
-			objLayer = t.getLayer(selectedLayerSerial);
+			objLayer = event.originapPosition===undefined ? t.getLayer(event) : t.getLayer(t.selectedLayerSerial),
+			_tw = totalWidth,
+			_th = totalHeight;
+		
+		
 		jQuery('#layer_text_wrapper').removeClass("currently_editing_txt");
 		t.toolbarInPos(objLayer);
+
+		var old = objLayer.p_uid;
+
+		if (htmlLayer.parent().attr('id')==="divLayers") 			
+			objLayer.p_uid = -1;
+
+		if (old!==-1 && objLayer.p_uid!==-1) {
+			// NO NEED TO CHANGE THE LAYER POSITION AND STYLE
+		} else 
+		if (old!=objLayer.p_uid) {
+			if (objLayer.type==="row" || objLayer.p_uid!==-1 && t.getObjLayerType(objLayer.p_uid)==="column") 
+				punchgs.TweenLite.set(htmlLayer,{left:"auto",right:"auto",top:"auto",bottom:"auto",display:"inline-block",position:"relative"});							
+			else 
+				punchgs.TweenLite.set(htmlLayer,{display:"block",position:"absolute"});				
+
+		}
+		
+		if (objLayer.p_uid!==-1 && t.getObjLayerType(objLayer.p_uid)==="group") {
+			_tw = t.getLayerByUniqueId(objLayer.p_uid).references.htmlLayer.width();
+			_th = t.getLayerByUniqueId(objLayer.p_uid).references.htmlLayer.height();
+		}
+						
+		if (ui.offsetX!==undefined && event.originalPosition!==undefined && t.groupMove.sameGroup.length>0) {		
+			var dif = {x:(event.originalPosition.left - event.position.left), y: (event.originalPosition.top - event.position.top)}			
+			for (var k=0;k<t.groupMove.sameGroup.length;k++) {
+				var sgl = t.groupMove.sameGroup[k];
+				punchgs.TweenLite.set(sgl.references.htmlLayer,{left:sgl.positionCache.left - dif.x, top:sgl.positionCache.top - dif.y});
+			}
+		}
+
 
 		switch(t.getVal(objLayer,'align_hor')){
 			case "left":
 				updateX = posLeft;
 			break;
 			case "right":
-				updateX = totalWidth - posLeft - selectedLayerWidth;
+				updateX = _tw - posLeft - selectedLayerWidth;
 			break;
 			case "center":
-				updateX = posLeft - (totalWidth - selectedLayerWidth)/2;
+				updateX = posLeft - Math.round((_tw - selectedLayerWidth)/2);				
 				updateX = Math.round(updateX);
 			break;
 			case "left":
@@ -8889,10 +11065,10 @@ var UniteLayersRev = new function(){
 
 		switch(t.getVal(objLayer,'align_vert')){
 			case "bottom":
-				updateY = totalHeight - posTop - selectedlayerHeight;
+				updateY = _th - posTop - selectedlayerHeight;
 			break;
 			case "middle":
-				updateY = posTop - (totalHeight - selectedlayerHeight)/2;
+				updateY = posTop - Math.round((_th - selectedlayerHeight)/2);
 				updateY = Math.round(updateY);
 			break;
 			case "top":
@@ -8901,67 +11077,49 @@ var UniteLayersRev = new function(){
 			break;
 		}
 
+		if (objLayer.p_uid!==-1 && t.getObjLayerType(objLayer.p_uid)==="column") {
+			updateX = 0;
+			updateY = 0;			
+		} 
 
+		
+	
+		jQuery('#layer_left').val(updateX+"px");
+		jQuery('#layer_top').val(updateY+"px");
 
-		jQuery('#layer_left').val(updateX);
-		jQuery('#layer_top').val(updateY);
-
-		if (end==="ende") {
-			var objUpdate = {};
-
+		if (ui==="ende") {
+			var objUpdate = {};			
 			objUpdate = t.setVal(objUpdate, 'left', updateX);
 			objUpdate = t.setVal(objUpdate, 'top', updateY);
 			objUpdate = t.setVal(objUpdate, 'width', selectedLayerWidth);
 			objUpdate = t.setVal(objUpdate, 'height', selectedlayerHeight);		
 
+			// event == layerSerial !!
+
+			t.updateLayer(event,objUpdate);			
+			t.updateHtmlLayerPosition(false,objLayer,t.getVal(objUpdate, 'top'),t.getVal(objUpdate, 'left'),t.getVal(objLayer,'align_hor'),t.getVal(objLayer,'align_vert'));
 			
-			t.updateLayer(layerSerial,objUpdate);			
-			t.updateHtmlLayerPosition(false,htmlLayer,objLayer,t.getVal(objUpdate, 'top'),t.getVal(objUpdate, 'left'),t.getVal(objLayer,'align_hor'),t.getVal(objLayer,'align_vert'));
-		
-			if(isLayerSelected(layerSerial))			
-				updateLayerFormFields(layerSerial);
+			if(isLayerSelected(event))			
+				t.updateLayerFormFields(event);
+
 		}
+		
 
 	}
-
 
 	/**
-	 * move some layer
+	 * Get Object Layer  Type
 	 */
-	var moveLayer = function(serial,dir,step){
-		var layer = t.getLayer(serial);
-
-		if(!layer)
-			return(false);
-
-
-		switch(dir){
-			case "down":
-				t.arrLayers[serial] = t.setVal(t.arrLayers[serial], 'top', t.getVal(t.arrLayers[serial], 'top') + step);
-			break;
-			case "up":
-				t.arrLayers[serial] = t.setVal(t.arrLayers[serial], 'top', t.getVal(t.arrLayers[serial], 'top') - step);
-			break;
-			case "right":
-				t.arrLayers[serial] = t.setVal(t.arrLayers[serial], 'left', t.getVal(t.arrLayers[serial], 'left') + step);
-			break;
-			case "left":
-				t.arrLayers[serial] = t.setVal(t.arrLayers[serial], 'left', t.getVal(t.arrLayers[serial], 'left') - step);
-			break;
-			default:
-				UniteAdminRev.showErrorMessage("wrong direction: "+dir);
-				return(false);
-			break;
-		}
-
-		
-		
-		updateHtmlLayersFromObject(serial);
-
-		if(isLayerSelected(serial))
-			updateLayerFormFields(serial);
+	t.getObjLayerType = function(unique_id) {
+		var o = t.getLayerByUniqueId(unique_id);
+		if (o.type)
+			return o.type
+		else
+			return false;		
 	}
 
+
+	
 
 //======================================================
 //		Events Functions End
@@ -8977,7 +11135,8 @@ var UniteLayersRev = new function(){
 		 * calculate image height/width
 		 */
 
-		var scaleImage = function(){
+		var scaleAndResetLayerInit = function(){
+
 
 			jQuery("#layer_scaleX").change(function(){
 				if(jQuery("#layer_proportional_scale")[0].checked)
@@ -9009,83 +11168,43 @@ var UniteLayersRev = new function(){
 			});
 			
 			jQuery("#layer_proportional_scale").click(function(){
-				var serial = selectedLayerSerial;
-				var layer = jQuery("#slide_layer_" + serial);
-				var objLayer = t.getLayer(selectedLayerSerial);
-
-				if(jQuery(this)[0].checked){
+				var objLayer = t.getLayer(t.selectedLayerSerial);				
+				if(this.checked){
 					jQuery('#layer_cover_mode option[value="custom"]').attr('selected', true);
 					jQuery('.rs-proportion-check').removeClass('notselected');
-					scaleProportional(true);
-					var aspectratio = true;
+					if (objLayer.type==="video" || objLayer.type==="audio")
+						scaleProportionalVideo(false);
+					else
+					if (objLayer.type==="image") {						
+						scaleProportional(true);
+					}
+					
 				}else{
 					jQuery('.rs-proportion-check').addClass('notselected');
-					scaleNormal();
-					var aspectratio = false;
+					if (objLayer.type==="video" || objLayer.type==="audio")
+						scaleNormalVideo(false);
+					else
+					if (objLayer.type==="image")
+						scaleNormal();
+					
 				}
-				
-				//only do on images, not videos
-				if(objLayer.type == 'image'){
-					layer.resizable("destroy").resizable({
-						aspectRatio:aspectratio,
-						start:function(event,ui) {
-							
-							// IF IMAGE IS IN ASPECT RATIO MODE
-							if(jQuery("#layer_proportional_scale")[0].checked) {								
-								punchgs.TweenLite.set(ui.element,{width:ui.originalSize.width,height:ui.originalSize.height})
-								punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"auto"})
-								punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{width:"100%",height:"auto"})
-							} else {								
-								punchgs.TweenLite.set(ui.element,{width:ui.originalSize.width,height:ui.originalSize.height})
-								punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"100%"})
-								punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{width:"100%",height:"100%"})						
-							}
-						},
-						resize:function(event,ui) {
-							jQuery('#layer_scaleX').val(ui.size.width);
-							jQuery('#layer_scaleY').val(ui.size.height);	
-							if(jQuery("#layer_proportional_scale")[0].checked) {									
-								punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"auto"})
-								punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{width:"100%",height:"auto"})
-							} else {								
-								punchgs.TweenLite.set(ui.element.find('img'),{width:"100%",height:"100%"})
-								punchgs.TweenLite.set(ui.element.find('.innerslide_layer'),{width:"100%",height:"100%"})						
-							}					
-						},
-						stop:function(event,ui) {
-							t.updateLayerFromFields();
-						}
-					});
-				}
+				t.setLayerResizable(objLayer);			
 			});
 
 
 			// AUTO LINE BREAK on/off
-			jQuery("#layer_auto_line_break").click(function(){
-				var serial = selectedLayerSerial;
-				var layer = jQuery("#slide_layer_" + serial);
-				var objLayer = t.getLayer(selectedLayerSerial);
+			jQuery("#layer_auto_line_break").click(function(){				
+				t.clickOnAutoLineBreak();				
+			});
 
+			
+
+			jQuery("#layer_displaymode").click(function(){
 				if(jQuery(this)[0].checked){
-					jQuery('.rs-linebreak-check').removeClass('notselected');					
-					jQuery("#layer_whitespace option[value='normal']").attr('selected', 'selected');
-					
-					var mw = layer.outerWidth(),
-						mh = layer.outerHeight();
-					layer.css({height:"auto"});
-					layer.find('.innerslide_layer.tp-caption').css({maxHeight:"none",minHeight:mh,maxWidth:mw});
-					jQuery('#layer_max_width').val(mw);
-					jQuery('#layer_max_height').val("auto");
-				}else{
-					jQuery('.rs-linebreak-check').addClass('notselected');										
-					jQuery("#layer_whitespace option[value='nowrap']").attr('selected', 'selected');
-					jQuery('#layer_max_width').val("auto");
-					jQuery('#layer_max_height').val("auto");
-					layer.css({width:"auto"});
-					layer.find('.innerslide_layer.tp-caption').css({maxHeight:"none",minHeight:"none",maxWidth:"none"});
+					jQuery("#layer_display option[value='block']").attr('selected', 'selected');
+				} else {
+					jQuery("#layer_display option[value='inline-block']").attr('selected', 'selected');
 				}
-				t.updateLayerFromFields();
-				
 			});
 
 			jQuery('#layer_cover_mode').change(function(){
@@ -9096,20 +11215,47 @@ var UniteLayersRev = new function(){
 			
 		}
 
-		var resetCurrentElementSize = function() {
-			var objLayer = t.getLayer(selectedLayerSerial);
-				
+		t.clickOnAutoLineBreak = function() {
+				var serial = t.selectedLayerSerial;
+				var layer = jQuery("#slide_layer_" + serial);
+				var objLayer = t.getLayer(t.selectedLayerSerial);
+
+				if(jQuery("#layer_auto_line_break")[0].checked){
+					jQuery('.rs-linebreak-check').removeClass('notselected');					
+					jQuery("#layer_whitespace option[value='normal']").attr('selected', 'selected');
+					
+					var mw = layer.outerWidth()+1,
+						mh = layer.outerHeight()+1;
+					layer.css({height:"auto"});
+					layer.find('.innerslide_layer.tp-caption').first().css({maxHeight:"none",minHeight:mh,maxWidth:mw});
+					jQuery('#layer_max_width').val(mw+"px");
+					jQuery('#layer_max_height').val("auto");
+				}else{
+					jQuery('.rs-linebreak-check').addClass('notselected');										
+					jQuery("#layer_whitespace option[value='nowrap']").attr('selected', 'selected');
+					jQuery('#layer_max_width').val("auto");
+					jQuery('#layer_max_height').val("auto");
+					layer.css({width:"auto"});
+					layer.find('.innerslide_layer.tp-caption').first().css({maxHeight:"none",minHeight:"none",maxWidth:"none"});
+				}
+				t.updateLayerFromFields();
+			}
+
+		var resetCurrentElementSize = function() {			
+			var objLayer = t.getLayer(t.selectedLayerSerial);
+			
 				if (objLayer.type == "shape") {
 					return false;
 				}else /*if (objLayer.type == "no_edit") {
 					return false;
-				}else*/ if (objLayer.type == 'svg') {
+				}else*/ 
+				if (objLayer.type == 'svg') {
 					//reset svg size
 					return false;
 				}else if (objLayer.type == 'audio') {
 					return false;
 				}else if (objLayer.type=="text" || objLayer.type=="button") {
-					var ww = jQuery('.slide_layer.layer_selected .innerslide_layer').outerWidth();
+					var ww = jQuery('.slide_layer.layer_selected .innerslide_layer').first().outerWidth();
 					if (parseInt(jQuery("#layer_max_width").val(),0)>ww) {
 						ww = ww === undefined ? "auto" : ww+"px"
 						jQuery("#layer_max_width").val("auto");
@@ -9118,73 +11264,91 @@ var UniteLayersRev = new function(){
 					
 					
 				} else {
-					if (objLayer.type == "image") {
+					if (objLayer.type == "image") {						
 						jQuery('#layer_cover_mode option[value="custom"]').attr('selected', true);
 					}
 					
-					var rsdimensions = resetImageDimensions();
-					jQuery("#layer_proportional_scale").attr('checked', false);
-					jQuery('.rs-proportion-check').addClass('notselected');
+					var rsdimensions = resetImageDimensions();					
+					jQuery("#layer_proportional_scale").attr('checked', true);
+					//jQuery('.rs-proportion-check').addClass('notselected');
 	
 					jQuery("#layer_scaleX_text").html(jQuery("#layer_scaleX_text").data("textnormal")).css("width", "10px");
 					
-					var mwidth = rsdimensions['width'];
-					var mheight = rsdimensions['height'];
+					var mwidth = objLayer.image_librarysize !=undefined ?  objLayer.image_librarysize.width : rsdimensions['width'],
+						mheight = objLayer.image_librarysize !=undefined ?  objLayer.image_librarysize.height :rsdimensions['height'];
+
 					
 					jQuery("#layer_scaleX").val(mwidth);
 					jQuery("#layer_scaleY").val(mheight);
 					
-					jQuery("#slide_layer_" + selectedLayerSerial + " img").css("width", mwidth);
-					jQuery("#slide_layer_" + selectedLayerSerial + " img").css("height", mheight);					
+
+					jQuery("#slide_layer_" + t.selectedLayerSerial + " img").css("width", mwidth);
+					jQuery("#slide_layer_" + t.selectedLayerSerial + " img").css("height", mheight);					
 				}
+				
 				t.updateLayerFromFields();			
 		}
 
-		var scaleProportional = function(useX){
-			var serial = selectedLayerSerial;
+		var scaleProportional = function(useX){			
+			var serial = t.selectedLayerSerial;
 
 			resetImageDimensions();
 
-			var imgObj = new Image();
+			var imgObj = new Image(),
+				x,y,suffixX,suffixY,v;
+			
 			imgObj.src = jQuery("#slide_layer_" + serial + " img").attr("src");
-
+			
+			
 			if(useX){
-				var x = parseInt(jQuery("#layer_scaleX").val());
-				if(isNaN(x)) x = imgObj.width;
-				var y = Math.round(100 / imgObj.width * x / 100 * imgObj.height, 0);
-			}else{
-				var y = parseInt(jQuery("#layer_scaleY").val());
-				if(isNaN(y)) y = imgObj.height;
-				var x = Math.round(100 / imgObj.height * y / 100 * imgObj.width, 0);
+				v = jQuery("#layer_scaleX").val();
+				x = parseFloat(v),
+				suffixX = v.replace(x,"");				
+				if(isNaN(x))
+					x = suffixX==="%" ? 100 : imgObj.width;				
+				y = suffixX==="%" ? "auto" : Math.round(100 / imgObj.width * x / 100 * imgObj.height, 0);
+				suffixY = "";
 
+			}else{
+				v = jQuery("#layer_scaleY").val();
+				y = parseFloat(v);
+				suffixY = v.replace(y,"");
+				if(isNaN(y)) 
+					y = suffixY==="%" ? 100 : imgObj.height;				
+				x = suffixY==="%" ? "auto" : Math.round(100 / imgObj.height * y / 100 * imgObj.width, 0);
+				suffixX = "";
 			}
 
+			jQuery("#slide_layer_" + serial + " img").css("width", x + suffixX);
+			jQuery("#slide_layer_" + serial + " img").css("height", y + suffixY);
 
-			jQuery("#slide_layer_" + serial + " img").css("width", x + "px");
-			jQuery("#slide_layer_" + serial + " img").css("height", y + "px");
-
-			jQuery("#slide_layer_" + serial).css("width", jQuery("#slide_layer_" + serial + " img").width() + "px");
-			jQuery("#slide_layer_" + serial).css("height", jQuery("#slide_layer_" + serial + " img").height() + "px");
+			jQuery("#slide_layer_" + serial).css("width", jQuery("#slide_layer_" + serial + " img").width() + suffixX);
+			jQuery("#slide_layer_" + serial).css("height", jQuery("#slide_layer_" + serial + " img").height() + suffixY);
 
 
 			jQuery("#slide_layer_" + serial + " img").css("width", "100%");
 			jQuery("#slide_layer_" + serial + " img").css("height", "100%");
 
-			jQuery("#layer_scaleX").val(x);
-			jQuery("#layer_scaleY").val(y);
+			jQuery("#layer_scaleX").val(x+suffixX);
+			jQuery("#layer_scaleY").val(y+suffixY);
 		}
 		
-		var scaleNormal = function(){
-
-			var serial = selectedLayerSerial,
+		var scaleNormal = function(){			
+			var serial = t.selectedLayerSerial,
 				imgdims = resetImageDimensions(),
 				layer = jQuery("#slide_layer_" + serial),
-				ww = parseInt(jQuery("#layer_scaleX").val(),0),
-				hh = parseInt(jQuery("#layer_scaleY").val(),0);
+				ww = jQuery("#layer_scaleX").val(),
+				hh = jQuery("#layer_scaleY").val();
 
-			punchgs.TweenLite.set(layer,{width:ww+"px",height:hh+"px"});
-			punchgs.TweenLite.set(layer.find('.innerslide_layer'),{width:ww+"px",height:hh+"px"});
-			punchgs.TweenLite.set(layer.find('img'),{width:ww+"px",height:hh+"px"});			
+			
+			ww = jQuery.isNumeric(ww) ? ww+"px" : ww;
+			hh = jQuery.isNumeric(hh) ? hh+"px" : hh;
+
+
+
+			punchgs.TweenLite.set(layer,{width:ww,height:hh});
+			punchgs.TweenLite.set(layer.find('.innerslide_layer').first(),{width:ww,height:hh});
+			punchgs.TweenLite.set(layer.find('img'),{width:ww,height:hh});			
 		}
 
 		/**
@@ -9192,9 +11356,9 @@ var UniteLayersRev = new function(){
 		 * @since: 5.0
 		 **/
 		var scaleProportionalVideo = function(useX){
-			var serial = selectedLayerSerial;
-
-			var cur_video = jQuery("#slide_layer_" + serial).find('.slide_layer_video');
+			
+			var serial = t.selectedLayerSerial,
+				cur_video = jQuery("#slide_layer_" + serial).find('.slide_layer_video');
 
 			if(useX){
 				var x = parseInt(jQuery("#layer_video_width").val());
@@ -9207,8 +11371,8 @@ var UniteLayersRev = new function(){
 			}
 
 			
-			jQuery("#slide_layer_" + serial).find('.slide_layer_video').css("width", x + "px");
-			jQuery("#slide_layer_" + serial).find('.slide_layer_video').css("height", y + "px");
+			cur_video.css("width", x + "px");
+			cur_video.css("height", y + "px");
 			
 			jQuery("#slide_layer_" + serial).css("width", x + "px");
 			jQuery("#slide_layer_" + serial).css("height", y + "px");
@@ -9218,23 +11382,30 @@ var UniteLayersRev = new function(){
 		}
 
 		var scaleNormalVideo = function(){
-			var serial = selectedLayerSerial;
 			
+			var serial = t.selectedLayerSerial,
+				cur_video = jQuery("#slide_layer_" + serial).find('.slide_layer_video'),
+				ww = jQuery("#layer_video_width").val(),
+				hh = jQuery("#layer_video_height").val();
+			
+			ww = jQuery.isNumeric(ww) ? ww+"px" : ww;
+			hh = jQuery.isNumeric(hh) ? hh+"px" : hh;
 
-			jQuery("#slide_layer_" + serial).find('.slide_layer_video').css("width", parseInt(jQuery("#layer_video_width").val(),0) + "px");
-			jQuery("#slide_layer_" + serial).find('.slide_layer_video').css("height", parseInt(jQuery("#layer_video_height").val(),0) + "px");
+			cur_video.css("width", ww);
+			cur_video.css("height", hh);
 
-			jQuery("#slide_layer_" + serial).css("width", parseInt(jQuery("#layer_video_width").val(),0) + "px");
-			jQuery("#slide_layer_" + serial).css("height", parseInt(jQuery("#layer_video_height").val(),0) + "px");
+			jQuery("#slide_layer_" + serial).css("width", ww);
+			jQuery("#slide_layer_" + serial).css("height", hh);
 
 		}
 		
 		
 		var resetImageDimensions = function(){
+			
 			var imgObj = new Image();
-			imgObj.src = jQuery("#slide_layer_" + selectedLayerSerial + " img").attr("src");
-			jQuery("#slide_layer_" + selectedLayerSerial).css("width", imgObj.width + "px");
-			jQuery("#slide_layer_" + selectedLayerSerial).css("height", imgObj.height + "px");
+			imgObj.src = jQuery("#slide_layer_" + t.selectedLayerSerial + " img").attr("src");
+			jQuery("#slide_layer_" + t.selectedLayerSerial).css("width", imgObj.width + "px");
+			jQuery("#slide_layer_" + t.selectedLayerSerial).css("height", imgObj.height + "px");
 
 			var imgdims = {width:imgObj.width, height:imgObj.height};
 			return imgdims;
@@ -9252,7 +11423,252 @@ var UniteLayersRev = new function(){
 	//	Main Background Image Functions
 	//======================================================
 
+
+
+
+
+	t.startKenBurn =  function(prgs) {
+
+		var l = jQuery('#ken_burn_example'),
+			d = l.data(),
+			i = l.find('.defaultimg'),
+			s = d.lastsrc,
+			i_a = d.owidth / d.oheight,
+			cw = l.width(),
+			ch = l.height(),
+			c_a = cw / ch;
+
+		
+		if (l.data('kbtl'))
+			l.data('kbtl').kill();
+		
+		prgs = prgs || 0;
 	
+		if (s===undefined) return;
+
+		l.find('.tp-kbimg').remove();
+
+		
+
+		// NO KEN BURN IMAGE EXIST YET
+		if (l.find('.tp-kbimg').length==0) {
+			l.append('<div class="tp-kbimg-wrap" style="z-index:2;width:100%;height:100%;top:0px;left:0px;position:absolute;"><img class="tp-kbimg" src="'+s+'" style="position:absolute;" width="'+d.owidth+'" height="'+d.oheight+'"></div>');
+			l.data('kenburn',l.find('.tp-kbimg'));
+		}
+
+		var getKBSides = function(w,h,f,cw,ch,ho,vo) {			
+					var tw = w * f,
+						th = h * f,
+						hd = Math.abs(cw-tw),
+						vd = Math.abs(ch-th),
+						s = new Object();
+					s.l = (0-ho)*hd;
+					s.r = s.l + tw;			
+					s.t = (0-vo)*vd;
+					s.b = s.t + th;	
+					s.h = ho;
+					s.v = vo;
+
+					
+					return s;
+				},
+
+			getKBCorners = function(d,cw,ch,ofs,o) {
+
+				var p = d.bgposition.split(" ") || "center center",
+					ho = p[0] == "center"  ? "50%" : p[0] == "left" || p [1] == "left" ? "0%" : p[0]=="right" || p[1] =="right" ? "100%" : p[0],
+					vo = p[1] == "center" ? "50%" : p[0] == "top" || p [1] == "top" ? "0%" : p[0]=="bottom" || p[1] =="bottom" ? "100%" : p[1];
+				
+				ho = parseInt(ho,0)/100 || 0;
+				vo = parseInt(vo,0)/100 || 0;
+
+
+				var sides = new Object();
+
+
+				sides.start = getKBSides(o.start.width,o.start.height,o.start.scale,cw,ch,ho,vo);
+				sides.end = getKBSides(o.start.width,o.start.height,o.end.scale,cw,ch,ho,vo);
+							
+				return sides;	
+			},
+
+			kcalcL = function(cw,ch,d) {				
+				var f=d.scalestart/100,
+					fe=d.scaleend/100,
+					ofs = d.offsetstart != undefined ? d.offsetstart.split(" ") || [0,0] : [0,0],
+					ofe = d.offsetend != undefined ? d.offsetend.split(" ") || [0,0] : [0,0];
+				d.bgposition = d.bgposition == "center center" ? "50% 50%" : d.bgposition;
+				
+				
+				var o = new Object(),
+					sw = cw*f,
+					sh = sw/d.owidth * d.oheight,
+					ew = cw*fe,
+					eh = ew/d.owidth * d.oheight;		
+
+
+				
+
+				o.start = new Object();		
+				o.starto = new Object();
+				o.end = new Object();
+				o.endo = new Object();
+				
+				o.start.width = cw;
+				o.start.height = o.start.width / d.owidth * d.oheight;		
+
+				if (o.start.height<ch) {
+					var newf = ch / o.start.height;
+					o.start.height = ch;
+					o.start.width = o.start.width*newf;
+				}
+				o.start.transformOrigin = d.bgposition;					
+				o.start.scale = f;	
+				o.end.scale = fe;
+
+				o.start.rotation = d.rotatestart+"deg";
+				o.end.rotation = d.rotateend+"deg";		
+				
+				// MAKE SURE THAT OFFSETS ARE NOT TOO HIGH
+				var c = getKBCorners(d,cw,ch,ofs,o);
+
+				
+
+				ofs[0] = parseFloat(ofs[0]) + c.start.l;
+				ofe[0] = parseFloat(ofe[0]) + c.end.l;
+				
+				ofs[1] = parseFloat(ofs[1]) + c.start.t;			
+				ofe[1] = parseFloat(ofe[1]) + c.end.t;
+					
+				var iws = c.start.r - c.start.l,
+					ihs	= c.start.b - c.start.t,
+					iwe = c.end.r - c.end.l,
+					ihe	= c.end.b - c.end.t;
+				
+				
+				// X (HORIZONTAL)
+				
+				ofs[0] = ofs[0]>0 ? 0 : iws + ofs[0] < cw ? cw-iws : ofs[0];
+				ofe[0] = ofe[0]>0 ? 0 : iwe + ofe[0] < cw ? cw-iwe : ofe[0];
+				o.starto.x = ofs[0]+"px";
+				o.endo.x = ofe[0]+"px";
+				
+				// Y (VERTICAL)
+				ofs[1] = ofs[1]>0 ? 0 : ihs + ofs[1] < ch ? ch-ihs : ofs[1];
+				ofe[1] = ofe[1]>0 ? 0 : ihe + ofe[1] < ch ? ch-ihe : ofe[1];
+				o.starto.y = ofs[1]+"px";				
+				o.endo.y = ofe[1]+"px";	
+
+				
+
+				
+				
+				
+
+				o.end.ease = o.endo.ease = d.ease;
+				o.end.force3D = o.endo.force3D = true;
+				return o;
+			};
+		
+		if (l.data('kbtl')!=undefined) {
+			l.data('kbtl').kill();
+			l.removeData('kbtl');
+		}
+
+		var k = l.data('kenburn'),
+			kw = k.parent(),
+			anim = kcalcL(cw,ch,d),
+			kbtl =  new punchgs.TimelineLite();
+		
+		
+		kbtl.pause();
+		
+		anim.start.transformOrigin = "0% 0%";
+		anim.starto.transformOrigin = "0% 0%";	
+		
+		kbtl.add(punchgs.TweenLite.fromTo(k,d.duration/1000,anim.start,anim.end),0);
+		kbtl.add(punchgs.TweenLite.fromTo(kw,d.duration/1000,anim.starto,anim.endo),0);
+			
+		kbtl.progress(prgs);
+		if (jQuery('#kenburn-playpause-wrapper').hasClass("playing")) 
+			kbtl.play(0);	
+		else
+			kbtl.pause();
+		
+		kbtl.eventCallback("onComplete", function() {
+			kbtl.play(0);
+		});
+		l.data('kbtl',kbtl);														
+	}		
+
+
+	t.updateKenBurnExampleValues = function() {
+		var img = new Image(),
+			nsrc = jQuery('#ken_burn_slot_example').data('src'),
+			lsrc = jQuery('#ken_burn_example').data('lastsrc'),
+			inloadalready = jQuery('#ken_burn_slot_example').data('inload');
+		
+		if (!inloadalready) {
+
+			if (nsrc!==lsrc) {
+				jQuery('#ken_burn_slot_example').data('inload',true)
+				img.onload = function() {												 							
+					jQuery('#ken_burn_example').data({
+						lastsrc: this.src,
+						owidth:this.width,
+						oheight:this.height,
+						bgposition:jQuery('#slide_bg_position').val(), 
+						duration:parseInt(jQuery('#kb_duration').val(),0), 
+						rotatestart: parseInt(jQuery('#kb_start_rotate').val(),0), 
+						rotateend: parseInt(jQuery('#kb_end_rotate').val(),0),
+						scalestart: parseInt(jQuery('#kb_start_fit').val(),0), 
+						scaleend: parseInt(jQuery('#kb_end_fit').val(),0),
+						offsetstart: jQuery('#kb_start_offset_x').val()+" "+jQuery('#kb_start_offset_y').val(),
+						offsetend: jQuery('#kb_end_offset_x').val()+" "+jQuery('#kb_end_offset_y').val(),
+						ease:jQuery('#kb_easing').val()
+					});		
+					jQuery('#ken_burn_slot_example').data('inload',false)		
+					t.startKenBurn();				
+				}
+				img.onerror = function() {				
+					console.log("Ken Burn Demo Image could not be Loaded");
+				}
+				img.onabort = function() {				
+					console.log("Ken Burn Demo Image could not be Loaded");
+				}
+				img.src = nsrc;
+			} else {
+				jQuery('#ken_burn_example').data({
+					lastsrc: jQuery('#ken_burn_slot_example').data('src'),
+					owidth:jQuery('#ken_burn_example').data('owdith'),
+					oheight:jQuery('#ken_burn_example').data('oheight'),
+					bgposition:jQuery('#slide_bg_position').val(), 
+					duration:parseInt(jQuery('#kb_duration').val(),0), 
+					rotatestart: parseInt(jQuery('#kb_start_rotate').val(),0), 
+					rotateend: parseInt(jQuery('#kb_end_rotate').val(),0),
+					scalestart: parseInt(jQuery('#kb_start_fit').val(),0), 
+					scaleend: parseInt(jQuery('#kb_end_fit').val(),0),
+					offsetstart: jQuery('#kb_start_offset_x').val()+" "+jQuery('#kb_start_offset_y').val(),
+					offsetend: jQuery('#kb_end_offset_x').val()+" "+jQuery('#kb_end_offset_y').val(),
+					ease:jQuery('#kb_easing').val()
+				});		
+				t.startKenBurn();
+			}
+		}
+		
+	}
+
+	var buildKenBurnExample = function() {
+		var wrapper = jQuery('#ken_burn_example'),
+			swrapper = jQuery('#ken_burn_slot_example'),
+			c = jQuery('#divLayers'),
+			newh = (wrapper.width() / c.width())*c.height();
+		
+		wrapper.css({height:newh+"px"});
+		t.updateKenBurnExampleValues();
+
+
+	}
 	var initBackgroundFunctions = function(){
 		jQuery('body').on('change', 'select[name="layer_target[]"]', function(){
 			jQuery(this).data('selectoption', jQuery(this).find('option:selected').val());
@@ -9387,6 +11803,10 @@ var UniteLayersRev = new function(){
 				jQuery('#divLayers-wrapper').css('maxWidth', 'none');
 
 				jQuery('#slide_bg_position').change();
+				jQuery('#bg-setting-bgfit-wrap').css({display:"none"});
+				jQuery('#bg-setting-bgrep-wrap').css({display:"none"});
+				jQuery('#bg-setting-bgpos-wrap').prependTo('#kenburn_wrapper');
+				buildKenBurnExample();
 			}else{
 				jQuery('#kenburn_wrapper').hide();
 				//jQuery('#bg-position-lbl').show();
@@ -9396,7 +11816,9 @@ var UniteLayersRev = new function(){
 				jQuery('#slide_bg_repeat').change();
 				jQuery('#slide_bg_position').change();
 				jQuery('#slide_bg_fit').change();
-
+				jQuery('#bg-setting-bgfit-wrap').show();
+				jQuery('#bg-setting-bgrep-wrap').show();
+				jQuery('#bg-setting-bgpos-wrap').appendTo('#bg-setting-bgpos-def-wrap');
 				if(jQuery('#slide_bg_fit').val() == 'contain'){
 					jQuery('#divLayers-wrapper').css('maxWidth', jQuery('#divbgholder').css('minWidth'));
 				}else{
@@ -9406,6 +11828,38 @@ var UniteLayersRev = new function(){
 			t.changeSlotBGs();
 		});
 		jQuery('input[name="kenburn_effect"]:checked').change();
+
+
+		// MEDIA FILTER CHANGES		
+		jQuery('body').on('mouseenter','.inst-filter-griditem',function() {
+			punchgs.TweenLite.to(jQuery(this).find('.inst-filter-griditem-img'),0.5,{autoAlpha:0});
+		})
+		jQuery('body').on('mouseleave','.inst-filter-griditem',function() {
+			punchgs.TweenLite.to(jQuery(this).find('.inst-filter-griditem-img'),0.5,{autoAlpha:1});
+		});
+
+		jQuery('body').on('click','.inst-filter-griditem',function() {
+			var a = jQuery(this);
+			jQuery('#media-filter-type option:selected').prop('selected',false);
+			jQuery('#media-filter-type option[value="'+a.data("type")+'"]').attr('selected','selected');
+			jQuery('.inst-filter-griditem.selected').removeClass("selected")
+			a.addClass("selected");
+			jQuery('.oldslotholder').attr("class","oldslotholder "+a.data("type"));
+			jQuery('.slotholder').attr("class","slotholder "+a.data("type"));
+		});
+
+		// SET CURRENT FILTER
+		var mediafilter = jQuery('#media-filter-type option:selected').val();
+		if (mediafilter!==undefined) {
+			jQuery('.inst-filter-griditem.selected').removeClass("selected");
+			jQuery('.inst-filter-griditem.filter_'+mediafilter).addClass("selected");
+			jQuery('.oldslotholder').attr("class","oldslotholder "+mediafilter);
+			jQuery('.slotholder').attr("class","slotholder "+mediafilter);
+		}
+		// END OF MEDIA FILTER CHANGES
+
+		
+
 
 
 		jQuery('#slide_bg_end_position').change(function(){
@@ -9495,9 +11949,10 @@ var UniteLayersRev = new function(){
 
 				if(urlImage != ''){
 					limg.src = urlImage;
-				}
-
+				}				
 			}
+			t.setObjectLibraryHeight();
+			
 		});
 	}
 
@@ -9591,7 +12046,7 @@ var UniteLayersRev = new function(){
 	}
 	
 	t.get_current_selected_layer = function(){
-		return selectedLayerSerial;
+		return t.selectedLayerSerial;
 	}
 	
 	t.addPreventLeave = function(){
@@ -9611,6 +12066,5 @@ var UniteLayersRev = new function(){
 				return message;
 			}
 		};
-	}
-	
+	} 
 }

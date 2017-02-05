@@ -533,16 +533,22 @@ class RevSliderInstagram {
 	 */
 	public function get_public_photos($search_user_id,$count){
 		//call the API and decode the response
-		$url = "https://api.instagram.com/v1/users/".$search_user_id."/media/recent?count=".$count."&access_token=".$this->api_key."&client_id=".$search_user_id;
-		
+		$url = "https://www.instagram.com/".$search_user_id."/media/";
+
 		$transient_name = 'revslider_' . md5($url);
 		if ($this->transient_sec > 0 && false !== ($data = get_transient( $transient_name)))
 			return ($data);
 
 		$rsp = json_decode(wp_remote_fopen($url));
-		if(isset($rsp->data)){
-			set_transient( $transient_name, $rsp->data, $this->transient_sec );
-			return $rsp->data;
+
+	    for($i=0;$i<$count;$i++) {
+	      	$return[] = $rsp->items[$i];
+	    }
+    
+		if(isset($rsp->items)){
+			$rsp->items = $return;
+			set_transient( $transient_name, $rsp->items, $this->transient_sec );
+			return $rsp->items;
 		}
 		else return '';
 	}
@@ -562,6 +568,9 @@ class RevSliderInstagram {
 			return ($data);
 
 		$rsp = json_decode(wp_remote_fopen($url));
+
+
+
 		if(isset($rsp->data)){
 			set_transient( $transient_name, $rsp->data, $this->transient_sec );
 			return $rsp->data;

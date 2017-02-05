@@ -82,8 +82,11 @@ class RevSliderSlide extends RevSliderElementsBase{
 			$imageUrl = RevSliderFunctions::getVal($params, "image");
 			
 			$imgID = RevSliderBase::get_image_id_by_url($imageUrl);
-			if($imgID !== false){
+			if($imgID !== false && $imgID !== null){
 				$imageUrl = RevSliderFunctionsWP::getUrlAttachmentImage($imgID, $imgResolution);
+			}else{ //we may be from the object library
+				$objlib = new RevSliderObjectLibrary();
+				$imageUrl = $objlib->get_correct_size_url($imageUrl, $imgResolution); //check for size to be used
 			}
 		}
 		
@@ -1110,7 +1113,22 @@ class RevSliderSlide extends RevSliderElementsBase{
 			$image_url = $this->decode_facebook_url(RevSliderFunctions::getVal($this->postData, 'picture', ''));
 			$image_url = parse_str(parse_url($image_url, PHP_URL_QUERY), $array);
 			$image_url = explode('&', $array['url']);
-			$return = $image_url[0];
+			
+			 /* patch for when url returned as "fbstaging://" */
+	        if(strpos($image_url[0], 'fbstaging') !== false) {
+	            
+	            $new_url = RevSliderFunctions::getVal($this->postData, 'picture', '');
+	            $new_url = explode('&w=', $new_url);
+	            
+	            if(count($new_url) > 1) {
+	                
+	                $end_url = explode('&url=', $new_url[1]);                   
+	                if(count($end_url) > 1) $image_url = array($new_url[0] . '&url=' . $end_url[1]);
+	            }
+	        }
+	        /* END patch */
+	        
+	        $return = $image_url[0];
 		}
 		return apply_filters('revslider_slide_get_facebook_timeline_image', $return, $object_id, $picture, $this);
 	}
@@ -1380,6 +1398,7 @@ class RevSliderSlide extends RevSliderElementsBase{
 		$text = str_replace(array('%catlist%', '{{catlist}}'), $catlist, $text);
 		$text = str_replace(array('%catlist_raw%', '{{catlist_raw}}'), $catlist_raw, $text);
 		$text = str_replace(array('%taglist%', '{{taglist}}'), $taglist, $text);
+		$text = str_replace(array('%id%', '{{id}}'), $post_id, $text);
 		
 		foreach($img_sizes as $img_handle => $img_name){
 			$url = (isset($attr['img_urls']) && isset($attr['img_urls'][$img_handle]) && isset($attr['img_urls'][$img_handle]['url'])) ? $attr['img_urls'][$img_handle]['url'] : '';
@@ -1469,79 +1488,79 @@ class RevSliderSlide extends RevSliderElementsBase{
 		
 		if(RevSliderWooCommerce::isWooCommerceExists()){
 			$product = get_product($post_id);
-			
-			$wc_full_price = $product->get_price_html();
-			$wc_price = wc_price($product->get_price());
-			$wc_price_no_cur = $product->get_price();
-			$wc_stock = $product->get_total_stock();
-			$wc_rating = $product->get_rating_html();
-			$wc_star_rating = '<div class="rs-starring">';
-			preg_match_all('#<strong class="rating">.*?</span>#', $wc_rating, $match);
-			if(!empty($match) && isset($match[0]) && isset($match[0][0])){
-				$wc_star_rating .= str_replace($match[0][0], '', $wc_rating);
-			}
-			$wc_star_rating .= '</div>';
-			$wc_categories = $product->get_categories(',');
-			$wc_add_to_cart = $product->add_to_cart_url();
-			$wc_add_to_cart_button = '';
-			
-			
-			$wc_sku = $product->get_sku();
-			$wc_stock_quantity = $product->get_stock_quantity();
-			$wc_rating_count = $product->get_rating_count();
-			$wc_review_count = $product->get_review_count();
-			$wc_tags = $product->get_tags();
-			
-			
-			if(strpos($text, 'wc_add_to_cart_button') !== false){
-				$suffix               	= defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-				$ajax_cart_en			= get_option( 'woocommerce_enable_ajax_add_to_cart' ) == 'yes' ? true : false;
-				$assets_path          	= str_replace( array( 'http:', 'https:' ), '', WC()->plugin_url() ) . '/assets/';
-				$frontend_script_path 	= $assets_path . 'js/frontend/';
-				
-				if ( $ajax_cart_en ){
-					wp_enqueue_script( 'wc-add-to-cart', $frontend_script_path . 'add-to-cart' . $suffix . '.js', array( 'jquery' ), WC_VERSION, true );
-					
-					global $wc_is_localized;
-					if($wc_is_localized === false){ //load it only one time
-						wp_localize_script( 'wc-add-to-cart', 'wc_add_to_cart_params', apply_filters( 'wc_add_to_cart_params', array(
-							'ajax_url'                => WC()->ajax_url(),
-							'ajax_loader_url'         => apply_filters( 'woocommerce_ajax_loader_url', $assets_path . 'images/ajax-loader@2x.gif' ),
-							'i18n_view_cart'          => esc_attr__( 'View Cart', 'woocommerce' ),
-							'cart_url'                => get_permalink( wc_get_page_id( 'cart' ) ),
-							'is_cart'                 => is_cart(),
-							'cart_redirect_after_add' => get_option( 'woocommerce_cart_redirect_after_add' )
-						) ) );
-						$wc_is_localized = true;
-					}
+			if($product !== false){
+				$wc_full_price = $product->get_price_html();
+				$wc_price = wc_price($product->get_price());
+				$wc_price_no_cur = $product->get_price();
+				$wc_stock = $product->get_total_stock();
+				$wc_rating = $product->get_rating_html();
+				$wc_star_rating = '<div class="rs-starring">';
+				preg_match_all('#<strong class="rating">.*?</span>#', $wc_rating, $match);
+				if(!empty($match) && isset($match[0]) && isset($match[0][0])){
+					$wc_star_rating .= str_replace($match[0][0], '', $wc_rating);
 				}
-				$wc_add_to_cart_button = apply_filters( 'woocommerce_loop_add_to_cart_link',
-									sprintf( '<a href="%s" rel="nofollow" data-product_id="%s" data-product_sku="%s" class="button %s product_type_%s">%s</a>',
-										esc_url( $product->add_to_cart_url() ),
-										esc_attr( $product->id ),
-										esc_attr( $product->get_sku() ),
-										$product->is_purchasable() ? 'add_to_cart_button' : '',
-										esc_attr( $product->product_type ),
-										esc_html( $product->add_to_cart_text() )
-									),
-								$product );
+				$wc_star_rating .= '</div>';
+				$wc_categories = $product->get_categories(',');
+				$wc_add_to_cart = $product->add_to_cart_url();
+				$wc_add_to_cart_button = '';
+				
+				
+				$wc_sku = $product->get_sku();
+				$wc_stock_quantity = $product->get_stock_quantity();
+				$wc_rating_count = $product->get_rating_count();
+				$wc_review_count = $product->get_review_count();
+				$wc_tags = $product->get_tags();
+				
+				
+				if(strpos($text, 'wc_add_to_cart_button') !== false){
+					$suffix               	= defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+					$ajax_cart_en			= get_option( 'woocommerce_enable_ajax_add_to_cart' ) == 'yes' ? true : false;
+					$assets_path          	= str_replace( array( 'http:', 'https:' ), '', WC()->plugin_url() ) . '/assets/';
+					$frontend_script_path 	= $assets_path . 'js/frontend/';
+					
+					if ( $ajax_cart_en ){
+						wp_enqueue_script( 'wc-add-to-cart', $frontend_script_path . 'add-to-cart' . $suffix . '.js', array( 'jquery' ), WC_VERSION, true );
+						
+						global $wc_is_localized;
+						if($wc_is_localized === false){ //load it only one time
+							wp_localize_script( 'wc-add-to-cart', 'wc_add_to_cart_params', apply_filters( 'wc_add_to_cart_params', array(
+								'ajax_url'                => WC()->ajax_url(),
+								'ajax_loader_url'         => apply_filters( 'woocommerce_ajax_loader_url', $assets_path . 'images/ajax-loader@2x.gif' ),
+								'i18n_view_cart'          => esc_attr__( 'View Cart', 'woocommerce' ),
+								'cart_url'                => get_permalink( wc_get_page_id( 'cart' ) ),
+								'is_cart'                 => is_cart(),
+								'cart_redirect_after_add' => get_option( 'woocommerce_cart_redirect_after_add' )
+							) ) );
+							$wc_is_localized = true;
+						}
+					}
+					$wc_add_to_cart_button = apply_filters( 'woocommerce_loop_add_to_cart_link',
+										sprintf( '<a href="%s" rel="nofollow" data-product_id="%s" data-product_sku="%s" class="button %s product_type_%s">%s</a>',
+											esc_url( $product->add_to_cart_url() ),
+											esc_attr( $product->id ),
+											esc_attr( $product->get_sku() ),
+											$product->is_purchasable() ? 'add_to_cart_button' : '',
+											esc_attr( $product->product_type ),
+											esc_html( $product->add_to_cart_text() )
+										),
+									$product );
+				}
+				
+				$text = str_replace(array('%wc_full_price%', '{{wc_full_price}}'), $wc_full_price, $text);
+				$text = str_replace(array('%wc_price%', '{{wc_price}}'), $wc_price, $text);
+				$text = str_replace(array('%wc_price_no_cur%', '{{wc_price_no_cur}}'), $wc_price_no_cur, $text);
+				$text = str_replace(array('%wc_stock%', '{{wc_stock}}'), $wc_stock, $text);
+				$text = str_replace(array('%wc_rating%', '{{wc_rating}}'), $wc_rating, $text);
+				$text = str_replace(array('%wc_star_rating%', '{{wc_star_rating}}'), $wc_star_rating, $text);
+				$text = str_replace(array('%wc_categories%', '{{wc_categories}}'), $wc_categories, $text);
+				$text = str_replace(array('%wc_add_to_cart%', '{{wc_add_to_cart}}'), $wc_add_to_cart, $text);
+				$text = str_replace(array('%wc_add_to_cart_button%', '{{wc_add_to_cart_button}}'), $wc_add_to_cart_button, $text);
+				$text = str_replace(array('%wc_sku%', '{{wc_sku}}'), $wc_sku, $text);
+				$text = str_replace(array('%wc_stock_quantity%', '{{wc_stock_quantity}}'), $wc_stock_quantity, $text);
+				$text = str_replace(array('%wc_rating_count%', '{{wc_rating_count}}'), $wc_rating_count, $text);
+				$text = str_replace(array('%wc_review_count%', '{{wc_review_count}}'), $wc_review_count, $text);
+				$text = str_replace(array('%wc_tags%', '{{wc_tags}}'), $wc_tags, $text);
 			}
-			
-			$text = str_replace(array('%wc_full_price%', '{{wc_full_price}}'), $wc_full_price, $text);
-			$text = str_replace(array('%wc_price%', '{{wc_price}}'), $wc_price, $text);
-			$text = str_replace(array('%wc_price_no_cur%', '{{wc_price_no_cur}}'), $wc_price_no_cur, $text);
-			$text = str_replace(array('%wc_stock%', '{{wc_stock}}'), $wc_stock, $text);
-			$text = str_replace(array('%wc_rating%', '{{wc_rating}}'), $wc_rating, $text);
-			$text = str_replace(array('%wc_star_rating%', '{{wc_star_rating}}'), $wc_star_rating, $text);
-			$text = str_replace(array('%wc_categories%', '{{wc_categories}}'), $wc_categories, $text);
-			$text = str_replace(array('%wc_add_to_cart%', '{{wc_add_to_cart}}'), $wc_add_to_cart, $text);
-			$text = str_replace(array('%wc_add_to_cart_button%', '{{wc_add_to_cart_button}}'), $wc_add_to_cart_button, $text);
-			$text = str_replace(array('%wc_sku%', '{{wc_sku}}'), $wc_sku, $text);
-			$text = str_replace(array('%wc_stock_quantity%', '{{wc_stock_quantity}}'), $wc_stock_quantity, $text);
-			$text = str_replace(array('%wc_rating_count%', '{{wc_rating_count}}'), $wc_rating_count, $text);
-			$text = str_replace(array('%wc_review_count%', '{{wc_review_count}}'), $wc_review_count, $text);
-			$text = str_replace(array('%wc_tags%', '{{wc_tags}}'), $wc_tags, $text);
-			
 		}
 		
 		return $text;
@@ -2048,7 +2067,6 @@ class RevSliderSlide extends RevSliderElementsBase{
 		return RevSliderFunctions::getVal($this->params, $name, $default);
 	}
 	
-	
 	/**
 	 * set parameter
 	 * @since: 5.0
@@ -2238,7 +2256,7 @@ class RevSliderSlide extends RevSliderElementsBase{
 	 * 
 	 * update slide parameters in db
 	 */
-	protected function updateParamsInDB($arrUpdate = array()){
+	protected function updateParamsInDB($arrUpdate = array(), $static = false){
 		$this->validateInited();
 		
 		$this->params = apply_filters('revslider_slide_updateParamsInDB', array_merge($this->params,$arrUpdate), $this);
@@ -2246,8 +2264,12 @@ class RevSliderSlide extends RevSliderElementsBase{
 		$jsonParams = json_encode($this->params);
 		
 		$arrDBUpdate = array("params"=>$jsonParams);
-		
-		$this->db->update(RevSliderGlobals::$table_slides,$arrDBUpdate,array("id"=>$this->id));
+		if($static === false){
+			$this->db->update(RevSliderGlobals::$table_slides,$arrDBUpdate,array("id"=>$this->id));
+		}else{
+			
+			$this->db->update(RevSliderGlobals::$table_static_slides,$arrDBUpdate,array("id"=>$static));
+		}
 	}
 	
 	
@@ -2255,7 +2277,7 @@ class RevSliderSlide extends RevSliderElementsBase{
 	 * 
 	 * update current layers in db
 	 */
-	protected function updateLayersInDB($arrLayers = null){
+	protected function updateLayersInDB($arrLayers = null, $static = false){
 		$this->validateInited();
 		
 		if($arrLayers === null)
@@ -2266,8 +2288,11 @@ class RevSliderSlide extends RevSliderElementsBase{
 		
 		$jsonLayers = json_encode($arrLayers);
 		$arrDBUpdate = array("layers"=>$jsonLayers);
-		
-		$this->db->update(RevSliderGlobals::$table_slides,$arrDBUpdate,array("id"=>$this->id));
+		if($static === false){
+			$this->db->update(RevSliderGlobals::$table_slides,$arrDBUpdate,array("id"=>$this->id));
+		}else{
+			$this->db->update(RevSliderGlobals::$table_static_slides,$arrDBUpdate,array("id"=>$static));
+		}
 	} 
 	
 	
@@ -2826,6 +2851,7 @@ class RevSliderSlide extends RevSliderElementsBase{
 		}
 		
 		if($bgType=="trans" || $bgType=="transparent"){
+			$data_urlImageForView = '';
 			$bg_extraClass = 'mini-transparent';
 			$bg_fullstyle = 'background-size: inherit; background-repeat: repeat;';
 		}
@@ -2842,13 +2868,12 @@ class RevSliderSlide extends RevSliderElementsBase{
 	 * 
 	 * replace image url's among slide image and layer images
 	 */
-	public function replaceImageUrls($urlFrom, $urlTo){
-		
+	public function replaceImageUrls($urlFrom, $urlTo, $static = false){
 		$this->validateInited();
 		
 		$isUpdated = false;
 		
-		$check = array('image', 'background_image', 'slide_thumb', 'show_alternate_image');
+		$check = array('image', 'image_url', 'background_image', 'slide_thumb', 'show_alternate_image');
 		
 		if(isset($this->params['background_type']) && $this->params['background_type'] == 'html5'){
 			$check[] = 'slide_bg_html_mpeg';
@@ -2865,8 +2890,9 @@ class RevSliderSlide extends RevSliderElementsBase{
 			}
 		}
 		
-		if($isUpdated == true)
-			$this->updateParamsInDB();
+		if($isUpdated == true){
+			$this->updateParamsInDB(array(), $static);
+		}
 		
 		
 		// update image url in layers
@@ -2935,8 +2961,9 @@ class RevSliderSlide extends RevSliderElementsBase{
 			
 		}
 		
-		if($isUpdated == true)
-			$this->updateLayersInDB();
+		if($isUpdated == true){
+			$this->updateLayersInDB(null, $static);
+		}
 		
 		do_action('revslider_slide_replaceImageUrls', $this);
 	}
@@ -3081,7 +3108,10 @@ class RevSliderSlide extends RevSliderElementsBase{
 			'video_height',
 			'video_width',
 			'scaleX',
-			'scaleY'
+			'scaleY',
+			'margin',
+			'padding',
+			'text-align'
 		));
 	}
 	

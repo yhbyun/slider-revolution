@@ -35,7 +35,10 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 	<div class="clear_both"></div>
 
 	<div class="title_line" style="margin-bottom:0px !important">
-		<div id="icon-options-general" class="icon32"></div>
+		<?php 
+			$icon_general = '<div class="icon32" id="icon-options-general"></div>';
+			echo apply_filters( 'rev_icon_general_filter', $icon_general ); 
+		?>
 		<div class="view_title"><?php echo ($is_edit) ? __("Edit Slider", 'revslider') : __("New Slider", 'revslider'); ?></div>
 		<a href="<?php echo RevSliderGlobals::LINK_HELP_SLIDER;?>" class="button-secondary float_right mtop_10 mleft_10" target="_blank"><?php _e("Help", 'revslider'); ?></a>
 		<div class="tp-clearfix"></div>
@@ -111,16 +114,22 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 		});
 	</script>
 
-
+	<?php 
+		$settings_wrapper_class = '';
+		$settings_wrapper_class = apply_filters( 'rev_main_options_settings_wrapper_class_filter', $settings_wrapper_class );
+	?>
 	<div class="settings_panel">
-		<div class="settings_panel_left settings_wrapper">
+		<div class="settings_panel_left settings_wrapper<?php echo $settings_wrapper_class;?>">
 			<form name="form_slider_main" id="form_slider_main" onkeypress="return event.keyCode != 13;">
 				
 				<input type="hidden" name="hero_active" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, 'hero_active', -1); ?>" />
 				
+				<?php echo apply_filters( 'rev_main_options_pre_content_source_filter' , ''); ?>
 				<!-- CONTENT SOURCE -->
-				<div class="setting_box">
-					<h3><span class="setting-step-number">1</span><span><?php _e("Content Source", 'revslider')?></span></h3>
+				<div id="content_source_sb" class="setting_box">
+					<?php $headline = '<h3><span class="setting-step-number">1</span><span>'.__("Content Source", 'revslider').'</span></h3>';
+						  echo apply_filters( 'rev_main_options_headline_content_source_filter', $headline );
+					?>
 					<div class="inside" style="padding:0px;">
 						<div class="source-selector-wrapper">
 							<?php $source_type = RevSliderFunctions::getVal($arrFieldsParams, 'source_type', 'gallery');?>
@@ -196,36 +205,36 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 					
 					<div id="rs-instagram-settings-wrapper" class="rs-settings-wrapper">
 						<div style="width:50%;display:block;float:left;">
-							<span class="rev-new-label"><?php _e('Slides (max 33)', 'revslider');?></span>
+							<span class="rev-new-label"><?php _e('Slides (max 20)', 'revslider');?></span>
 							<input type="text" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, 'instagram-count', '');?>" name="instagram-count" title="<?php _e('Display this number of photos', 'revslider');?>">
 							<p>
 								<span class="rev-new-label"><?php _e('Cache (sec)', 'revslider');?></span>
 								<input type="text" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, 'instagram-transient', '1200');?>" name="instagram-transient" title="<?php _e('Cache the result', 'revslider');?>">
 							</p>
-							<p>
+							<!--p>
 								<span class="rev-new-label"><?php _e('Access Token', 'revslider');?></span>
 								<input type="text" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, 'instagram-access-token', '');?>" name="instagram-access-token" title="<?php _e('Put in your Instagram Access Token', 'revslider');?>">
 							</p>
 							<p>
 								<span class="description"><?php _e('Get your Instagram Access Token <a target="_blank" href="http://jelled.com/instagram/access-token">here</a>', 'revslider');?></span>
-							</p>
+							</p-->
 						</div>
 						<div style="width:50%;display:block;float:left;">
 							<span class="rev-new-label"><?php _e('Source', 'revslider');?></span>
 							<select name="instagram-type">
-								<option value="user" title="<?php _e('Display a user\'s public photos', 'revslider');?>" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, 'instagram-type', 'user'), 'user');?>> <?php _e('User Public Photos', 'revslider');?></option>
-								<option value="hash" title="<?php _e('Display photos with one special hashtag', 'revslider');?>"<?php selected(RevSliderFunctions::getVal($arrFieldsParams, 'instagram-type', 'user'), 'hash');?>> <?php _e('Hashtag', 'revslider');?></option>
+								<option value="user" title="<?php _e('Display a user\'s public photos', 'revslider');?>" selected <?php //selected(RevSliderFunctions::getVal($arrFieldsParams, 'instagram-type', 'user'), 'user');?>> <?php _e('User Public Photos', 'revslider');?></option>
+								<!--option value="hash" title="<?php _e('Display photos with one special hashtag', 'revslider');?>"<?php selected(RevSliderFunctions::getVal($arrFieldsParams, 'instagram-type', 'user'), 'hash');?>> <?php _e('Hashtag', 'revslider');?></option-->
 								</select>
 							<div id="instagram_user">
 								<p>
-									<span class="rev-new-label"><?php _e('Instagram User ID', 'revslider');?></span>
-									<input type="text" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, 'instagram-user-id', '');?>" name="instagram-user-id" title="<?php _e('Put in the Instagram User ID', 'revslider');?>">
+									<span class="rev-new-label"><?php _e('Instagram User Name', 'revslider');?></span>
+									<input type="text" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, 'instagram-user-id', '');?>" name="instagram-user-id" title="<?php _e('Put in the Instagram User Name', 'revslider');?>">
 								</p>
-								<p>
+								<!--p>
 									<span class="description"><?php _e('Find the Instagram User ID <a target="_blank" href="http://www.otzberg.net/iguserid/">here</a>', 'revslider');?></span>
-								</p>
+								</p-->
 							</div>
-							<div id="instagram_hash">
+							<!--div id="instagram_hash">
 								<p>
 									<span class="rev-new-label"><?php _e('Instagram Hashtag', 'revslider');?></span>
 									<input type="text" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, 'instagram-hash-tag', '');?>" name="instagram-hash-tag" title="<?php _e('Put in one Instagram Hashtag', 'revslider');?>">
@@ -233,7 +242,7 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 								<p>
 									<span class="description"><?php _e('Finds the latest photos posted with one certain hashtag (#)', 'revslider');?></span>
 								</p>
-							</div>
+							</div-->
 						</div>
 					</div>
 
@@ -714,10 +723,12 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 				</div>
 
 
-
+				<?php echo apply_filters( 'rev_main_options_pre_slider_title_filter' , ''); ?>
 				<!-- SLIDER TITLE AND SHORTCODE -->
-				<div class="setting_box" style="background:#fff">
-					<h3><span class="setting-step-number">2</span><span><?php _e("Slider Title & ShortCode", 'revslider')?></span></h3>
+				<div id="slider_title_sb" class="setting_box" style="background:#fff">
+					<?php $headline = '<h3><span class="setting-step-number">2</span><span>'.__("Slider Title & ShortCode", 'revslider').'</span></h3>';
+						  echo apply_filters( 'rev_main_options_headline_slider_title_filter', $headline );
+					?>
 					<div class="inside">
 						<div class="slidertitlebox">
 
@@ -744,13 +755,14 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 					</div>
 				</div>
 
-
+				<?php echo apply_filters( 'rev_main_options_pre_slider_type_filter' , ''); ?>
 				<!-- THE SLIDE TYPE CHOOSER -->
-				<div class="setting_box">
+				<div id="slider_type_sb" class="setting_box">
 					<?php
 					$slider_type = RevSliderFunctions::getVal($arrFieldsParams, 'slider-type', 'standard');
+					$headline = '<h3><span class="setting-step-number">3</span><span>'.__("Select a Slider Type", 'revslider').'</span></h3>';
+					echo apply_filters( 'rev_main_options_headline_slider_type_filter', $headline );
 					?>
-					<h3><span class="setting-step-number">3</span><span><?php _e("Select a Slider Type", 'revslider');?></span></h3>
 					<div class="rs-slidetypeselector">
 
 						<div data-mode="standardpreset" class="rs-slidertype<?php echo ($slider_type == 'standard') ? ' selected' : '';?>">
@@ -871,6 +883,12 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 								var bt = jQuery(this);
 								jQuery('.rs-slidertype').removeClass("selected");
 								bt.addClass("selected").find('input[name="slider-type"]').attr('checked', 'checked');
+								
+								if (jQuery('input[name="slider-type"]:checked').val()!=="hero" || jQuery('#ddd_parallax').attr('checked')==="checked") 
+									jQuery('#fadeinoutparallax').hide();
+								else								
+									jQuery('#fadeinoutparallax').show();
+								
 								updateSliderPresets();
 							});
 
@@ -1166,12 +1184,16 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 
 				?>
 
+				<?php echo apply_filters( 'rev_main_options_pre_slider_layout_filter', '', array($width, $height, $arrFieldsParams)); ?>
 				<div class="setting_box" id="rs-slider-layout-cont">
-					<h3><span class="setting-step-number">4</span><span><?php _e("Slide Layout", 'revslider');?></span></h3>
+					<?php
+						$headline = '<h3><span class="setting-step-number">4</span><span>'.__("Slide Layout", 'revslider').'</span></h3>';
+						echo apply_filters( 'rev_main_options_headline_slider_layout_filter', $headline );
+					?>
 					<div class="inside" style="padding:0px">
 
 						<?php $slider_type = RevSliderFunctions::getVal($arrFieldsParams, 'slider_type', 'fullwidth');?>
-						<div style="background:#eee">
+						<div id="rs_slider_layout_size_wrapper" style="background:#eee">
 							<div class="rs-slidesize-selector" >
 
 								<div class="rs-slidersize">
@@ -1217,11 +1239,13 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 									<div class="rsp-device-imac-bg"></div>
 								</div>
 								<div class="slide-size-wrapper">
-									<span class="rs-preset-label"><?php _e('Layer Grid Size', 'revslider');?></span>
-									<span class="relpos"><input id="width" name="width" type="text" style="width:120px" class="textbox-small" value="<?php echo $width;?>"><span class="pxfill">px</span></span>
-									<span class="rs-preset-label label-multiple">x</span>
-									<span class="relpos"><input id="height" name="height" type="text" style="width:120px" class="textbox-small" value="<?php echo $height;?>"><span class="pxfill">px</span></span>
-									<span class="tp-clearfix" style="margin-bottom:15px"></span>
+									<div id="desktop-dimension-fields">
+										<span class="rs-preset-label"><?php _e('Layer Grid Size', 'revslider');?></span>
+										<span class="relpos"><input id="width" name="width" type="text" style="width:120px" class="textbox-small" value="<?php echo $width;?>"><span class="pxfill">px</span></span>
+										<span class="rs-preset-label label-multiple">x</span>
+										<span class="relpos"><input id="height" name="height" type="text" style="width:120px" class="textbox-small" value="<?php echo $height;?>"><span class="pxfill">px</span></span>
+										<span class="tp-clearfix" style="margin-bottom:15px"></span>
+									</div>
 									<span class="description"><?php _e('Specify a layer grid size above', 'revslider');?></span>
 									<span class="description" style="padding:20px 20px 0px; box-sizing:border-box;-moz-box-sizing:border-box;"><?php _e('Slider is always Linear Responsive till next Defined Grid size has been hit.', 'revslider');?></span>
 								</div>
@@ -1424,7 +1448,7 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 									</span>
 									
 									<span class="one-third-container" style="vertical-align:top">
-										<input placeholder="<?php _e("Min. Heigh (Optional)", 'revslider');?>" type="text" class="text-sidebar" style="padding:11px 45px 11px 15px; line-height:26px" id="min_height" name="min_height" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "min_height", "");?>">
+										<input placeholder="<?php _e("Min. Height (Optional)", 'revslider');?>" type="text" class="text-sidebar" style="padding:11px 45px 11px 15px; line-height:26px" id="min_height" name="min_height" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "min_height", "");?>">
 										<i class="input-edit-icon"></i>
 										<span class="description"><?php _e("The minimum height of the Slider in FullWidth or Auto mode.", 'revslider');?></span>
 										<span class="rs-show-on-auto">
@@ -1688,8 +1712,12 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 					</div>
 				</div>
 
-				<div class="setting_box">
-					<h3><span class="setting-step-number">5</span><span><?php _e("Customize, Build & Implement", 'revslider');?></span></h3>
+				<?php echo apply_filters( 'rev_main_options_pre_customize_build_implement_filter' , ''); ?>
+				<div id="customize_build_implement_sb" class="setting_box">
+					<?php
+						$headline = '<h3><span class="setting-step-number">5</span><span>'.__("Customize, Build & Implement", 'revslider').'</span></h3>';
+						echo apply_filters( 'rev_main_options_headline_customize_build_implement_filter', $headline );
+					?>
 					<div class="inside" style="padding:35px 20px">
 						<div class="slidertitlebox breakdownonmobile">
 							<span class="one-third-container" style="text-align:center">
@@ -1706,16 +1734,16 @@ if(!isset($linksEditSlides)) $linksEditSlides = '';
 								<span class="description" style="text-align:center;min-height:60px;"><?php _e("Our drag and drop editor will make creating slide content an absolut breeze. This is where the magic happens!", 'revslider');?></span>
 								<div style="float:none; clear:both; height:20px;"></div>
 								<?php
-if (isset($linksEditSlides)) {
-	?>
+								if (isset($linksEditSlides)) {
+									?>
 									<a class="button-primary revblue" href="<?php echo $linksEditSlides;?>"  id="link_edit_slides"><i class="revicon-pencil-1"></i><?php _e("Edit Slides", 'revslider');?> </a>
 									<?php
-}
-?>
+								}
+								?>
 							</span>
 
 							<span class="one-third-container" style="text-align:center">
-								<img style="width:100%;max-width:325px;" src="<?php echo RS_PLUGIN_URL;?>/admin/assets/images/mainoptions/mini-implement.jpg"><span class="description"><?php _e("", 'revslider');?></span>
+								<img id="impl_yr_sldr" style="width:100%;max-width:325px;" src="<?php echo RS_PLUGIN_URL;?>/admin/assets/images/mainoptions/mini-implement.jpg"><span class="description"></span>
 								<span class="cbi-title"><?php _e("Implement your Slider", 'revslider');?></span>
 								<span class="description" style="text-align:center;min-height:60px;"><?php _e("There are several ways to add your slider to your wordpress post / page / etc.", 'revslider');?></span>
 								<div style="float:none; clear:both; height:20px;"></div>
@@ -1771,8 +1799,13 @@ if (isset($linksEditSlides)) {
 					$hidebox = 'display: none;';
 				}
 				?>
-				<div class="setting_box" id="css-javascript-customs" style="max-width:100%;position:relative;overflow:hidden;<?php echo $hidebox; ?>">
-					<h3><span class="setting-step-number">6</span><span><?php _e("Custom CSS / Javascript", 'revslider');?></span></h3>
+
+				<?php echo apply_filters( 'rev_main_options_pre_customize_css_js_filter' , ''); ?>
+				<div id="customize_css_js_sb" class="setting_box" id="css-javascript-customs" style="max-width:100%;position:relative;overflow:hidden;<?php echo $hidebox; ?>">
+					<?php
+						$headline = '<h3><span class="setting-step-number">6</span><span>'.__("Custom CSS / Javascript", 'revslider').'</span></h3>';
+						echo apply_filters( 'rev_main_options_headline_customize_css_js_filter', $headline );
+					?>
 					<div class="inside" id="codemirror-wrapper">
 
 						<span class="cbi-title"><?php _e("Custom CSS", 'revslider')?></span>
@@ -2048,11 +2081,11 @@ if (isset($linksEditSlides)) {
 							<div class="inside" style="display:none;">
 
 								<ul class="main-options-small-tabs" style="display:inline-block; ">
-									<li data-content="#general-slideshow" class="selected"><?php _e('Slideshow', 'revslider');?></li>
-									<li data-content="#general-defaults" class=""><?php _e('Defaults', 'revslider');?></li>
-									<li data-content="#general-progressbar" class="dontshowonhero"><?php _e('Progress Bar', 'revslider');?></li>
-									<li data-content="#general-firstslide" class="dontshowonhero"><?php _e('1st Slide', 'revslider');?></li>
-									<li data-content="#general-misc"><?php _e('Misc.', 'revslider');?></li>
+									<li id="gs_mp_1" data-content="#general-slideshow" class="selected"><?php _e('Slideshow', 'revslider');?></li>
+									<li id="gs_mp_2" data-content="#general-defaults" class=""><?php _e('Defaults', 'revslider');?></li>
+									<li id="gs_mp_3" data-content="#general-progressbar" class="dontshowonhero"><?php _e('Progress Bar', 'revslider');?></li>
+									<li id="gs_mp_4" data-content="#general-firstslide" class="dontshowonhero"><?php _e('1st Slide', 'revslider');?></li>
+									<li id="gs_mp_5" data-content="#general-misc"><?php _e('Misc.', 'revslider');?></li>
 
 								</ul>
 
@@ -2438,6 +2471,10 @@ if (isset($linksEditSlides)) {
 										<span class="label" origmedia="show" origtitle="<?php _e("Min. Size of Slider must be in Viewport before slide starts again.", 'revslider');?>"><?php _e("Area out of ViewPort:", 'revslider');?> </span>
 										<input type="text" class="text-sidebar withlabel"  id="viewport_area" name="viewport_area" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, 'viewport_area', '80');?>">
 										<span><?php _e("%", 'revslider');?></span>
+
+										<span class="label label-with-subsection" origtitle="<?php _e("Precalculate the Height of the Slider to support Inline Links", 'revslider');?>"><?php _e("Preset Slider Height", 'revslider');?> </span>
+										<input type="checkbox" class="tp-moderncheckbox withlabel"  id="label_presetheight" name="label_presetheight" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, 'label_presetheight', 'off'), 'on');?>>
+										<div class="clear"></div>
 										
 									</div>
 									
@@ -2543,11 +2580,11 @@ if (isset($linksEditSlides)) {
 
 							<div class="inside" style="display:none">
 								<ul class="main-options-small-tabs" style="display:inline-block; ">
-									<li data-content="#visual-appearance" class="selected"><?php _e('Appearance', 'revslider');?></li>
+									<li id="lv_mp_1" data-content="#visual-appearance" class="selected"><?php _e('Appearance', 'revslider');?></li>
 									<!--<li data-content="#visual-sizing"><?php _e('Sizing', 'revslider');?></li>									-->
-									<li data-content="#visual-spinner"><?php _e('Spinner', 'revslider');?></li>
-									<li data-content="#visual-mobile"><?php _e('Mobile', 'revslider');?></li>
-									<li data-content="#visual-position"><?php _e('Position', 'revslider');?></li>
+									<li id="lv_mp_2" data-content="#visual-spinner"><?php _e('Spinner', 'revslider');?></li>
+									<li id="lv_mp_3" data-content="#visual-mobile"><?php _e('Mobile', 'revslider');?></li>
+									<li id="lv_mp_4" data-content="#visual-position"><?php _e('Position', 'revslider');?></li>
 								</ul>
 
 								<!-- VISUAL Mobile -->
@@ -2808,12 +2845,12 @@ if (isset($linksEditSlides)) {
 
 							<div class="inside" style="display:none;">
 								<ul class="main-options-small-tabs" style="display:inline-block; ">
-									<li data-content="#navigation-arrows" class="selected"><?php _e('Arrows', 'revslider');?></li>
-									<li data-content="#navigation-bullets"><?php _e('Bullets', 'revslider');?></li>
-									<li data-content="#navigation-tabs"><?php _e('Tabs', 'revslider');?></li>
-									<li data-content="#navigation-thumbnails"><?php _e('Thumbs', 'revslider');?></li>
-									<li data-content="#navigation-touch"><?php _e('Touch', 'revslider');?></li>
-									<li data-content="#navigation-keyboard"><?php _e('Misc.', 'revslider');?></li>
+									<li id="nav_mp_1" data-content="#navigation-arrows" class="selected"><?php _e('Arrows', 'revslider');?></li>
+									<li id="nav_mp_2" data-content="#navigation-bullets"><?php _e('Bullets', 'revslider');?></li>
+									<li id="nav_mp_3" data-content="#navigation-tabs"><?php _e('Tabs', 'revslider');?></li>
+									<li id="nav_mp_4" data-content="#navigation-thumbnails"><?php _e('Thumbs', 'revslider');?></li>
+									<li id="nav_mp_5" data-content="#navigation-touch"><?php _e('Touch', 'revslider');?></li>
+									<li id="nav_mp_6" data-content="#navigation-keyboard"><?php _e('Misc.', 'revslider');?></li>
 								</ul>
 
 								<!-- NAVIGATION ARROWS -->
@@ -3780,11 +3817,65 @@ if (isset($linksEditSlides)) {
 									<span class="label" id="label_carousel_stretch" origtitle="<?php _e("Stretch carousel element width to the wrapping container width.  Using this you can see only 1 item in same time.", 'revslider');?>"><?php _e("Stretch Element", 'revslider');?> </span>
 									<input type="checkbox" class="tp-moderncheckbox withlabel" id="carousel_stretch" name="carousel_stretch" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, 'carousel_stretch', 'off'), 'on');?>>
 									<div class="clearfix"></div>
+
+									<!-- Carousel Show All Lyers -->
+									<span class="label" id="label_showalllayers_carousel" origtitle="<?php _e("Show All Layers for all the Time with one Start Animation only.", 'revslider');?>"><?php _e("Show All Layers 1 Time", 'revslider');?> </span>
+									<input type="checkbox" class="tp-moderncheckbox withlabel" id="showalllayers_carousel" name="showalllayers_carousel" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, 'showalllayers_carousel', 'off'), 'on');?>>
+									<div class="clearfix"></div>
 									
 									<div class="clear"></div>
 								</div>
 
-
+								<!-- Carousel Easing -->
+								<?php
+								$car_easing = RevSliderFunctions::getVal($arrFieldsParams, 'carousel_easing', 'Power3.easeInOut');
+								?>
+								<span class="label" id="label_carousel_easing" origtitle="<?php _e("The carousel easing", 'revslider');?>"><?php _e("Easing", 'revslider');?> </span>
+								<select id="carousel_easing" class="withlabel"  name="carousel_easing" style="width: 106px;">
+									<option <?php selected($car_easing, 'Linear.easeNone');?> value="Linear.easeNone">Linear.easeNone</option>
+									<option <?php selected($car_easing, 'Power0.easeIn');?> value="Power0.easeIn">Power0.easeIn  (linear)</option>
+									<option <?php selected($car_easing, 'Power0.easeInOut');?> value="Power0.easeInOut">Power0.easeInOut  (linear)</option>
+									<option <?php selected($car_easing, 'Power0.easeOut');?> value="Power0.easeOut">Power0.easeOut  (linear)</option>
+									<option <?php selected($car_easing, 'Power1.easeIn');?> value="Power1.easeIn">Power1.easeIn</option>
+									<option <?php selected($car_easing, 'Power1.easeInOut');?> value="Power1.easeInOut">Power1.easeInOut</option>
+									<option <?php selected($car_easing, 'Power1.easeOut');?> value="Power1.easeOut">Power1.easeOut</option>
+									<option <?php selected($car_easing, 'Power2.easeIn');?> value="Power2.easeIn">Power2.easeIn</option>
+									<option <?php selected($car_easing, 'Power2.easeInOut');?> value="Power2.easeInOut">Power2.easeInOut</option>
+									<option <?php selected($car_easing, 'Power2.easeOut');?> value="Power2.easeOut">Power2.easeOut</option>
+									<option <?php selected($car_easing, 'Power3.easeIn');?> value="Power3.easeIn">Power3.easeIn</option>
+									<option <?php selected($car_easing, 'Power3.easeInOut');?> value="Power3.easeInOut">Power3.easeInOut</option>
+									<option <?php selected($car_easing, 'Power3.easeOut');?> value="Power3.easeOut">Power3.easeOut</option>
+									<option <?php selected($car_easing, 'Power4.easeIn');?> value="Power4.easeIn">Power4.easeIn</option>
+									<option <?php selected($car_easing, 'Power4.easeInOut');?> value="Power4.easeInOut">Power4.easeInOut</option>
+									<option <?php selected($car_easing, 'Power4.easeOut');?> value="Power4.easeOut">Power4.easeOut</option>
+									<option <?php selected($car_easing, 'Back.easeIn');?> value="Back.easeIn">Back.easeIn</option>
+									<option <?php selected($car_easing, 'Back.easeInOut');?> value="Back.easeInOut">Back.easeInOut</option>
+									<option <?php selected($car_easing, 'Back.easeOut');?> value="Back.easeOut">Back.easeOut</option>
+									<option <?php selected($car_easing, 'Bounce.easeIn');?> value="Bounce.easeIn">Bounce.easeIn</option>
+									<option <?php selected($car_easing, 'Bounce.easeInOut');?> value="Bounce.easeInOut">Bounce.easeInOut</option>
+									<option <?php selected($car_easing, 'Bounce.easeOut');?> value="Bounce.easeOut">Bounce.easeOut</option>
+									<option <?php selected($car_easing, 'Circ.easeIn');?> value="Circ.easeIn">Circ.easeIn</option>
+									<option <?php selected($car_easing, 'Circ.easeInOut');?> value="Circ.easeInOut">Circ.easeInOut</option>
+									<option <?php selected($car_easing, 'Circ.easeOut');?> value="Circ.easeOut">Circ.easeOut</option>
+									<option <?php selected($car_easing, 'Elastic.easeIn');?> value="Elastic.easeIn">Elastic.easeIn</option>
+									<option <?php selected($car_easing, 'Elastic.easeInOut');?> value="Elastic.easeInOut">Elastic.easeInOut</option>
+									<option <?php selected($car_easing, 'Elastic.easeOut');?> value="Elastic.easeOut">Elastic.easeOut</option>
+									<option <?php selected($car_easing, 'Expo.easeIn');?> value="Expo.easeIn">Expo.easeIn</option>
+									<option <?php selected($car_easing, 'Expo.easeInOut');?> value="Expo.easeInOut">Expo.easeInOut</option>
+									<option <?php selected($car_easing, 'Expo.easeOut');?> value="Expo.easeOut">Expo.easeOut</option>
+									<option <?php selected($car_easing, 'Sine.easeIn');?> value="Sine.easeIn">Sine.easeIn</option>
+									<option <?php selected($car_easing, 'Sine.easeInOut');?> value="Sine.easeInOut">Sine.easeInOut</option>
+									<option <?php selected($car_easing, 'Sine.easeOut');?> value="Sine.easeOut">Sine.easeOut</option>
+									<option <?php selected($car_easing, 'SlowMo.ease');?> value="SlowMo.ease">SlowMo.ease</option>
+								</select>
+								<div class="clear"></div>
+								
+								<!-- Carousel Easing Speed -->
+								<span class="label" id="label_carousel_speed" origtitle="<?php _e("The easing speed", 'revslider');?>"><?php _e("Easing Speed", 'revslider');?> </span>
+								<input type="text" class="text-sidebar withlabel"   id="carousel_speed" name="carousel_speed" value="<?php echo intval(RevSliderFunctions::getVal($arrFieldsParams, 'carousel_speed', '800'));?>">
+								<span><?php _e("ms", 'revslider');?></span>
+								<div class="clear"></div>
+								
 								<div id="carousel-trans" style="display:none">
 									<!-- Carousel Fade Out -->
 									<span class="label" id="label_carousel_fadeout" origtitle="<?php _e("All elements out of focus will get some Opacity value based on the Distance to the current focused element, or only the coming/leaving elements.", 'revslider');?>"><?php _e("Fade All Elements", 'revslider');?> </span>
@@ -3797,8 +3888,7 @@ if (isset($linksEditSlides)) {
 										<input type="checkbox" class="tp-moderncheckbox withlabel" id="carousel_varyfade" name="carousel_varyfade" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, 'carousel_varyfade', 'off'), "on");?>>
 										<div class="clearfix"></div>
 									</div>
-
-
+									
 									<!-- Carousel Rotation  -->
 									<span class="label label-with-subsection" id="label_carousel_rotation" origtitle="<?php _e("Rotation enabled/disabled for not focused elements.", 'revslider');?>"><?php _e("Rotation", 'revslider');?> </span>
 									<input type="checkbox" class="tp-moderncheckbox withlabel" id="carousel_rotation" name="carousel_rotation" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, 'carousel_rotation', 'off'), "on");?>>
@@ -3982,104 +4072,106 @@ if (isset($linksEditSlides)) {
 
 									
 
-									
-									<h4><?php _e("Mouse Sensibility", 'revslider');?></h4>
-									<div class="withsublabels">
-										<div class="hide_on_ddd_parallax">
-											<span id="label_parallax_type" class="label" origtitle="<?php _e("Defines on what event type the parallax should react to", 'revslider');?>"><?php _e("Event", 'revslider');?></span>
-											<select id="parallax_type" name="parallax_type"  class="withlabel">
-												<option value="mouse" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "parallax_type", "mouse"), "mouse");?>><?php _e("Mouse Move", 'revslider');?></option>
-												<option value="scroll" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "parallax_type", "mouse"), "scroll");?>><?php _e("Scroll Position", 'revslider');?></option>
-												<option value="mouse+scroll" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "parallax_type", "mouse"), "mouse+scroll");?>><?php _e("Move and Scroll", 'revslider');?></option>
-											</select>
+									<div id="p3_ms_wrap">
+										<h4><?php _e("Mouse Sensibility", 'revslider');?></h4>
+										<div class="withsublabels">
+											<div class="hide_on_ddd_parallax">
+												<span id="label_parallax_type" class="label" origtitle="<?php _e("Defines on what event type the parallax should react to", 'revslider');?>"><?php _e("Event", 'revslider');?></span>
+												<select id="parallax_type" name="parallax_type"  class="withlabel">
+													<option value="mouse" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "parallax_type", "mouse"), "mouse");?>><?php _e("Mouse Move", 'revslider');?></option>
+													<option value="scroll" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "parallax_type", "mouse"), "scroll");?>><?php _e("Scroll Position", 'revslider');?></option>
+													<option value="mouse+scroll" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "parallax_type", "mouse"), "mouse+scroll");?>><?php _e("Move and Scroll", 'revslider');?></option>
+												</select>
+												<div class="clear"></div>
+
+												<span id="label_parallax_origo" class="label" origtitle="<?php _e("Mouse Based parallax calculation Origo", 'revslider');?>"><?php _e("Parallax Origo", 'revslider');?></span>
+												<select id="parallax_origo" name="parallax_origo"  class="withlabel">
+													<option value="enterpoint" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "parallax_origo", "enterpoint"), "enterpoint");?>><?php _e("Mouse Enter Point", 'revslider');?></option>
+													<option value="slidercenter" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "parallax_origo", "enterpoint"), "slidercenter");?>><?php _e("Slider Center", 'revslider');?></option>										
+												</select>
+												<div class="clear"></div>
+											</div>
+
+											<span class="label" id="label_parallax_speed" origtitle="<?php _e("Parallax Speed for Mouse movents.", 'revslider');?>"><?php _e("Animation Speed", 'revslider');?> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_speed" name="parallax_speed" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_speed", "400");?>">									
+											<span ><?php _e("ms", 'revslider');?></span>
+											<div class="clear"></div>		
+										</div>							
+
+										<h4 class="hide_on_ddd_parallax"><?php _e("Parallax Levels", 'revslider');?></h4>
+										<h4 class="show_on_ddd_parallax"><?php _e("3D Depth Levels", 'revslider');?></h4>
+
+										<div class="withsublabels">
+											<span class="show_on_ddd_parallax">
+												<span class="label" id="label_parallax_level_16" origtitle="<?php _e("Defines the Strength of the 3D Rotation on the Background and Layer Groups.  The Higher the Value the stronger the effect.  All other Depth will offset this default value !", 'revslider');?>"><span><?php _e("Default 3D Depth", 'revslider');?></span> </span>
+												<input type="text" class="text-sidebar withlabel" id="parallax_level_16" name="parallax_level_16" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_16", "55");?>">
+												<span class="clear"></span>
+											</span>
+
+											<span class="label" id="label_parallax_level_1" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 1", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 1", 'revslider');?></span></span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_1" name="parallax_level_1" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_1", "5");?>">									
 											<div class="clear"></div>
 
-											<span id="label_parallax_origo" class="label" origtitle="<?php _e("Mouse Based parallax calculation Origo", 'revslider');?>"><?php _e("Parallax Origo", 'revslider');?></span>
-											<select id="parallax_origo" name="parallax_origo"  class="withlabel">
-												<option value="enterpoint" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "parallax_origo", "enterpoint"), "enterpoint");?>><?php _e("Mouse Enter Point", 'revslider');?></option>
-												<option value="slidercenter" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "parallax_origo", "enterpoint"), "slidercenter");?>><?php _e("Slider Center", 'revslider');?></option>										
-											</select>
+											<span class="label" id="label_parallax_level_2" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 2", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 2", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_2" name="parallax_level_2" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_2", "10");?>">
 											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_3" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 3", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 3", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel " id="parallax_level_3" name="parallax_level_3" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_3", "15");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_4" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 4", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 4", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_4" name="parallax_level_4" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_4", "20");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_5" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 5", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 5", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_5" name="parallax_level_5" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_5", "25");?>">
+											<div class="clear"></div>
+											
+											<span class="label" id="label_parallax_level_6" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 6", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 6", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_6" name="parallax_level_6" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_6", "30");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_7" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 7", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 7", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_7" name="parallax_level_7" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_7", "35");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_8" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 8", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 8", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_8" name="parallax_level_8" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_8", "40");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_9" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 9", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 9", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_9" name="parallax_level_9" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_9", "45");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_10" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 10", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 10", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_10" name="parallax_level_10" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_10", "46");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_11" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 11", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 11", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_11" name="parallax_level_11" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_11", "47");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_12" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 12", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 12", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_12" name="parallax_level_12" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_12", "48");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_13" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 13", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 13", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_13" name="parallax_level_13" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_13", "49");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_14" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 14", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 14", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_14" name="parallax_level_14" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_14", "50");?>">
+											<div class="clear"></div>
+
+											<span class="label" id="label_parallax_level_15" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 15", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 15", 'revslider');?></span> </span>
+											<input type="text" class="text-sidebar withlabel" id="parallax_level_15" name="parallax_level_15" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_15", "51");?>">
+											<div class="clear"></div>
+
+											
 										</div>
-
-										<span class="label" id="label_parallax_speed" origtitle="<?php _e("Parallax Speed for Mouse movents.", 'revslider');?>"><?php _e("Animation Speed", 'revslider');?> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_speed" name="parallax_speed" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_speed", "400");?>">									
-										<span ><?php _e("ms", 'revslider');?></span>
-										<div class="clear"></div>		
-									</div>							
-
-									<h4 class="hide_on_ddd_parallax"><?php _e("Parallax Levels", 'revslider');?></h4>
-									<h4 class="show_on_ddd_parallax"><?php _e("3D Depth Levels", 'revslider');?></h4>
-
-									<div class="withsublabels">
-										<span class="show_on_ddd_parallax">
-											<span class="label" id="label_parallax_level_16" origtitle="<?php _e("Defines the Strength of the 3D Rotation on the Background and Layer Groups.  The Higher the Value the stronger the effect.  All other Depth will offset this default value !", 'revslider');?>"><span><?php _e("Default 3D Depth", 'revslider');?></span> </span>
-											<input type="text" class="text-sidebar withlabel" id="parallax_level_16" name="parallax_level_16" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_16", "55");?>">
-											<span class="clear"></span>
-										</span>
-
-										<span class="label" id="label_parallax_level_1" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 1", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 1", 'revslider');?></span></span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_1" name="parallax_level_1" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_1", "5");?>">									
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_2" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 2", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 2", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_2" name="parallax_level_2" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_2", "10");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_3" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 3", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 3", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel " id="parallax_level_3" name="parallax_level_3" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_3", "15");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_4" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 4", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 4", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_4" name="parallax_level_4" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_4", "20");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_5" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 5", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 5", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_5" name="parallax_level_5" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_5", "25");?>">
-										<div class="clear"></div>
-										
-										<span class="label" id="label_parallax_level_6" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 6", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 6", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_6" name="parallax_level_6" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_6", "30");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_7" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 7", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 7", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_7" name="parallax_level_7" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_7", "35");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_8" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 8", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 8", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_8" name="parallax_level_8" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_8", "40");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_9" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 9", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 9", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_9" name="parallax_level_9" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_9", "45");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_10" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 10", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 10", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_10" name="parallax_level_10" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_10", "46");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_11" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 11", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 11", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_11" name="parallax_level_11" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_11", "47");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_12" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 12", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 12", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_12" name="parallax_level_12" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_12", "48");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_13" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 13", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 13", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_13" name="parallax_level_13" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_13", "49");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_14" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 14", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 14", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_14" name="parallax_level_14" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_14", "50");?>">
-										<div class="clear"></div>
-
-										<span class="label" id="label_parallax_level_15" origtitle="<?php _e("Defines the strength of the effect. The higher the value, the stronger the effect. In 3D World the smaller Value comes to the front, and the Higher Value goes to the Background. Set for BG in 3D World the highest value always. Elements with higher z-index should get smaller values to make the effect perfect.", 'revslider');?>"><span class="hide_on_ddd_parallax"><?php _e("Level Depth 15", 'revslider');?></span><span class="show_on_ddd_parallax"><?php _e("Depth 15", 'revslider');?></span> </span>
-										<input type="text" class="text-sidebar withlabel" id="parallax_level_15" name="parallax_level_15" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "parallax_level_15", "51");?>">
-										<div class="clear"></div>
-
-										
 									</div>
+									
 								</div>
 							</div>
 
@@ -4102,9 +4194,11 @@ if (isset($linksEditSlides)) {
 									if (sbi.attr("checked") === "checked" && jQuery('#use_parallax').attr("checked")=== "checked") {
 											jQuery('.hide_on_ddd_parallax').hide();
 											jQuery('.show_on_ddd_parallax').show();
+											jQuery('#fadeinoutparallax').hide();
 										} else {
 											jQuery('.hide_on_ddd_parallax').show();
 											jQuery('.show_on_ddd_parallax').hide();
+											if (jQuery('input[name="slider-type"]:checked').val()==="hero") jQuery('#fadeinoutparallax').show();
 										}									
 								});
 
@@ -4117,12 +4211,101 @@ if (isset($linksEditSlides)) {
 						</div>
 
 
+						<!-- Scroll Effects -->
+						<div class="setting_box" id="fadeinoutparallax">
+							<h3 class="box_closed"><i class="rs-rp-accordion-icon eg-icon-camera-alt"></i>
+
+							<div class="setting_box-arrow"></div>
+
+							<span><?php _e('Scroll Effects', 'revslider');?></span>
+							</h3>
+							<div class="inside" style="display:none">								
+								<!-- FADE EFFECT ON SCROLL -->
+								<span class="label" id="label_fade_scrolleffect" origtitle="<?php _e("Endable / Disable Fade Effect on Scroll:", 'revslider');?>"><?php _e("Fade Effect", 'revslider');?> </span>
+								<input type="checkbox" class="tp-moderncheckbox withlabel" id="fade_scrolleffect" name="fade_scrolleffect" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, "fade_scrolleffect", "off"), "on");?>>
+								<div class="clear"></div>
+
+								<!-- BLUR EFFECT ON SCROLL -->
+								<span class="label" id="label_blur_scrolleffect" origtitle="<?php _e("Endable / Disable Blur Effect on Scroll", 'revslider');?>"><?php _e("Blur Effect", 'revslider');?> </span>
+								<input type="checkbox" class="tp-moderncheckbox withlabel" id="blur_scrolleffect" name="blur_scrolleffect" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, "blur_scrolleffect", "off"), "on");?>>
+								<div class="clear"></div>
+
+								<!-- GRAYSCALE EFFECT ON SCROLL -->
+								<span class="label" id="label_grayscale_scrolleffect" origtitle="<?php _e("Enable / Disable grayscale Effect on Scroll", 'revslider');?>"><?php _e("Grayscale Effect", 'revslider');?> </span>
+								<input type="checkbox" class="tp-moderncheckbox withlabel" id="grayscale_scrolleffect" name="grayscale_scrolleffect" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, "grayscale_scrolleffect", "off"), "on");?>>
+								<div class="clear"></div>
+
+								<h4><?php _e("Effect Levels:", 'revslider');?></h4>
+								<div class="withsublabels">
+									
+									<!-- MAX BLUR EFFECT -->
+									<span class="label" id="label_scrolleffect_maxblur" origtitle="<?php _e("Maximum Blur Level on Elements by Maximal Scroll. Optimal Values between 0-100", 'revslider');?>"><?php _e("Max. Blur Effect", 'revslider');?> </span>
+									<input type="text" class="text-sidebar withlabel" id="scrolleffect_maxblur" name="scrolleffect_maxblur" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "scrolleffect_maxblur", "10");?>">
+									<span ><?php _e("px", 'revslider');?></span>
+									<div class="clear"></div>
+									
+								</div>
+
+								<h4><?php _e("Effects on Elements:", 'revslider');?></h4>
+								<div class="withsublabels">
+									<span class="label" id="label_scrolleffect_bg" origtitle="<?php _e("Effects enabled on Slide BG", 'revslider');?>"><?php _e("On Slider BG's", 'revslider');?> </span>
+									<input type="checkbox" class="tp-moderncheckbox withlabel" id="scrolleffect_bg" name="scrolleffect_bg" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, "scrolleffect_bg", "off"), "on");?>>
+									<div class="clear"></div>
+
+									<span class="label" id="label_scrolleffect_layers" origtitle="<?php _e("Effects on Layers without Parallax Effect", 'revslider');?>"><?php _e("None Parallax Layers", 'revslider');?> </span>
+									<input type="checkbox" class="tp-moderncheckbox withlabel" id="scrolleffect_layers" name="scrolleffect_layers" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, "scrolleffect_layers", "off"), "on");?>>
+									<div class="clear"></div>
+
+									<span class="label" id="label_scrolleffect_parallax_layers" origtitle="<?php _e("Effects on Layers with Parallax Effect", 'revslider');?>"><?php _e("Parallax Layers", 'revslider');?> </span>
+									<input type="checkbox" class="tp-moderncheckbox withlabel" id="scrolleffect_parallax_layers" name="scrolleffect_parallax_layers" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, "scrolleffect_parallax_layers", "off"), "on");?>>
+									<div class="clear"></div>
+
+									<span class="label" id="label_scrolleffect_static_layers" origtitle="<?php _e("Effects on Static Layers without Parallax Effect", 'revslider');?>"><?php _e("None Parallax Static L.", 'revslider');?> </span>
+									<input type="checkbox" class="tp-moderncheckbox withlabel" id="scrolleffect_static_layers" name="scrolleffect_static_layers" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, "scrolleffect_static_layers", "off"), "on");?>>
+									<div class="clear"></div>
+
+									<span class="label" id="label_scrolleffect_static_parallax_layers" origtitle="<?php _e("Effects on Static Layers with Parallax Effect", 'revslider');?>"><?php _e("Parallax Static Layers", 'revslider');?> </span>
+									<input type="checkbox" class="tp-moderncheckbox withlabel" id="scrolleffect_static_parallax_layers" name="scrolleffect_static_parallax_layers" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, "scrolleffect_static_parallax_layers", "off"), "on");?>>
+									<div class="clear"></div>
+
+								</div>
+								<h4><?php _e("Scroll Dependencies:", 'revslider');?></h4>
+								<div class="withsublabels">
+									<span class="label" id="label_scrolleffect_direction" origtitle="<?php _e("Select the Direction where the Elements should be Fade In/Out from/to", 'revslider');?>"><?php _e("Effect Directions", 'revslider');?> </span>
+									<select id="scrolleffect_direction" class="withlabel"  name="scrolleffect_direction" style="max-width:110px">
+										<option value="top" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, 'scrolleffect_direction', 'both'), "top");?>><?php _e("Top Direction", 'revslider');?></option>
+										<option value="bottom" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, 'scrolleffect_direction', 'both'), "bottom");?>><?php _e("Bottom Direction", 'revslider');?></option>
+										<option value="both" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, 'scrolleffect_direction', 'both'), "both");?>><?php _e("Both Direction", 'revslider');?></option>												
+									</select>
+									<div class="clear"></div>
+
+									<span class="label" id="label_scrolleffect_tilt" origtitle="<?php _e("Offset the Effect with % of Screen. Best Values between 0% and 100%", 'revslider');?>"><?php _e("Offset Effect", 'revslider');?> </span>
+									<input type="text" class="text-sidebar withlabel" id="scrolleffect_tilt" name="scrolleffect_tilt" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "scrolleffect_tilt", "30");?>">
+									<span ><?php _e("%", 'revslider');?></span>
+									<div class="clear"></div>
+
+									<span class="label" id="label_scrolleffect_multiplicator" origtitle="<?php _e("Parallax Speed Multiplicator For Background. Best Values between 0.2 and 2", 'revslider');?>"><?php _e("Effect Factor BG", 'revslider');?> </span>
+									<input type="text" class="text-sidebar withlabel" id="scrolleffect_multiplicator" name="scrolleffect_multiplicator" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "scrolleffect_multiplicator", "1.3");?>">																				
+									<div class="clear"></div>
+
+									<span class="label" id="label_scrolleffect_multiplicator_layers" origtitle="<?php _e("Parallax Speed Multiplicator For Layers.  Best Values between 0.2 and 2", 'revslider');?>"><?php _e("Effect Factor Layers", 'revslider');?> </span>
+									<input type="text" class="text-sidebar withlabel" id="scrolleffect_multiplicator_layers" name="scrolleffect_multiplicator_layers" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, "scrolleffect_multiplicator_layers", "1.3");?>">																				
+									<div class="clear"></div>
+
+									<span class="label" id="label_scrolleffect_off_mobile" origtitle="<?php _e("Disable Fade Out Effect On Mobile Devices", 'revslider');?>"><?php _e("Disable on Mobile", 'revslider');?> </span>
+									<input type="checkbox" class="tp-moderncheckbox withlabel" id="scrolleffect_off_mobile" name="scrolleffect_off_mobile" data-unchecked="off" <?php checked(RevSliderFunctions::getVal($arrFieldsParams, "scrolleffect_off_mobile", "on"), "on");?>>
+									<div class="clear"></div>
+
+								</div>								
+							</div>
+						</div><!-- END OF SCROLL EFFECTS--> 
+
 
 					<?php
 					if (!empty($sliderID)) {
 						?>
 						<!-- SPEED MONITOR -->
-						<div class="setting_box">
+						<div class="setting_box" id="v_sp_mo">
 							<h3 class="box_closed"><i class="rs-rp-accordion-icon eg-icon-cog-alt"></i>
 								<div class="setting_box-arrow"></div>
 								<span><?php _e("Performance and SEO Optimization", 'revslider');?></span>
@@ -4234,6 +4417,21 @@ if (isset($linksEditSlides)) {
 									<a original-title="" href="javascript:void(0)" class="button-image-select-background-img button-primary revblue"><?php _e('Set', 'revslider'); ?></a>
 									<div class="clear"></div>
 								</div>
+								
+								<div class="rs-show-on-auto">
+									<div id="label_ignore_height_changes" class="label" origtitle="<?php _e("Prevents jumping of background image for Android devices for example", 'revslider');?>"><?php _e("Ignore Height Changes", 'revslider');?> </div>
+									<select id="ignore_height_changes" name="ignore_height_changes" class="withlabel">
+										<option value="off" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "ignore_height_changes", "off"), "off");?>><?php _e("Off", 'revslider');?></option>
+										<option value="mobile" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "ignore_height_changes", "off"), "mobile");?>><?php _e("On Mobile", 'revslider');?></option>
+										<option value="always" <?php selected(RevSliderFunctions::getVal($arrFieldsParams, "ignore_height_changes", "off"), "always");?>><?php _e("Always", 'revslider');?></option>
+									</select>
+									<div class="clear"></div>
+									
+									<span class="label" id="label_ignore_height_changes_px" origtitle="<?php _e("Ignores the Ignore Height Changes feature under a certain amount of pixels.", 'revslider');?>"><?php _e("Ignore Height Changes Under", 'revslider');?></span>
+									<input type="text" class="text-sidebar withlabel" id="ignore_height_changes_px" name="ignore_height_changes_px" value="<?php echo RevSliderFunctions::getVal($arrFieldsParams, 'ignore_height_changes_px', '0');?>">
+									<span><?php _e("px", 'revslider');?></span>
+									<div class="clear"></div>
+								</div>
 							</div>
 							<div id="problem-troubleshooting" style="display:none;">
 								<div id="label_jquery_noconflict" class="label" origtitle="<?php _e("Turns on / off jquery noconflict mode. Try to enable this option if javascript conflicts exist on the page.", 'revslider');?>"><?php _e("JQuery No Conflict Mode", 'revslider');?> </div>
@@ -4293,7 +4491,7 @@ if (isset($linksEditSlides)) {
 						</script>
 					</div>
 
-					<div class="setting_box rs-cm-refresh">
+					<div class="setting_box rs-cm-refresh" id="v_goo_fo">
 						<h3 class="box_closed"><i class="rs-rp-accordion-icon eg-icon-font"></i>
 							<div class="setting_box-arrow"></div>
 							<span><?php _e('Google Fonts', 'revslider');?></span>
@@ -4376,12 +4574,10 @@ if (isset($linksEditSlides)) {
 									
 								});
 							</script>
-							<h4><?php _e("Deprecated Google Font Import",'revslider');?></h4>
+							<!--h4><?php _e("Deprecated Google Font Import",'revslider');?></h4>
 							<div id="rs-google-fonts">
 							
-							</div>
-							<!--p><a class="button-primary revblue" id="add_new_google_font" original-title=""><i class="revicon-cog"></i><?php _e('Add New Font', 'revslider'); ?></a></p-->
-							<!--i style="font-size:10px;color:#777"><?php _e('Copy the Google Font Family from <a href="http://www.google.com/fonts" target="_blank">http://www.google.com/fonts</a> like: <strong>Open+Sans:400,700,600</strong>', 'revslider'); ?></i-->
+							</div-->
 						</div>
 					</div>
 					
@@ -4415,7 +4611,7 @@ if (isset($linksEditSlides)) {
 				if(!RS_DEMO){
 					if ($is_edit) {
 						?>
-						<div class="setting_box">
+						<div class="setting_box" id="v_imp_exp">
 							<h3 class="box_closed"><i class="rs-rp-accordion-icon eg-icon-upload"></i>
 								<div class="setting_box-arrow"></div>
 								<span><?php _e('Import / Export / Replace', 'revslider');?></span>
@@ -4446,11 +4642,11 @@ if (isset($linksEditSlides)) {
 											<input class="withlabel"  type="radio" name="update_animations" value="false"> <?php _e("append", 'revslider')?>
 											<div class="tp-clearfix"></div>
 
-											<span class="label label-with-subsection" id="label_update_static_captions" origtitle="<?php _e("Overwrite or append the static styles due the new imported values ?", 'revslider');?>"><?php _e("Static Styles", 'revslider');?> </span>
+											<!--span class="label label-with-subsection" id="label_update_static_captions" origtitle="<?php _e("Overwrite or append the static styles due the new imported values ?", 'revslider');?>"><?php _e("Static Styles", 'revslider');?> </span>
 											<input class="withlabel" type="radio" name="update_static_captions" value="true"> <?php _e("overwrite", 'revslider')?>
 											<input class="withlabel" type="radio" name="update_static_captions" value="false"> <?php _e("append", 'revslider')?>
 											<input class="withlabel" type="radio" name="update_static_captions" value="none" checked="checked"> <?php _e("ignore",'revslider'); ?>
-											<div class="tp-clearfix"></div>
+											<div class="tp-clearfix"></div-->
 
 											<div class="divide5"></div>
 											<input type="submit" style="width:100%" class="button-primary revgreen" id="rs-submit-import-form" value="<?php _e('Import Slider', 'revslider'); ?>">
@@ -4498,7 +4694,7 @@ if (isset($linksEditSlides)) {
 						$api = "revapi" . $sliderID;
 						?>
 
-						<div class="setting_box rs-cm-refresh">
+						<div class="setting_box rs-cm-refresh" id="v_api_se">
 							<h3 class="box_closed"><i class="rs-rp-accordion-icon eg-icon-magic"></i>
 								<div class="setting_box-arrow"></div>
 								<span><?php _e('API Functions', 'revslider');?></span>
@@ -5802,7 +5998,7 @@ if (isset($linksEditSlides)) {
 				});
 				var rs_navigations = jQuery.parseJSON(<?php echo RevSliderFunctions::jsonEncodeForClientSide($arr_navigations); ?>);								
 				
-				var googlef_template_container = wp.template( "rs-preset-googlefont" );
+				/*var googlef_template_container = wp.template( "rs-preset-googlefont" );
 				
 				jQuery('#add_new_google_font').click(function(){
 					var content = googlef_template_container({'value':''});
@@ -5822,7 +6018,7 @@ if (isset($linksEditSlides)) {
 						<?php
 					}
 				}
-				?>
+				?>*/
 				/*
 				
 				var data = {};
@@ -5916,11 +6112,11 @@ THE INFO ABOUT EMBEDING OF THE SLIDER
 	</span>
 </script>
 
-<script type="text/html" id="tmpl-rs-preset-googlefont">
+<!--script type="text/html" id="tmpl-rs-preset-googlefont">
 	<div>
 		<span class="label" style="min-width:100px" origtitle="<?php _e("Google Font String", 'revslider');?>"><?php _e("Font", 'revslider')?>:</span>
 		<input type="text" style="width:180px" name="google_font[]" value="{{ data['value'] }}">
 		<a class="button-primary revred rs-google-remove-field" original-title=""><i class="revicon-trash"></i></a>
 		<div class="tp-clearfix"></div>
 	</div>
-</script>
+</script-->

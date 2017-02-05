@@ -24,7 +24,7 @@ if( !defined( 'ABSPATH') ) exit();
 				$is_favorite = $slider->isFavorite();
 				
 				$shortCode = $slider->getShortcode();
-				$numSlides = $slider->getNumSlides();
+				$numSlides = $slider->getNumSlidesRaw();
 				$numReal = '';
 				
 				$rowClass = "";
@@ -92,10 +92,8 @@ if( !defined( 'ABSPATH') ) exit();
 				
 				if(intval($numSlides) == 0){
 					$first_slide_id = 'new&slider='.$id;
-					
-					
 				}else{
-					$slides = $slider->getSlides(false);
+					$slides = $slider->getFirstSlideIdFromGallery();
 					
 					if(!empty($slides)){
 						$first_slide_id = $slides[key($slides)]->getID();

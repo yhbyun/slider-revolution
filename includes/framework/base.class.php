@@ -129,7 +129,7 @@ class RevSliderBase {
 			
 		}catch (Exception $e){
 			header("status: 500");
-			echo $e->getMessage();
+			echo __('Image not Found', 'revslider');
 			exit();
 		}
 	}
@@ -331,22 +331,32 @@ class RevSliderBase {
 	public static function get_svg_sets_url(){
 		$svg_sets = array();
 		
-		$svg_sets['Actions'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/action/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/action/');
-		$svg_sets['Alerts'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/alert/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/alert/');
-		$svg_sets['AV'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/av/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/av/');
-		$svg_sets['Communication'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/communication/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/communication/');
-		$svg_sets['Content'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/content/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/content/');
-		$svg_sets['Device'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/device/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/device/');
-		$svg_sets['Editor'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/editor/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/editor/');
-		$svg_sets['File'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/file/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/file/');
-		$svg_sets['Hardware'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/hardware/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/hardware/');
-		$svg_sets['Images'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/image/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/image/');
-		$svg_sets['Maps'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/maps/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/maps/');
-		$svg_sets['Navigation'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/navigation/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/navigation/');
-		$svg_sets['Notifications'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/notification/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/notification/');
-		$svg_sets['Places'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/places/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/places/');
-		$svg_sets['Social'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/social/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/social/');
-		$svg_sets['Toggle'] = array('path' => RS_PLUGIN_PATH . 'public/assets/assets/svg/toggle/', 'url' => RS_PLUGIN_URL . 'public/assets/assets/svg/toggle/');
+		$path = RS_PLUGIN_PATH . 'public/assets/assets/svg/';
+		$url = RS_PLUGIN_URL . 'public/assets/assets/svg/';
+		
+		if(!file_exists($path.'action/ic_3d_rotation_24px.svg')){ //the path needs to be changed to the uploads folder then
+			$upload_dir = wp_upload_dir();
+			$path = $upload_dir['basedir'].'/revslider/assets/svg/';
+			$url = $upload_dir['baseurl'].'/revslider/assets/svg/';
+		}
+		
+		$svg_sets['Actions'] = array('path' => $path.'action/', 'url' => $url.'action/');
+		$svg_sets['Alerts'] = array('path' => $path.'alert/', 'url' => $url.'alert/');
+		$svg_sets['AV'] = array('path' => $path.'av/', 'url' => $url.'av/');
+		$svg_sets['Communication'] = array('path' => $path.'communication/', 'url' => $url.'communication/');
+		$svg_sets['Content'] = array('path' => $path.'content/', 'url' => $url.'content/');
+		$svg_sets['Device'] = array('path' => $path.'device/', 'url' => $url.'device/');
+		$svg_sets['Editor'] = array('path' => $path.'editor/', 'url' => $url.'editor/');
+		$svg_sets['File'] = array('path' => $path.'file/', 'url' => $url.'file/');
+		$svg_sets['Hardware'] = array('path' => $path.'hardware/', 'url' => $url.'hardware/');
+		$svg_sets['Images'] = array('path' => $path.'image/', 'url' => $url.'image/');
+		$svg_sets['Maps'] = array('path' => $path.'maps/', 'url' => $url.'maps/');
+		$svg_sets['Navigation'] = array('path' => $path.'navigation/', 'url' => $url.'navigation/');
+		$svg_sets['Notifications'] = array('path' => $path.'notification/', 'url' => $url.'notification/');
+		$svg_sets['Places'] = array('path' => $path.'places/', 'url' => $url.'places/');
+		$svg_sets['Social'] = array('path' => $path.'social/', 'url' => $url.'social/');
+		$svg_sets['Toggle'] = array('path' => $path.'toggle/', 'url' => $url.'toggle/');
+		
 		
 		$svg_sets = apply_filters('revslider_get_svg_sets', $svg_sets);
 		
@@ -558,14 +568,21 @@ class RevSliderBase {
 				}
 				
 				if(!$zimage){
-					echo $image.__(' not found!<br>', 'revslider');
+					//echo $image.__(' not found!<br>', 'revslider');
 				}else{
 					if(!isset($alreadyImported['images/'.$image])){
-						if($strip == true){ //pclzip
-							$importImage = RevSliderFunctionsWP::import_media($d_path.str_replace('//', '/', 'images/'.$image), $alias.'/');
+						//check if we are object folder, if yes, do not import into media library but add it to the object folder
+						$uimg = ($strip == true) ? str_replace('//', '/', 'images/'.$image) : $image; //pclzip
+						
+						$object_library = (strpos($uimg, 'revslider/objects/') === 0) ? true : false;
+						
+						if($object_library === true){ //copy the image to the objects folder if false
+							$objlib = new RevSliderObjectLibrary();
+							$importImage = $objlib->_import_object($d_path.'images/'.$uimg);
 						}else{
-							$importImage = RevSliderFunctionsWP::import_media($d_path.'images/'.$image, $alias.'/');
+							$importImage = RevSliderFunctionsWP::import_media($d_path.'images/'.$uimg, $alias.'/');
 						}
+						
 						if($importImage !== false){
 							$alreadyImported['images/'.$image] = $importImage['path'];
 							
@@ -602,6 +619,7 @@ class RevSliderBase {
 			return $text;
 		}
 	}
+	
 	
 	/**
 	 * prints out debug text if constant TP_DEBUG is defined and true

@@ -12,6 +12,12 @@ $js_defer = RevSliderBase::getVar($arrValues, 'js_defer', 'off');
 $show_dev_export = RevSliderBase::getVar($arrValues, 'show_dev_export', 'off');
 $change_font_loading = RevSliderBase::getVar($arrValues, 'change_font_loading', '');
 $enable_logs = RevSliderBase::getVar($arrValues, 'enable_logs', 'off');
+$load_all_javascript = RevSliderBase::getVar($arrValues, 'load_all_javascript', 'off');
+
+$pack_page_creation = RevSliderBase::getVar($arrValues, 'pack_page_creation', 'on');
+$single_page_creation = RevSliderBase::getVar($arrValues, 'single_page_creation', 'off');
+
+$stage_collapse = RevSliderBase::getVar($arrValues, "stage_collapse",'off');
 
 $enable_newschannel = apply_filters('revslider_set_notifications', 'on');
 $enable_newschannel = RevSliderBase::getVar($arrValues, "enable_newschannel",$enable_newschannel);
@@ -22,6 +28,7 @@ $width_tablet = RevSliderBase::getVar($arrValues, 'width_tablet', 778);
 $width_mobile = RevSliderBase::getVar($arrValues, 'width_mobile', 480);
 
 $force_activation_box = RevSliderBase::getVar($arrValues, 'force_activation_box', 'off');
+
 ?>
 
 <div id="dialog_general_settings" title="<?php _e("General Settings",'revslider'); ?>" style="display:none;">
@@ -125,6 +132,27 @@ $force_activation_box = RevSliderBase::getVar($arrValues, 'force_activation_box'
 							</div>
 						</td>
 					</tr>
+					<tr id="load_all_javascript" valign="top">
+						<th scope="row">
+							<?php _e("Load all JavaScript libraries:", 'revslider'); ?>
+						</th>
+						<td>
+							<span id="load_all_javascript_wrapper" class="radio_settings_wrapper">
+								<div class="radio_inner_wrapper">
+									<input type="radio" id="load_all_javascript_1" value="on" name="load_all_javascript" <?php checked($load_all_javascript, 'on'); ?>>
+									<label for="load_all_javascript_1" style="cursor:pointer;"><?php _e("On",'revslider'); ?></label>
+								</div>
+
+								<div class="radio_inner_wrapper">
+									<input type="radio" id="load_all_javascript_2" value="off" name="load_all_javascript" <?php checked($load_all_javascript, 'off'); ?>>
+									<label for="load_all_javascript_2" style="cursor:pointer;"><?php _e("Off",'revslider'); ?></label>
+								</div>					
+							</span>
+							<div class="description_container">
+								<span class="description"><?php _e("Enabling this will load all JavaScript libraries of Slider Revolution. Disabling this will let Slider Revolution load only the libraries needed for the current Sliders on page. Enabling this option can solve CDN issues.",'revslider'); ?></span>
+							</div>
+						</td>
+					</tr>	
 					<tr id="show_dev_export_row" valign="top">
 						<th scope="row">
 							<?php _e("Enable Markup Export option:",'revslider'); ?>
@@ -174,6 +202,28 @@ $force_activation_box = RevSliderBase::getVar($arrValues, 'force_activation_box'
 							
 							<div class="description_container">
 								<span class="description"><?php _e("Define the default Grid Sizes for devices: Desktop, Tablet and Mobile",'revslider'); ?></span>
+							</div>
+						</td>
+					</tr>
+					
+					<tr valign="top">
+						<th scope="row">
+							<?php _e("Slide Stage Collapse:",'revslider'); ?>
+						</th>
+						<td>
+							<span id="stage_collapse_wrapper" class="radio_settings_wrapper">
+								<div class="radio_inner_wrapper">
+									<input type="radio" id="" value="on" name="stage_collapse" <?php checked($stage_collapse, 'on'); ?>>
+									<label for="" style="cursor:pointer;"><?php _e("On",'revslider'); ?></label>
+								</div>
+				
+								<div class="radio_inner_wrapper">
+									<input type="radio" id="" value="off" name="stage_collapse" <?php checked($stage_collapse, 'off'); ?>>
+									<label for="" style="cursor:pointer;"><?php _e("Off",'revslider'); ?></label>
+								</div>
+							</span>
+							<div class="description_container">
+								<span class="description"><?php _e("Collapse left WordPress Menu on Slide Stage automatically ",'revslider'); ?></span>
 							</div>
 						</td>
 					</tr>
@@ -239,6 +289,48 @@ $force_activation_box = RevSliderBase::getVar($arrValues, 'force_activation_box'
 							</span>
 							<div class="description_container">
 								<span class="description"><?php _e("Force the Activation Area to show up if the Theme disabled it.",'revslider'); ?></span>
+							</div>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">
+							<?php _e("Enable Blank Page Creation for Slider Packages:",'revslider'); ?>
+						</th>
+						<td>
+							<span id="pack_page_creation_box_wrapper" class="radio_settings_wrapper">
+								<div class="radio_inner_wrapper">
+									<input type="radio" id="" value="on" name="pack_page_creation" <?php checked($pack_page_creation, 'on'); ?>>
+									<label for="" style="cursor:pointer;"><?php _e("On",'revslider'); ?></label>
+								</div>
+				
+								<div class="radio_inner_wrapper">
+									<input type="radio" id="" value="off" name="pack_page_creation" <?php checked($pack_page_creation, 'off'); ?>>
+									<label for="" style="cursor:pointer;"><?php _e("Off",'revslider'); ?></label>
+								</div>
+							</span>
+							<div class="description_container">
+								<span class="description"><?php _e("Enable option to automatically create a Blank Page if a Slider Pack is installed.",'revslider'); ?></span>
+							</div>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">
+							<?php _e("Enable Blank Page Creation for Single Sliders:",'revslider'); ?>
+						</th>
+						<td>
+							<span id="single_page_creation_box_wrapper" class="radio_settings_wrapper">
+								<div class="radio_inner_wrapper">
+									<input type="radio" id="" value="on" name="single_page_creation" <?php checked($single_page_creation, 'on'); ?>>
+									<label for="" style="cursor:pointer;"><?php _e("On",'revslider'); ?></label>
+								</div>
+				
+								<div class="radio_inner_wrapper">
+									<input type="radio" id="" value="off" name="single_page_creation" <?php checked($single_page_creation, 'off'); ?>>
+									<label for="" style="cursor:pointer;"><?php _e("Off",'revslider'); ?></label>
+								</div>
+							</span>
+							<div class="description_container">
+								<span class="description"><?php _e("Enable option to automatically create a Blank Page if a Single Slider is installed.",'revslider'); ?></span>
 							</div>
 						</td>
 					</tr>

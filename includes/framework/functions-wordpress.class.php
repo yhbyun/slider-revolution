@@ -7,7 +7,7 @@
 
 if( !defined( 'ABSPATH') ) exit();
 
-class RevSliderFunctionsWP{
+class RevSliderFunctionsWP {
 
 	public static $urlSite;
 	public static $urlAdmin;
@@ -189,7 +189,6 @@ class RevSliderFunctionsWP{
 	 *
 	 * @return boolean True on success, false on failure
 	 */
-
 	public static function import_media($file_url, $folder_name) {
 		require_once(ABSPATH . 'wp-admin/includes/image.php');
 		
@@ -249,6 +248,8 @@ class RevSliderFunctionsWP{
 			return false;
 		}
 	}
+	
+	
 	/**
 	 * 
 	 * register widget (must be class)
@@ -496,7 +497,8 @@ class RevSliderFunctionsWP{
 		if(RevSliderWpml::isWpmlExists()){ //translate categories to languages
 			$newcat = array();
 			foreach($catID as $id){
-				$newcat[] = icl_object_id($id, 'category', true);
+				//$newcat[] = icl_object_id($id, 'category', true);
+				$newcat[] = apply_filters( 'wpml_object_id', $id, 'category', true );
 			}
 			$catID = $newcat;
 		}
@@ -1208,6 +1210,15 @@ class RevSliderFunctionsWP{
 		return $attachment_id;
 	}
 	
+	
+	public static function update_option($handle, $value, $autoload = 'on'){ //on is on, false is 'off'
+		
+		if(!add_option($handle, $value, '', $autoload)){ //returns false if option is not existing
+			delete_option($handle);
+		}
+		
+		add_option($handle, $value, '', $autoload);
+	}
 	
 }	//end of the class
 

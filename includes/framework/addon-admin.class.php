@@ -188,7 +188,7 @@ class Rev_addon_Admin {
 	}
 
 	/**
-	 * Deactivates Installed Add-On/Plugin
+	 * Install Add-On/Plugin
 	 *
 	 * @since    1.0.0
 	 */
@@ -196,9 +196,13 @@ class Rev_addon_Admin {
 		if( wp_verify_nonce( $_REQUEST['nonce'], 'ajax_rev_slider_addon_nonce' ) ) {
 			if(isset($_REQUEST['plugin'])){
 				global $wp_version;
+				$plugin_slug = basename($_REQUEST['plugin']);
 				$plugin_result = false;
 				$plugin_message = 'UNKNOWN';
-				$url = 'http://updates.themepunch.tools/addons/'.$_REQUEST['plugin'].'/'.$_REQUEST['plugin'].'.zip';
+
+				if(0 !== strpos($plugin_slug, 'revslider-')) die( '-1' );
+
+				$url = 'http://updates.themepunch.tools/addons/'.$plugin_slug.'/'.$plugin_slug.'.zip';
 
 				$get = wp_remote_post($url, array(
 					'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo('url'),
@@ -206,12 +210,12 @@ class Rev_addon_Admin {
 					'timeout' => 45
 				));
 
-				if( !$get ){
+				if( !$get || $get["response"]["code"] != "200" ){
 				  $plugin_message = 'FAILED TO DOWNLOAD';
 				}else{
 					$plugin_message = 'ZIP is there';
 					$upload_dir = wp_upload_dir();
-					$file = $upload_dir['basedir']. '/revslider/templates/' . $_REQUEST['plugin'] . '.zip';
+					$file = $upload_dir['basedir']. '/revslider/templates/' . $plugin_slug . '.zip';
 					@mkdir(dirname($file));
 					$ret = @file_put_contents( $file, $get['body'] );
 
@@ -245,7 +249,7 @@ class Rev_addon_Admin {
 					@unlink($file);
 					die('1');
 				}
-				//$result = activate_plugin( $_REQUEST['plugin'].'/'.$_REQUEST['plugin'].'.php' );
+				//$result = activate_plugin( $plugin_slug.'/'.$plugin_slug.'.php' );
 			}
 			else{
 				die( '0' );
