@@ -12,6 +12,7 @@ class RevSliderUpdate {
 	private $plugin_url			= 'http://codecanyon.net/item/slider-revolution-responsive-wordpress-plugin/2751380';
 	private $remote_url			= 'http://updates.themepunch.tools/check_for_updates.php';
 	private $remote_url_info	= 'http://updates.themepunch.tools/revslider/revslider.php';
+	private $remote_temp_active	= 'http://updates.themepunch.tools/temp_activate.php';
 	private $plugin_slug		= 'revslider';
 	private $plugin_path		= 'revslider/revslider.php';
 	private $version;
@@ -169,11 +170,14 @@ class RevSliderUpdate {
 			
 			update_option('revslider-update-check-short', time());
 			
+			$purchase = (get_option('revslider-valid', 'false') == 'true') ? get_option('revslider-code', '') : '';
+			
 			$response = wp_remote_post($this->remote_url, array(
 				'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo('url'),
 				'body' => array(
 					'item' => urlencode('revslider'),
-					'version' => urlencode(RevSliderGlobals::SLIDER_REVISION)
+					'version' => urlencode(RevSliderGlobals::SLIDER_REVISION),
+					'code' => urlencode($purchase)
 				)
 			));
 			
@@ -200,12 +204,74 @@ class RevSliderUpdate {
 				update_option('revslider-notices', $version_info->notices);
 			}
 			
+			if(isset($version_info->dashboard)){
+				update_option('revslider-dashboard', $version_info->dashboard);
+			}
+
+			if(isset($version_info->addons)){
+				update_option('revslider-addons', $version_info->addons);
+			}
+			
+			if(isset($version_info->deactivated) && $version_info->deactivated === true){
+				if(get_option('revslider-valid', 'false') == 'true'){
+					//remove validation, add notice
+					update_option('revslider-valid', 'false');
+					update_option('revslider-deact-notice', true);
+				}
+			}
+			
 		}
 		
 		if($force_check == true){ //force that the update will be directly searched
 			update_option('revslider-update-check', '');
 		}
 		
+	}
+	
+	
+	public function add_temp_active_check($force = false){
+		global $wp_version;
+		
+		$last_check = get_option('revslider-activate-temp-short');
+		if($last_check == false){ //first time called
+			$last_check = time();
+			update_option('revslider-activate-temp-short', $last_check);
+		}
+		
+		
+		// Check for updates
+		if(time() - $last_check > 3600 || $force == true){
+			$response = wp_remote_post($this->remote_temp_active, array(
+				'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo('url'),
+				'body' => array(
+					'item' => urlencode('revslider'),
+					'version' => urlencode(RevSliderGlobals::SLIDER_REVISION),
+					'code' => urlencode(get_option('revslider-code', ''))
+				)
+			));
+			
+			$response_code = wp_remote_retrieve_response_code( $response );
+			$version_info = wp_remote_retrieve_body( $response );
+			
+			if ( $response_code != 200 || is_wp_error( $version_info ) ) {
+				//wait, cant connect
+			}else{
+				if($version_info == 'valid'){
+					update_option('revslider-valid', 'true');
+					update_option('revslider-temp-active', 'false');
+				}elseif($version_info == 'temp_valid'){
+					//do nothing, 
+				}elseif($version_info == 'invalid'){
+					//invalid, deregister plugin!
+					update_option('revslider-valid', 'false');
+					update_option('revslider-temp-active', 'false');
+					update_option('revslider-temp-active-notice', 'true');
+				}
+			}
+			
+			$last_check = time();
+			update_option('revslider-activate-temp-short', $last_check);
+		}
 	}
 	
 }

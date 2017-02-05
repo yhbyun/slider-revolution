@@ -4,7 +4,7 @@
  *
  * @package   Essential_Grid
  * @author    ThemePunch <info@themepunch.com>
- * @link      http://www.revolution.themepunch.com/
+ * @link      http://revolution.themepunch.com/
  * @copyright 2015 ThemePunch
  */
 
@@ -146,9 +146,11 @@ class RevSliderExtension {
 	public function add_eg_additional_inline_javascript(){
 		?>
 		<script type="text/javascript">
+			var ajaxRevslider;
+			
 			jQuery(document).ready(function() {
 				// CUSTOM AJAX CONTENT LOADING FUNCTION
-				var ajaxRevslider = function(obj) {
+				ajaxRevslider = function(obj) {
 				
 					// obj.type : Post Type
 					// obj.id : ID of Content to Load

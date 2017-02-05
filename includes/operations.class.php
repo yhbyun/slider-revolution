@@ -8,25 +8,9 @@
 if( !defined( 'ABSPATH') ) exit();
 
 class RevSliderOperations extends RevSliderElementsBase{
-
-
-	/**
-	 * get button classes
-	 */
-	public function getButtonClasses(){
-
-		$arrButtons = array(
-			"red"=>"Red Button",
-			"green"=>"Green Button",
-			"blue"=>"Blue Button",
-			"orange"=>"Orange Button",
-			"darkgrey"=>"Darkgrey Button",
-			"lightgrey"=>"Lightgrey Button",
-		);
-
-		return($arrButtons);
-	}
-
+	
+	private static $animations;
+	private static $css;
 
 	/**
 	 * get easing functions array
@@ -478,10 +462,11 @@ class RevSliderOperations extends RevSliderElementsBase{
 	 * delete custom animations
 	 */
 	public static function deleteCustomAnim($rawID){
+		
 		if(trim($rawID) != '') {
 			$db = new RevSliderDB();
 			$id = str_replace(array('customin-', 'customout-'), array('', ''), $rawID);
-			$db->delete(RevSliderGlobals::$table_layer_anims, "id = '".intval($id)."'");
+			$db->delete(RevSliderGlobals::$table_layer_anims, $db->prepare("id = %s", array(intval($id))));
 		}
 
 		$arrAnims['customin'] = RevSliderOperations::getCustomAnimations();
@@ -491,27 +476,49 @@ class RevSliderOperations extends RevSliderElementsBase{
 		return $arrAnims;
 	}
 
+	
+	/**
+	 * Fetch all Custom Animations only one time
+	 * @since: 5.2.4
+	 **/
+	public static function fillAnimations(){
+		if(empty(self::$animations)){
+			$db = new RevSliderDB();
+			
+			$customAnimations = array();
+			$result = $db->fetch(RevSliderGlobals::$table_layer_anims);
+			if(!empty($result)){
+				$customAnimations = $result;
+			}
+			
+			self::$animations = $customAnimations;
+		}
+	}
+	
 	/**
 	 *
 	 * get custom animations
 	 */
 	public static function getCustomAnimations($pre = 'customin'){
-		$db = new RevSliderDB();
-
-		$customAnimations = array();
-
-		$result = $db->fetch(RevSliderGlobals::$table_layer_anims);
-		if(!empty($result)){
-			foreach($result as $key => $value){
-				$params = json_decode($value['params'], true);
-				if(!isset($params['type']) || $params['type'] == $pre){
-					$customAnimations[$pre.'-'.$value['id']] = $value['handle'];
-				}
+		
+		if(empty(self::$animations)){
+			self::fillAnimations();
+		}
+		
+		$customAnimations = self::$animations;
+		
+		$ret_array = array();
+		
+		foreach($customAnimations as $key => $value){
+			$params = json_decode($value['params'], true);
+			if(!isset($params['type']) || $params['type'] == $pre){
+				$ret_array[$pre.'-'.$value['id']] = $value['handle'];
 			}
 		}
-		asort($customAnimations);
 		
-		return $customAnimations;
+		asort($ret_array);
+		
+		return $ret_array;
 	}
 	
 	
@@ -520,19 +527,20 @@ class RevSliderOperations extends RevSliderElementsBase{
 	 * get custom animations
 	 */
 	public static function getCustomAnimationsFullPre($pre = 'customin'){
-		$db = new RevSliderDB();
-
+		
+		if(empty(self::$animations)){
+			self::fillAnimations();
+		}
+		
 		$customAnimations = array();
 		$customTemp = array();
 		$sort = array();
-		$result = $db->fetch(RevSliderGlobals::$table_layer_anims);
-		if(!empty($result)){
-			foreach($result as $key => $value){
-				$params = json_decode($value['params'], true);
-				if(!isset($params['type']) || $params['type'] == $pre){
-					$customTemp[$pre.'-'.$value['id']] = $value;
-					$sort[$pre.'-'.$value['id']] = $value['handle'];
-				}
+		
+		foreach(self::$animations as $key => $value){
+			$params = json_decode($value['params'], true);
+			if(!isset($params['type']) || $params['type'] == $pre){
+				$customTemp[$pre.'-'.$value['id']] = $value;
+				$sort[$pre.'-'.$value['id']] = $value['handle'];
 			}
 		}
 		if(!empty($sort)){
@@ -551,20 +559,22 @@ class RevSliderOperations extends RevSliderElementsBase{
 	 * get full custom animations
 	 */
 	public static function getFullCustomAnimations(){
-		$db = new RevSliderDB();
+		
+		if(empty(self::$animations)){
+			self::fillAnimations();
+		}
+		
+		$customAnimations = self::$animations;
+		
+		$ret_anims = array();
 
-		$customAnimations = array();
-
-		$result = $db->fetch(RevSliderGlobals::$table_layer_anims);
-		if(!empty($result)){
-			foreach($result as $key => $value){
-				$customAnimations[$key]['id'] = $value['id'];
-				$customAnimations[$key]['handle'] = $value['handle'];
-				$customAnimations[$key]['params'] = json_decode(str_replace("'", '"', $value['params']), true);
-			}
+		foreach($customAnimations as $key => $value){
+			$ret_anims[$key]['id'] = $value['id'];
+			$ret_anims[$key]['handle'] = $value['handle'];
+			$ret_anims[$key]['params'] = json_decode(str_replace("'", '"', $value['params']), true);
 		}
 
-		return $customAnimations;
+		return $ret_anims;
 	}
 
 	/**
@@ -572,12 +582,18 @@ class RevSliderOperations extends RevSliderElementsBase{
 	 * get animation params by handle
 	 */
 	public static function getCustomAnimationByHandle($handle){
-		$db = new RevSliderDB();
-
-		$result = $db->fetch(RevSliderGlobals::$table_layer_anims, "handle = '".$handle."'");
-		if(!empty($result)) return json_decode(str_replace("'", '"', $result[0]['params']), true);
-
+		if(empty(self::$animations)){
+			self::fillAnimations();
+		}
+		
+		foreach(self::$animations as $key => $value){
+			if($value['handle'] == $handle){
+				return json_decode(str_replace("'", '"', $value['params']), true);
+			}
+		}
+		
 		return false;
+		
 	}
 
 	/**
@@ -585,18 +601,20 @@ class RevSliderOperations extends RevSliderElementsBase{
 	 * get animation params by id
 	 */
 	public static function getFullCustomAnimationByID($id){
-		$db = new RevSliderDB();
-
-		$result = $db->fetch(RevSliderGlobals::$table_layer_anims, "id = '".$id."'");
-
-		if(!empty($result)){
-			$customAnimations = array();
-			$customAnimations['id'] = $result[0]['id'];
-			$customAnimations['handle'] = $result[0]['handle'];
-			$customAnimations['params'] = json_decode(str_replace("'", '"', $result[0]['params']), true);
-			return $customAnimations;
+		if(empty(self::$animations)){
+			self::fillAnimations();
 		}
-
+		
+		foreach(self::$animations as $key => $value){
+			if($value['id'] == $id){
+				$customAnimations = array();
+				$customAnimations['id'] = $value['id'];
+				$customAnimations['handle'] = $value['handle'];
+				$customAnimations['params'] = json_decode(str_replace("'", '"', $value['params']), true);
+				return $customAnimations;
+			}
+		}
+		
 		return false;
 	}
 
@@ -642,7 +660,9 @@ class RevSliderOperations extends RevSliderElementsBase{
 
 		if(isset($animArray['opacity_'.$is]) && $animArray['opacity_'.$is] !== '' && $animArray['opacity_'.$is] !== 'inherit'){ //captionopacity
 			$retString.= 'opacity:';
-			$retString.= ($animArray['opacity_'.$is] == 0) ? 0 : $animArray['opacity_'.$is] / 100;
+			$opa = (intval($animArray['opacity_'.$is]) > 1) ? $animArray['opacity_'.$is] / 100 : $animArray['opacity_'.$is];
+			$retString.= $opa;
+			//$retString.= ($is == 'start' && ($opa == '0' || $opa == 0)) ? '0.0001' : $opa;
 			$retString.= ';';
 		}
 		
@@ -766,8 +786,8 @@ class RevSliderOperations extends RevSliderElementsBase{
 		foreach($googlefonts as $f => $val){
 			$fonts[] = array('type' => 'googlefont', 'version' => __('Google Fonts', 'revslider'), 'label' => $f, 'variants' => $val['variants'], 'subsets' => $val['subsets']);
 		}
-
-		return $fonts;
+		
+		return apply_filters('revslider_operations_getArrFontFamilys', $fonts);
 	}
 
 
@@ -793,12 +813,36 @@ class RevSliderOperations extends RevSliderElementsBase{
 		return($htmlSelect);
 	}
 
+	
+	/**
+	 * Fetch all Custom CSS only one time
+	 * @since: 5.2.4
+	 **/
+	public static function fillCSS(){
+		if(empty(self::$css)){
+			$db = new RevSliderDB();
+			
+			$customCss = array();
+			$result = $db->fetch(RevSliderGlobals::$table_css);
+			if(!empty($result)){
+				$customCss = $result;
+			}
+			
+			self::$css = $customCss;
+		}
+	}
+	
 	/**
 	 *
 	 * get contents of the css table
 	 */
 	public function getCaptionsContent(){
-		$result = $this->db->fetch(RevSliderGlobals::$table_css);
+		
+		if(empty(self::$css)){
+			self::fillCSS();
+		}
+		
+		$result = self::$css;
 		$contentCSS = RevSliderCssParser::parseDbArrayToCss($result);
 		return($contentCSS);
 	}
@@ -809,8 +853,11 @@ class RevSliderOperations extends RevSliderElementsBase{
 	 * get contents of the css table
 	 */
 	public static function getCaptionsContentArray($handle = false){
-		$db = new RevSliderDB();
-		$result = $db->fetch(RevSliderGlobals::$table_css);
+		if(empty(self::$css)){
+			self::fillCSS();
+		}
+		
+		$result = self::$css;
 		$contentCSS = RevSliderCssParser::parseDbArrayToArray($result, $handle);
 		return($contentCSS);
 	}
@@ -864,9 +911,11 @@ class RevSliderOperations extends RevSliderElementsBase{
 	 * get contents of the static css file
 	 */
 	public function getDynamicCss(){
-		$db = new RevSliderDB();
-
-		$styles = $db->fetch(RevSliderGlobals::$table_css);
+		if(empty(self::$css)){
+			self::fillCSS();
+		}
+		
+		$result = self::$css;
 		$styles = RevSliderCssParser::parseDbArrayToCss($styles, "\n");
 
 		return $styles;
@@ -926,7 +975,8 @@ class RevSliderOperations extends RevSliderElementsBase{
 		$db = new RevSliderDB();
 
 		//first get single entry to merge settings
-		$styles = $db->fetchSingle(RevSliderGlobals::$table_css, '`handle` = "'.$db->escape('.tp-caption.'.$content['handle']).'"');
+
+		$styles = $db->fetchSingle(RevSliderGlobals::$table_css, $db->prepare('`handle` = %s', array('.tp-caption.'.$content['handle'])));
 	
 		if(empty($styles)) return false;
 		
@@ -977,7 +1027,7 @@ class RevSliderOperations extends RevSliderElementsBase{
 		$db = new RevSliderDB();
 		
 		//get current styles
-		$styles = $db->fetchSingle(RevSliderGlobals::$table_css, '`handle` = "'.$db->escape($data['handle']).'"');
+		$styles = $db->fetchSingle(RevSliderGlobals::$table_css, $db->prepare('`handle` = %s', array($data['handle'])));
 		
 		if(!empty($styles)){
 			if(!isset($styles['advanced'])) $styles['advanced'] = '';
@@ -1047,8 +1097,8 @@ class RevSliderOperations extends RevSliderElementsBase{
 	 */
 	public function deleteCaptionsContentData($handle){
 		$db = new RevSliderDB();
-
-		$db->delete(RevSliderGlobals::$table_css,"handle='.tp-caption.".$handle."'");
+		
+		$db->delete(RevSliderGlobals::$table_css, $db->prepare("handle= %s", array(".tp-caption.".$handle)));
 
 		//$this->updateDynamicCaptions();
 
@@ -1167,7 +1217,7 @@ class RevSliderOperations extends RevSliderElementsBase{
 					$arrInsert["params"] = json_encode($styles);
 				}
 				//check if class exists
-				$result = $db->fetch(RevSliderGlobals::$table_css, "handle = '".$class."'");
+				$result = $db->fetch(RevSliderGlobals::$table_css, $db->prepare("handle = %s", array($class)));
 
 				if(!empty($result)){ //update
 					$db->update(RevSliderGlobals::$table_css, $arrInsert, array('handle' => $class));
@@ -1205,7 +1255,7 @@ class RevSliderOperations extends RevSliderElementsBase{
 	 * if output object is null - create object
 	 */
 	public function previewOutput($sliderID,$output = null){
-
+		
 		if($sliderID == "empty_output"){
 			$this->loadingMessageOutput();
 			exit();
@@ -1250,13 +1300,17 @@ class RevSliderOperations extends RevSliderElementsBase{
 		?>
 			<html>
 				<head>
-					<link rel='stylesheet' href='<?php echo $urlPlugin?>css/settings.css?rev=<?php echo RevSliderGlobals::SLIDER_REVISION; ?>' type='text/css' media='all' />
-					<link rel='stylesheet' href='<?php echo $urlPlugin?>fonts/font-awesome/css/font-awesome.css?rev=<?php echo RevSliderGlobals::SLIDER_REVISION; ?>' type='text/css' media='all' />
-					<link rel='stylesheet' href='<?php echo $urlPlugin?>fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css?rev=<?php echo RevSliderGlobals::SLIDER_REVISION; ?>' type='text/css' media='all' />
+					<link rel='stylesheet' href='<?php echo $urlPlugin; ?>css/settings.css?rev=<?php echo RevSliderGlobals::SLIDER_REVISION; ?>' type='text/css' media='all' />
+					<link rel='stylesheet' href='<?php echo $urlPlugin; ?>fonts/font-awesome/css/font-awesome.css?rev=<?php echo RevSliderGlobals::SLIDER_REVISION; ?>' type='text/css' media='all' />
+					<link rel='stylesheet' href='<?php echo $urlPlugin; ?>fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css?rev=<?php echo RevSliderGlobals::SLIDER_REVISION; ?>' type='text/css' media='all' />
 					<?php
 					$db = new RevSliderDB();
 
-					$styles = $db->fetch(RevSliderGlobals::$table_css);
+					if(empty(self::$css)){
+						self::fillCSS();
+					}
+					
+					$styles = self::$css;
 					$styles = RevSliderCssParser::parseDbArrayToCss($styles, "\n");
 					$styles = RevSliderCssParser::compress_css($styles);
 
@@ -1283,13 +1337,16 @@ class RevSliderOperations extends RevSliderElementsBase{
 					<script type='text/javascript' src='<?php echo $urlPlugin?>js/jquery.themepunch.tools.min.js?rev=<?php echo RevSliderGlobals::SLIDER_REVISION; ?>'></script>
 					<script type='text/javascript' src='<?php echo $urlPlugin?>js/jquery.themepunch.revolution.min.js?rev=<?php echo RevSliderGlobals::SLIDER_REVISION; ?>'></script>
 					
+					<?php
+					do_action('revslider_preview_slider_head');
+					?>
 				</head>
 				<body style="padding:0px;margin:0px;width:100%;height:100%;position:relative;">
 					<?php
 					if($wpmlActive == true){
 						?>
 						<div style="margin-bottom:10px;text-align:center;">
-						<?php _e("Choose language",'revslider')?>: <?php echo $selectLangChoose?>
+						<?php _e("Choose language",'revslider'); ?>: <?php echo $selectLangChoose; ?>
 						</div>
 
 						<script type="text/javascript">
@@ -1312,7 +1369,6 @@ class RevSliderOperations extends RevSliderElementsBase{
 				</body>
 			</html>
 		<?php
-		exit();
 	}
 
 	/*
@@ -1564,8 +1620,9 @@ ob_end_clean();
 					$use_path = $path_assets;
 					$use_path_raw = $path_assets_raw;
 					
-					preg_match('/.*?.(?:jpg|jpeg|gif|png)/i', $_file, $match);
-					preg_match('/.*?.(?:ogv|webm|mp4)/i', $_file, $match2);
+					preg_match('/.*?.(?:jpg|jpeg|gif|png|svg)/i', $_file, $match);
+					preg_match('/.*?.(?:ogv|webm|mp4|mp3)/i', $_file, $match2);
+					
 					$f = false;
 					if(!empty($match) && isset($match[0]) && !empty($match[0])){
 						//image
@@ -1615,8 +1672,14 @@ ob_end_clean();
 						$remove = true;
 					}elseif(is_file(RS_PLUGIN_PATH.$_file)){
 						$mf = str_replace('//', '/', RS_PLUGIN_PATH.$_file);
+						
+						//we need to be special with svg files
+						$__file = basename($_file);
+						
 						//remove admin/assets/
-						$__file = str_replace('admin/assets/images/', '', $_file);
+						//$__file = str_replace('admin/assets/images/', '', $_file);
+						
+						
 						if(!$usepcl){
 							$zip->addFile($mf, $use_path_raw.'/'.$__file);
 						}else{
@@ -1763,7 +1826,7 @@ ob_end_clean();
 		}
 
 		$data = RevSliderFunctions::jsonDecodeFromClientSide($data);
-
+		
 		$slideID = $data["slideid"];
 		$slide = new RevSlide();
 		$slide->initByID($slideID);
@@ -1869,13 +1932,21 @@ ob_end_clean();
 	 * get html font import
 	 */
 	public static function getCleanFontImport($font, $class = '', $url = ''){
+		global $revslider_fonts;
+		
+		if(!isset($revslider_fonts)) $revslider_fonts = array(); //if this is called without revslider.php beeing loaded
+		
+		if(in_array($font, $revslider_fonts)) return '';
+		
 		$setBase = (is_ssl()) ? "https://" : "http://";
 		
 		if($class !== '') $class = ' class="'.$class.'"';
 		
+		$revslider_fonts[] = $font;
+		
 		if(strpos($font, "href=") === false){ //fallback for old versions
 			$url = RevSliderFront::modify_punch_url($setBase . 'fonts.googleapis.com/css?family=');
-			return '<link href="'.$url.$font.'"'.$class.' rel="stylesheet" property="stylesheet" type="text/css" media="all" />'; //id="rev-google-font"
+			return '<link href="'.$url.urlencode($font).'"'.$class.' rel="stylesheet" property="stylesheet" type="text/css" media="all" />'; //id="rev-google-font"
 		}else{
 			$font = str_replace(array('http://', 'https://'), array($setBase, $setBase), $font);
 			return html_entity_decode(stripslashes($font));
@@ -1890,6 +1961,8 @@ ob_end_clean();
 			'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo('url'),
 			'body' => array(
 				'code' => urlencode($data['code']),
+				//'email' => urlencode($data['email']),
+				'version' => urlencode(RevSliderGlobals::SLIDER_REVISION),
 				'product' => urlencode('revslider')
 			)
 		));
@@ -1904,13 +1977,26 @@ ob_end_clean();
 		if($version_info == 'valid'){
 			update_option('revslider-valid', 'true');
 			update_option('revslider-code', $data['code']);
-
+			//update_option('revslider-email', $data['email']);
+			update_option('revslider-temp-active-notice', 'false');
 			return true;
 		}elseif($version_info == 'exist'){
 			RevSliderFunctions::throwError(__('Purchase Code already registered!', 'revslider'));
+		}elseif($version_info == 'temp_valid'){ //only temporary active, rechecking needs to be done soon on the themepunch servers (envato API may be down)
+			update_option('revslider-valid', 'true');
+			update_option('revslider-code', $data['code']);
+			//update_option('revslider-email', $data['email']);
+			update_option('revslider-temp-active', 'true');
+			update_option('revslider-temp-active-notice', 'false');
+			return 'temp';
 		}else{
 			return false;
 		}
+		/*elseif($version_info == 'bad_email'){
+			return 'bad_email';
+		}elseif($version_info == 'email_used'){
+			return 'email_used';
+		}*/
 
 	}
 
@@ -1936,6 +2022,7 @@ ob_end_clean();
 
 		if($version_info == 'valid'){
 			update_option('revslider-valid', 'false');
+			update_option('revslider-temp-active', 'false');
 			return true;
 		}else{
 			return false;
